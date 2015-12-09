@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="@Url.Action("Index", "Default")" id="logo" class="navbar-brand">
+                <h1>Data<span>Master</span></h1>
+            </a>
+            <nav class="nav">
+                @BuildActionLink("Home", "Index", "Default", "nav-link first")
+                @BuildActionLink("About Us", "About", "Default", "nav-link")
+            </nav>
+        </div>
+    </header>
+
+    <div id="body" class="container">
+        @RenderBody()
+    </div>
+
+    <footer class="container">
+        footer
+    </footer>
+
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    @*    <script src="~/Scripts/Site.js"></script>*@
+    @RenderSection("PageScripts", false)
+</body>
+</html>
+
+
+@functions {
+
+    private MvcHtmlString BuildActionLink(string text, string action, string controller, string cssClasses = "")
+    {
+        var link = new System.UriBuilder(Request.Url.AbsoluteUri) { Path = Url.Action(action, controller) }.Uri;
+        var currentPage = Request.Url;
+        var cssClass = cssClasses;
+        var css = string.IsNullOrEmpty(cssClasses) ? new System.Text.StringBuilder() : new System.Text.StringBuilder(cssClasses).Append(" ");
+
+        if (link.AbsoluteUri == currentPage.AbsoluteUri)
+        {
+            css.Append("active");
+        }
+        else if (currentPage.AbsolutePath == "/" && (controller.ToLower() == "home" && action.ToLower() == "index"))
+        {
+            // Home page
+            css.Append("active");
+        }
+
+        //<a href="@Url.Action(action, controller)">@Html.Raw(text)</a>
+        return Html.ActionLink(text, action, controller, null, new { @class = css.ToString() });
+    }
+}

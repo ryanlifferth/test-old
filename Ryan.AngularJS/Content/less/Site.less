@@ -1,0 +1,166 @@
+﻿
+@import "DefaultStyle.less";
+
+.row {
+    border-bottom: 1px dotted #acacac;
+    margin: 10px 0 0 0;
+    padding: 0 20px 10px;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    h3 {
+        font-family: 'PT Sans';
+        margin-top: 0;
+    }
+
+    h4 {
+        margin-bottom: 5px;
+        margin-top: 5px;
+    }
+
+    label {
+        display: inline-block;
+        width: 80px;
+    }
+
+    @table-header-bg-color: #6a6a6a;
+
+    &#jsonFilterSample,
+    &#jsonEditSample {
+
+        ul {
+            display: inline-block;
+            float: left;
+            list-style: none;
+            margin: 0 0 0 5px;
+            overflow: auto;
+            padding-left: 0;
+
+            li {
+                background-color: rgba(43, 92, 135, 0.3);
+                cursor: pointer;
+                display: block;
+                font-size: 18px;
+                float: left;
+                margin: 0 2px 0 0;
+                min-width: 35px;
+                padding: 6px 25px 2px;
+                position: relative;
+                text-align: center;
+
+                &:hover {
+                    background-color: rgba(43, 92, 135, 0.5);
+                }
+
+                &.active {
+                    background-color: #6a6a6a;
+                    color: #fff;
+                    cursor: default;
+
+                    &:hover {
+                        background-color: #6a6a6a;
+                    }
+                }
+            }
+        }
+
+        .count {
+            display: block;
+            float: left;
+            font-size: 12px;
+            font-style: italic;
+            margin: 15px 0 0 100px;
+            position: relative;
+            text-transform: lowercase;
+
+            em {
+                font-size: 20px;
+                font-weight: 700;
+                line-height: 12px;
+                margin: 3px 0 0 3px;
+                display: block;
+                float: right;
+            }
+        }
+
+        table {
+            clear: both;
+            min-height: 34px;
+            min-width: 540px;
+
+            thead {
+
+                tr {
+                    background-color: @table-header-bg-color;
+
+                    th {
+                        color: #fff;
+                        font-family: Lato;
+                        font-size: 13px;
+                        font-weight: 700;
+                        padding: 4px 6px 4px 4px;
+                        white-space: nowrap;
+
+                        &.center {
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+
+            tbody {
+                tr {
+
+                    &:nth-of-type(even) {
+                        background-color: #e7e7e7;
+                    }
+
+                    &:hover {
+                        background-color: rgba(99,221,141,1.0);
+                    }
+
+                    &.editing {
+                        background-color: rgba(43, 92, 135, 0.8);
+                        color: #fff;
+                    }
+
+                    td {
+                        border-bottom: 1px solid #d4d4d4;
+                        font-size: 14px;
+                        overflow: visible;
+                        padding: 4px 10px 4px 6px;
+                        position: relative;
+                        white-space: nowrap;
+                        width: 90px;
+
+                        &.center {
+                            text-align: center;
+                        }
+
+                        @changed-color: #ed1c24;
+
+                        span {
+                            display: inline-block;
+                            margin: 3px 0 3px 2px;
+
+                            &.changed {
+                                color: @changed-color;
+                            }
+                        }
+
+                        input[type="text"] {
+                            color: #000;
+                            width: 100%;
+
+                            &.changed {
+                                color: @changed-color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

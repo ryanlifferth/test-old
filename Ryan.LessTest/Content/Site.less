@@ -1,0 +1,122 @@
+﻿@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700);
+
+@header-background-color: rgba(0, 52, 113, 0.75);
+@header-height: 60px;
+@header-font-color: #fff;
+@footer-font-color: #707070;
+
+body {
+    font-size: 14px;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    border-radius: 0;
+    max-width: 400px;
+}
+
+
+/* Header */
+header {
+    background-color: @header-background-color;
+    box-shadow: 0 1px 2px #707070;
+    color: @header-font-color;
+    min-height: @header-height;
+
+    .container {
+        min-height: 60px;
+        position: relative;
+    }
+    /* Header - NavBar */
+    &.navbar {
+        border-radius: 0;
+        padding: 0;
+
+        a#logo {
+            background: url(../Content/images/logo-white.png) no-repeat 0 -1px;
+            bottom: 0;
+            color: @header-font-color;
+            overflow: auto;
+            position: absolute;
+            left: 0;
+
+            h1 {
+                font-size: 28px;
+                letter-spacing: 3px;
+                margin-left: 47px;
+                text-shadow: 0 0 7px rgba(255,255,255,0.8), -1px -1px 0 #636363, 1px -1px 0 #636363, -1px 1px 0 #636363, 1px 1px 0 #636363;
+                text-transform: lowercase;
+
+                span {
+                    font-style: italic;
+                }
+            }
+        }
+
+        a#logo:hover {
+            color: @header-font-color;
+        }
+
+        .nav {
+            bottom: 0;
+            position: absolute;
+            right: 0;
+
+            a.nav-link {
+                border-left: 1px dotted #d3d2d2;
+                color: @header-font-color;
+                float: left;
+                min-width: 100px;
+                padding: 5px 10px;
+                text-align: center;
+            }
+
+            .nav-link.first {
+                border-left: none;
+            }
+
+            a.nav-link:hover {
+                color: @header-font-color;
+            }
+
+            a.nav-link:focus,
+            a.nav-link:hover {
+                background-color: rgba(238, 238, 238, 0.2);
+            }
+
+            a.nav-link.active:focus,
+            a.nav-link.active:hover {
+                background-color: transparent;
+                cursor: default;
+            }
+        }
+    }
+}
+
+/* Body */
+#body {
+    min-height: 300px;
+}
+
+/* Footer */
+footer {
+
+    &.container {
+        border-top: 1px dotted @footer-font-color;
+        clear: both;
+        color: @footer-font-color;
+        font-size: 11px;
+        margin: 0 auto;
+        padding: 5px;
+    }
+}

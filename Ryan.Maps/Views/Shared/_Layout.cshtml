@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/lib/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/lib/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    @RenderSection("htmlhead", required: false)
+</head>
+<body>
+
+    @Html.Partial("_Header")
+
+    <div id="body" class="container">
+        @RenderBody()
+    </div>
+
+    <footer class="container">
+        &copy;MySite @DateTime.Now.Year
+    </footer>
+
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    @*    <script src="~/Scripts/Site.js"></script>*@
+    @RenderSection("PageScripts", false)
+</body>
+</html>
+
+

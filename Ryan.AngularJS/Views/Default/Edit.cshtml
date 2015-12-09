@@ -1,0 +1,183 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    var persons = new List<dynamic> { new { firstName = "John",   lastName = "Doe",      title = "CEO",     email = "john@datmaster.com",    startDate = DateTime.Now.AddMonths(-7)},
+                                      new { firstName = "Anna",   lastName = "Smith",    title = "VP",      email = "anna@datamaster.com",   startDate = DateTime.Now.AddMonths(-6)},
+                                      new { firstName = "Peter",  lastName = "Jones",    title = "Worker",  email = "peter@datamaster.com",  startDate = DateTime.Now.AddMonths(-2) },
+                                      new { firstName = "Ryan",   lastName = "Lifferth", title = "Worker",  email = "ryan@datamaster.com",   startDate = DateTime.Now.AddMonths(-1) },
+                                      new { firstName = "Aimee",  lastName = "Fetui",    title = "Worker",  email = "aimee@datamaster.com",  startDate = DateTime.Now.AddMonths(-11) },
+                                      new { firstName = "Taylor", lastName = "Leilani",  title = "Worker",  email = "taylor@datamaster.com", startDate = DateTime.Now.AddMonths(-2) },
+                                      new { firstName = "Zach",   lastName = "Pago",     title = "Worker",  email = "zach@datamaster.com",   startDate = DateTime.Now.AddMonths(-4) },
+                                      new { firstName = "Tex",    lastName = "Tavita",   title = "Worker",  email = "tex@datamaster.com",    startDate = DateTime.Now.AddMonths(-8) },
+                                      new { firstName = "Jacob",  lastName = "Makoa",    title = "Worker",  email = "jacob@datamaster.com",  startDate = DateTime.Now.AddMonths(-9) }
+                                    };
+
+    var json = Newtonsoft.Json.JsonConvert.SerializeObject(persons);
+}
+
+<h2>Edit AngularJS Data Example</h2>
+
+<div class="row" id="jsonEditSample" ng-app="jsonEditApp" ng-controller="PersonController" ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(persons), '@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")')">
+
+
+    <ul>
+        <li ng-click="currentDateRange = dateRanges.all" ng-class="{active: currentDateRange == dateRanges.all}">all</li>
+        <li ng-click="currentDateRange = dateRanges.sevenTwelve" ng-class="{active: currentDateRange == dateRanges.sevenTwelve}">7 - 12</li>
+        <li ng-click="currentDateRange = dateRanges.fourSix" ng-class="{active: currentDateRange == dateRanges.fourSix}">4 -6</li>
+        <li ng-click="currentDateRange = dateRanges.zeroThree" ng-class="{active: currentDateRange == dateRanges.zeroThree}">0 - 3</li>
+    </ul>
+
+    <span class="count">
+        Person Count
+        <em>{{(people|filter:eventDateFilter).length}}</em>
+    </span>
+
+    <table>
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Title</th>
+                <th>email</th>
+                <th>Start Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="p in people | filter:eventDateFilter">
+                <td>
+                    <span ng-hide="editItem==$index + '-firstName'" ng-click="toggleEdit($index, 'firstName', $event)" ng-class="{changed: p.firstName != '{{::p.firstName}}'}">{{p.firstName}}</span>
+                    <input type="text" 
+                           ng-show="editItem==$index + '-firstName'" 
+                           ng-blur="toggleEdit('')" 
+                           ng-model="p.firstName" 
+                           ng-class="{changed: p.firstName != '{{::p.firstName}}'}"
+                           focus-on-show />
+                </td>
+                <td>
+                    <span ng-hide="editItem==$index + '-lastName'" ng-click="toggleEdit($index, 'lastName', $event)" ng-class="{changed: p.lastName != '{{::p.lastName}}'}">{{p.lastName}}</span>
+                    <input ng-show="editItem==$index + '-lastName'" ng-blur="toggleEdit('')" ng-model="p.lastName" ng-class="{changed: p.lastName != '{{::p.lastName}}'}" type="text" focus-on-show />
+                </td>
+                <td>
+                    <span ng-hide="editItem==$index + '-title'" ng-click="toggleEdit($index, 'title', $event)" ng-class="{changed: p.title != '{{::p.title}}'}">{{p.title}}</span>
+                    <input ng-show="editItem==$index + '-title'" ng-blur="toggleEdit('')" ng-model="p.title" type="text" ng-class="{changed: p.title != '{{::p.title}}'}" focus-on-show />
+                </td>
+                <td>
+                    <span ng-hide="editItem==$index + '-email'" ng-click="toggleEdit($index, 'email', $event)" ng-class="{changed: p.email != '{{::p.email}}'}">{{p.email}}</span>
+                    <input ng-show="editItem==$index + '-email'" ng-blur="toggleEdit('')" ng-model="p.email" ng-class="{changed: p.email != '{{::p.email}}'}" type="text" focus-on-show />
+                </td>
+                <td>
+                    <span ng-hide="editItem==$index + '-startDate'" ng-click="toggleEdit($index, 'startDate', $event)" ng-class="{changed: p.startDate != '{{::p.startDate}}'}">{{p.startDate | date: 'MM/dd/yyyy'}}</span>
+                    <input ng-show="editItem==$index + '-startDate'" ng-blur="toggleEdit('')" ng-model="p.startDate" ng-class="{changed: p.startDate != '{{::p.startDate}}'}" date='MM/dd/yyyy' type="text" focus-on-show />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+@section PageScripts {
+    <script src="~/Scripts/moment.min.js"></script>
+    <script type="text/javascript">
+        angular
+            .module('jsonEditApp', [])
+            .controller('PersonController', ['$scope', function ($scope) {
+
+                $scope.init = function (personData, effectiveDate) {
+
+                    $scope.people = personData;
+
+                    var effDate = moment(effectiveDate, 'YYYY-MM-DD');
+                    $scope.effectiveDate = effDate;
+                    $scope.dateRanges = {
+                        all: { from: moment(new Date(-100000000 * 86400000)), to: moment(new Date(100000000 * 86400000)) },
+                        sevenTwelve: { from: moment(effectiveDate, 'YYYY-MM-DD').subtract(12, 'month'), to: moment(effectiveDate, 'YYYY-MM-DD').subtract(7, 'month') },
+                        fourSix: { from: moment(effectiveDate, 'YYYY-MM-DD').subtract(6, 'month'), to: moment(effectiveDate, 'YYYY-MM-DD').subtract(4, 'month') },
+                        zeroThree: { from: moment(effectiveDate, 'YYYY-MM-DD').subtract(3, 'month'), to: moment(effectiveDate, 'YYYY-MM-DD').subtract(0, 'month') },
+                    };
+
+                    $scope.currentDateRange = $scope.dateRanges.all;
+                };
+
+                $scope.eventDateFilter = function (person) {
+                    var personStartDate = moment(person.startDate);
+                    var from = moment($scope.currentDateRange.from);
+                    var to = moment($scope.currentDateRange.to);
+
+                    //if (personStartDate >= from && personStartDate <= to) return true;
+                    if (personStartDate.isBetween(from, to, 'day') ||
+                        personStartDate.isSame(from, 'day') ||
+                        personStartDate.isSame(to, 'day')) {
+                        return true;
+                    }
+
+                    return false;
+                };
+
+                $scope.toggleEdit = function (indexKey, keyName, e) {
+                    keyName = keyName || '';  // In case param isn't passed in
+                    e = e || null;
+
+                    $scope.editItem = indexKey + '-' + keyName;
+
+                    // TODO:  Set/remove row class on edit???
+                    if (e !== null) {
+                        // add the "editing" class to the parent row
+                        $(e.target).parent().parent().addClass("editing");
+                    }
+
+                    if (indexKey === '') {
+                        // remove the "editing" class from the parent row
+                        $("table tbody tr").removeClass("editing");
+                    }
+                };
+
+            }])
+            // Formats the input fields for dates correctly
+            .directive('date', function (dateFilter) {
+                return {
+                    require: 'ngModel',
+                    link: function (scope, elm, attrs, ctrl) {
+
+                        var dateFormat = attrs['date'] || 'MM/dd/yyyy';  // Default value if nothing is passed in
+
+                        ctrl.$formatters.unshift(function (modelValue) {
+                            return dateFilter(modelValue, dateFormat);
+                        });
+                    }
+                };
+            })
+            // Sets focus to the input field
+            .directive('focusOnShow', function ($timeout) {
+                return {
+                    restrict: 'A',
+                    link: function ($scope, $element, $attr) {
+                        if ($attr.ngShow) {
+                            $scope.$watch($attr.ngShow, function (newValue) {
+                                if (newValue) {
+                                    $timeout(function () {
+                                        $element.focus();
+                                    }, 0);
+                                }
+                            })
+                        }
+                        if ($attr.ngHide) {
+                            $scope.$watch($attr.ngHide, function (newValue) {
+                                if (!newValue) {
+                                    $timeout(function () {
+                                        $element.focus();
+                                    }, 0);
+                                }
+                            })
+                        }
+
+                    }
+                };
+            })
+
+        //angular.bootstrap(document.getElementById("jsonFilterSample"), ['jsonFilterApp']);
+
+    </script>
+}
+

@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "Filter";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    var persons = new List<dynamic> { new { firstName = "John",  lastName = "Doe",   title = "CEO",     email = "john@datmaster.com",   startDate = DateTime.Now.AddMonths(-7)},
+                                      new { firstName = "Anna",  lastName = "Smith", title = "VP",      email = "anna@datamaster.com",  startDate = DateTime.Now.AddMonths(-6)},
+                                      new { firstName = "Peter", lastName = "Jones", title = "Worker",  email = "peter@datamaster.com", startDate = DateTime.Now.AddMonths(-2) }
+                                    };
+
+    //var s = propertyData.FirstOrDefault().firstName;
+    var json = Newtonsoft.Json.JsonConvert.SerializeObject(persons);
+
+}
+
+<h2>Angular Filter JSON example</h2>
+
+<div class="row" id="jsonFilterSample" ng-app="jsonFilterApp" ng-controller="PersonController" ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(persons), '@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")')">
+
+    <ul>
+        <li ng-click="currentDateRange = dateRanges.all" ng-class="{active: currentDateRange == dateRanges.all}">all</li>
+        <li ng-click="currentDateRange = dateRanges.sevenTwelve" ng-class="{active: currentDateRange == dateRanges.sevenTwelve}">7 - 12</li>
+        <li ng-click="currentDateRange = dateRanges.fourSix" ng-class="{active: currentDateRange == dateRanges.fourSix}">4 -6</li>
+        <li ng-click="currentDateRange = dateRanges.zeroThree" ng-class="{active: currentDateRange == dateRanges.zeroThree}">0 - 3</li>
+    </ul>
+
+    <span class="count">
+        Person Count
+        <em>{{(people|filter:eventDateFilter).length}}</em>
+    </span>
+
+    <table>
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Title</th>
+                <th>email</th>
+                <th>Start Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="p in people | filter:eventDateFilter">
+                <td><span>{{p.firstName}}</span></td>
+                <td><span>{{p.lastName}}</span></td>
+                <td><span>{{p.title}}</span></td>
+                <td><span>{{p.email}}</span></td>
+                <td><span>{{p.startDate | date: 'MM/dd/yyyy'}}</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+@section PageScripts {
+    <script src="~/Scripts/moment.min.js"></script>
+    <script type="text/javascript">
+        angular.module('jsonFilterApp', [])
+               .controller('PersonController', ['$scope', function ($scope) {
+                   $scope.init = function (personData, effectiveDate) {
+
+                       $scope.people = personData;
+
+                       var effDate = moment(effectiveDate, 'YYYY-MM-DD');
+                       $scope.effectiveDate = effDate;
+                       $scope.dateRanges = {  
+                           all:         { from: moment(new Date(-100000000 * 86400000)),                    to: moment(new Date(100000000 * 86400000)) },
+                           sevenTwelve: { from: moment(effectiveDate, 'YYYY-MM-DD').subtract(12, 'month'),  to: moment(effectiveDate, 'YYYY-MM-DD').subtract(7, 'month') },
+                           fourSix:     { from: moment(effectiveDate, 'YYYY-MM-DD').subtract(6, 'month'),   to: moment(effectiveDate, 'YYYY-MM-DD').subtract(4, 'month') },
+                           zeroThree:   { from: moment(effectiveDate, 'YYYY-MM-DD').subtract(3, 'month'),   to: moment(effectiveDate, 'YYYY-MM-DD').subtract(0, 'month') },
+                       };
+
+                       $scope.currentDateRange = $scope.dateRanges.all;
+                   };
+
+                   $scope.eventDateFilter = function (person) {
+                       var personStartDate = moment(person.startDate);
+                       var from = moment($scope.currentDateRange.from);
+                       var to = moment($scope.currentDateRange.to);
+
+                       //if (personStartDate >= from && personStartDate <= to) return true;
+                       if (personStartDate.isBetween(from, to, 'day') ||
+                           personStartDate.isSame(from,'day') ||
+                           personStartDate.isSame(to, 'day')) {
+                           return true;
+                       }
+
+                       return false;
+                   };
+
+               }]);
+
+        //angular.bootstrap(document.getElementById("jsonFilterSample"), ['jsonFilterApp']);
+
+    </script>
+}

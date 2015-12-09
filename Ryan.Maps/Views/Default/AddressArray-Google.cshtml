@@ -1,0 +1,186 @@
+﻿
+@{
+    ViewBag.Title = "AddressArrayGoogle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Address Array - Google</h2>
+
+@section PageScripts {
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var map;
+            var subjectAddress = '325 E Gordon Ave, Layton, Utah 84041';
+            var subjectLocation;
+            var subjectLatLng;
+
+            $.ajax({
+                type: 'GET',
+                url: 'http://maps.googleapis.com/maps/api/geocode/json?address=' + subjectAddress + '&sensor=false',
+                async: false, // setting to false so that subject is the center of the map
+                success: function (json) {
+                    //var loc = json.results[0].geometry.location;
+                    subjectLocation = json.results[0].geometry.location;
+                    subjectLatLng = new google.maps.LatLng(subjectLocation.lat, subjectLocation.lng);
+                }
+            });
+
+
+
+            var myOptions = {
+                zoom: 13,
+                center: new google.maps.LatLng(subjectLocation.lat, subjectLocation.lng),
+                //center: new google.maps.LatLng(41.0748015,-111.9631911),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map($('#googft-mapCanvas')[0], myOptions);
+
+            // Map the subject property
+            var marker = new google.maps.Marker({
+                position: subjectLatLng,
+                label: 'S',
+                title: "Subject\n" + subjectAddress,
+                map: map,
+                draggable: false
+                //,icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=A|FF0000|000000'
+                //, icon: 'http://maps.google.com/mapfiles/ms/icons/blue.png'
+            });
+
+            // Add 2 mile radius circle overlay and bind to marker
+            var circle = new google.maps.Circle({
+                map: map,
+                radius: 3220,    // metres
+                strokeColor: "#0000FF",
+                strokeOpacity: 0.4,
+                strokeWeight: 1,
+                fillColor: '#0069AB',
+                fillOpacity: 0.03,
+            });
+            circle.bindTo('center', marker, 'position');
+
+            // Add 1 mile radius circle overlay and bind to marker
+            circle = new google.maps.Circle({
+                map: map,
+                radius: 1610,    // metres
+                strokeColor: "#FF0000",
+                strokeOpacity: 0.4,
+                strokeWeight: 1,
+                fillColor: '#AA0000',
+                fillOpacity: 0.05,
+            });
+            circle.bindTo('center', marker, 'position');
+
+
+
+            var addresses = [
+                '929 Arbor Way, Layton, Utah 84041',
+                '765 E Gordon Ave, Layton, Utah 84041',
+                '2939 N 725 W, Layton, Utah 84041',
+                '498 W 2475 N, Layton, Utah 84041'
+                //,'549 W Muskmelon Way, Saratoga Springs, Utah 84045'
+            ];
+
+            var bounds = new google.maps.LatLngBounds();
+
+            for (var x = 0; x < addresses.length; x++) {
+                $.getJSON('http://maps.googleapis.com/maps/api/geocode/json?address=' + addresses[x] + '&sensor=false', null, function (data) {
+                    var compLocation = data.results[0].geometry.location
+                    var compLatLng = new google.maps.LatLng(compLocation.lat, compLocation.lng);
+                    var distanceFromSubject = google.maps.geometry.spherical.computeDistanceBetween(subjectLatLng, compLatLng);
+                    distanceFromSubject = (distanceFromSubject * 0.000621371192).round(1); // convert to miles
+                    //distanceFromSubject = distanceFromSubject.round(1);
+                    var distanceText = (distanceFromSubject === undefined || distanceFromSubject === null) ? "" : distanceFromSubject == 1.0 ? distanceFromSubject + " mile" : distanceFromSubject + " miles";
+                    
+
+                    var infowindow = new google.maps.InfoWindow({
+                        content: GetInfoWindowContent(BuildAddressFromComponent(data.results[0].address_components), distanceText)
+                    });
+
+                    var titleText = "Comparable\n" + data.results[0].formatted_address + '\nstraight line distance from subject: ' + distanceText;
+
+                    var marker = new google.maps.Marker({
+                        position: compLatLng,
+                        label: 'C',
+                        title: titleText,
+                        map: map
+                    });
+
+                    //  And increase the bounds to take this point
+                    bounds.extend(marker.position);
+                    map.fitBounds(bounds);
+                    
+                    marker.addListener('click', function () {
+                        infowindow.open(map, marker);
+                    });
+
+                });
+            }
+
+        });
+
+        // Extension method to round decimal
+        Number.prototype.round = function (places) {
+            return +(Math.round(this + "e+" + places) + "e-" + places);
+        }
+
+        String.prototype.ryan = function (stuff) {
+            return this + ' hi Ryan and ' + stuff;
+        }
+
+
+        /// Adds comp info
+        function GetInfoWindowContent(address, distance) {
+            var content = '<div class="property-info">' +
+                          '<h2>Comparable Property</h2>' +
+                          '<div class="property-photo"></div>' +
+                          '<address>' + address + '</address>' +
+                          '<div class="row">' +
+                          '<label>MLS Number:</label>' +
+                          '<span>1232</span>' +
+                          '</div>' +
+                          '<div class="row">' +
+                          '<label>Tax ID:</label>' +
+                          '<span>2132</span>' +
+                          '</div>' +
+                          '<div class="row">' + 
+                          '<label>' + distance + '</label>' +
+                          '<span> (straight line) from subject</span>' +
+                          '</div>' +
+                          '</div>';
+
+            return content;
+        }
+
+        function BuildAddressFromComponent(components) {
+
+            var streetNumber = GetAddressComponent(components, "street_number"),
+                street = GetAddressComponent(components, "route"),
+                city = GetAddressComponent(components, "locality"),
+                stateCode = GetAddressComponent(components, "administrative_area_level_1"),
+                postalCode = GetAddressComponent(components, "postal_code"),
+                postalCodeSuffix = GetAddressComponent(components, "postal_code_suffix");
+            if (!isNaN(postalCode) && !isNaN(postalCodeSuffix)) postalCode += "-" + postalCodeSuffix;
+
+            return streetNumber + " " + street + ", " + city + ", " + stateCode + " " + postalCode;
+        }
+
+        function GetAddressComponent(components, typeName) {
+            var streetNumber,
+                street;
+
+            for (var i = 0; i < components.length; i++) {
+                if (components[i].types[0] === typeName) {
+                    return components[i].short_name;
+                    break;
+                }
+            }
+
+
+        }
+
+</script>
+}
+
+<div id="googft-mapCanvas" class="map-canvas"></div>

@@ -1,0 +1,33 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+
+<html >
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/lib/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    
+    @Html.Partial("_Header")
+
+    <div id="body" class="container">
+        @RenderBody()
+    </div>
+
+    <footer class="container">
+        &copy;MySite @DateTime.Now.Year
+    </footer>
+
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/Angular/angular.min.js"></script>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>*@
+    @*@Scripts.Render("~/bundles/RyanAngular")*@
+    @*    <script src="~/Scripts/Site.js"></script>*@
+    @RenderSection("PageScripts", false)
+</body>
+</html>
+
+

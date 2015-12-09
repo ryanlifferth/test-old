@@ -1,0 +1,176 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    var propertyData = new List<dynamic> { new { firstName = "John", lastName = "Doe", title = "CEO", email = "john@datmaster.com" },
+                                           new { firstName = "Anna", lastName = "Smith", title = "VP of something", email = "anna@datamaster.com" },
+                                           new { firstName = "Peter", lastName = "Jones", title = "Worker", email = "peter@datamaster.com" }};
+
+    //var s = propertyData.FirstOrDefault().firstName;
+    var json = Newtonsoft.Json.JsonConvert.SerializeObject(propertyData);
+    
+}
+
+<h2>Angular Basics</h2>
+
+<div class="row" ng-app>
+    <h3>Example without any JS:</h3>
+    @Html.TextBox("Hello", "Sample", new { @class = "", ng_model = "helloAngular", placeholder = "Enter text..." })
+    <h4>{{helloAngular}}</h4>
+</div>
+
+<div class="row" id="secondAngularSection" ng-app="ryanTestApp" ng-controller="GreeterController">
+    <h3>Example using controllers</h3>
+    <h4>{{greeting}}</h4>
+    <h4>{{models.helloAngular}}</h4>
+</div>
+
+<div class="row" id="yahooServiceExample" ng-app="invoice" ng-controller="InvoiceController as invoice">
+    <h3>Invoice Example:</h3>
+    <div>
+        <label>Quantity:</label>
+        <input type="number" min="0" ng-model="invoice.qty" required>
+    </div>
+    <div>
+        <label>Costs:</label>
+        <input type="number" min="0" ng-model="invoice.cost" required>
+        <select ng-model="invoice.inCurr">
+            <option ng-repeat="c in invoice.currencies">{{c}}</option>
+        </select>
+    </div>
+    <div>
+        <label><b>Total:</b></label>
+        <span ng-repeat="c in invoice.currencies">
+            {{invoice.total(c) | currency:c}}
+        </span>
+    </div>
+    <div>
+        <label></label>
+        <button class="btn" ng-click="invoice.pay()">Pay</button>
+    </div>
+</div>
+
+<div class="row" id="controllerDataSample" ng-app="dataInputApp" ng-controller="SampleController" ng-init="init('Ryan', '007')">
+
+    <h3>Passing Simple Data From ASP Example:</h3>
+    I am {{name}} {{id}}
+</div>
+
+<div class="row" id="controllerJsonSample" ng-app="jsonInputApp" ng-controller="PropertyController" ng-init="init('ryan', @Newtonsoft.Json.JsonConvert.SerializeObject(propertyData))">
+    <h3>Passing JSON Data From ASP Example:</h3>
+    {{name}} {{properties.length}} {{properties[0].firstName}}
+    <div ng-repeat="e in properties">
+        {{e.firstName}} {{e.lastName}} <i>{{e.title}}</i> {{e.email}}
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Title</th>
+                <th>email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="person in properties">
+                <td>{{person.firstName}} {{person.lastName}}</td>
+                <td>{{person.title}}</td>
+                <td>{{person.email}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+@section PageScripts {
+
+    <script type="text/javascript">
+
+        var ryanTestApp = angular.module('ryanTestApp', []);
+
+        ryanTestApp.controller('GreeterController', ['$scope', function ($scope) {
+            $scope.greeting = "Hello";
+            $scope.models = {
+                helloAngular: 'I work!'
+            };
+        }])
+
+        angular.bootstrap(document.getElementById("secondAngularSection"), ['ryanTestApp']);
+
+    </script>
+
+    <script type="text/javascript">
+        angular.module('finance', [])
+               .factory('currencyConverter', function () {
+                   var currencies = ['USD', 'EUR', 'CNY'];
+                   var usdToForeignRates = {
+                       USD: 1,
+                       EUR: 0.74,
+                       CNY: 6.09
+                   };
+
+                   var convert = function (amount, inCurr, outCurr) {
+                       return amount * usdToForeignRates[outCurr] / usdToForeignRates[inCurr];
+                   };
+
+                   return {
+                       currencies: currencies,
+                       convert: convert
+                   };
+
+               });
+
+        angular.module('invoice', ['finance'])
+               .controller('InvoiceController', ['currencyConverter', function (currencyConverter) {
+                   this.qty = 1;
+                   this.cost = 2;
+                   this.inCurr = 'EUR';
+                   this.currencies = currencyConverter.currencies;
+
+                   this.total = function total(outCurr) {
+                       return currencyConverter.convert(this.qty * this.cost, this.inCurr, outCurr);
+                   };
+
+                   this.pay = function pay() {
+                       window.alert('Thanks');
+                   };
+               }]);
+
+        angular.bootstrap(document.getElementById("yahooServiceExample"), ['invoice']);
+
+    </script>
+
+    <script type="text/javascript">
+        angular.module('dataInputApp', [])
+               .controller('SampleController', ['$scope', function ($scope) {
+                   $scope.init = function (name, id) {
+                       $scope.name = name;
+                       $scope.id = id;
+                   };
+               }]);
+
+        angular.bootstrap(document.getElementById("controllerDataSample"), ['dataInputApp']);
+    </script>
+
+    <script type="text/javascript">
+        angular.module('jsonInputApp', [])
+               .controller('PropertyController', ['$scope', function ($scope) {
+                   $scope.init = function (name, propertyData) {
+                       $scope.name = name;
+                       $scope.properties = propertyData;
+                   };
+               }]);
+
+        angular.bootstrap(document.getElementById("controllerJsonSample"), ['jsonInputApp']);
+
+        /*"propertyData":[
+            {"firstName":"John", "lastName":"Doe",   title: "CEO",             email: "john@datmaster.com"},
+            {"firstName":"Anna", "lastName":"Smith", title: "VP of something", email: "anna@datamaster.com"},
+            {"firstName":"Peter","lastName":"Jones", title: "Worker",          email: "peter@datamaster.com"}
+        ]
+    "propertyData":[{"firstName":"John", "lastName":"Doe", title: "CEO", email: "john@datmaster.com"},{"firstName":"Anna", "lastName":"Smith", title: "VP of something", email: "anna@datamaster.com"}, {"firstName":"Peter","lastName":"Jones", title: "Worker", email: "peter@datamaster.com"}]
+    //ng-init='init("[{\"firstName\":\"John\", \"lastName\":\"Doe\", title: \"CEO\", email: \"john@datmaster.com\"},{\"firstName\":\"Anna\", \"lastName\":\"Smith\", title: \"VP of something\", email: \"anna@datamaster.com\"}, {\"firstName\":\"Peter\",\"lastName\":\"Jones\", title: \"Worker\", email: \"peter@datamaster.com\"}]")'
+        */
+    </script>
+
+}
