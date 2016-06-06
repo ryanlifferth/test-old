@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Newtonsoft.Json;
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
@@ -23,6 +24,13 @@
     <h3>Example using controllers</h3>
     <h4>{{greeting}}</h4>
     <h4>{{models.helloAngular}}</h4>
+
+    <br />
+    <a href="javascript:void(0)" ng-click="ryanValue = 'Value 1'">Value 1</a><br />
+    <a href="javascript:void(0)" ng-click="ryanValue = 'Value 2'">Value 2</a><br />
+
+    @Html.TextBox("ClickValue", string.Empty, new { @class = "", ng_model = "ryanValue", placeholder = "Enter text..." })
+    <p>{{ryanValue}}</p>
 </div>
 
 <div class="row" id="yahooServiceExample" ng-app="invoice" ng-controller="InvoiceController as invoice">
@@ -79,6 +87,22 @@
             </tr>
         </tbody>
     </table>
+</div>
+
+@{ 
+    var myList = new List<string> { "Ryan", "Aimee", "Taylor", "Zach", "Tex", "Jacob" };
+
+    var ryan    = myList.Select(x => { x = "Lifferth." + x; return x; });
+    var rryan   = myList.Select(i => i = "Lifferth." + i);
+    var ryan2 = myList.Select(x => x = "Lifferth, " + x);
+
+}
+<div class="row" id="controllerArraySample" ng-app="jsonArrayApp" ng-controller="RyanTestArrayController">
+    <h3>Serializing Array</h3>
+    @JsonConvert.SerializeObject(myList.ToArray());
+
+    <br />
+    <a href="javascript:void(0)" ng-click='testMyArray(@Html.Raw(JsonConvert.SerializeObject(ryan2.ToArray())))'>Do Something</a>
 </div>
 
 
@@ -171,6 +195,23 @@
     "propertyData":[{"firstName":"John", "lastName":"Doe", title: "CEO", email: "john@datmaster.com"},{"firstName":"Anna", "lastName":"Smith", title: "VP of something", email: "anna@datamaster.com"}, {"firstName":"Peter","lastName":"Jones", title: "Worker", email: "peter@datamaster.com"}]
     //ng-init='init("[{\"firstName\":\"John\", \"lastName\":\"Doe\", title: \"CEO\", email: \"john@datmaster.com\"},{\"firstName\":\"Anna\", \"lastName\":\"Smith\", title: \"VP of something\", email: \"anna@datamaster.com\"}, {\"firstName\":\"Peter\",\"lastName\":\"Jones\", title: \"Worker\", email: \"peter@datamaster.com\"}]")'
         */
+    </script>
+
+    <script type="text/javascript">
+        angular.module('jsonArrayApp', [])
+               .controller('RyanTestArrayController', ['$scope', function ($scope) {
+                   //$scope.init = function (myArray) {
+                   //    $scope.myArray = myArray;
+                   //};
+
+                   $scope.testMyArray = function (theArray) {
+                       for (var i = 0; i < theArray.length; i++) {
+                           var s = theArray[i];
+                           console.log(s);
+                       }
+                   }
+               }]);
+        angular.bootstrap(document.getElementById("controllerArraySample"), ['jsonArrayApp']);
     </script>
 
 }

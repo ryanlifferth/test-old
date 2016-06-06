@@ -26,6 +26,12 @@ namespace Ryan.Maps.Controllers
             return View();
         }
 
+        [ActionName("StreetView-Google")]
+        public ActionResult StreetViewGoogle()
+        {
+            return View();
+        }
+
         public ActionResult Buttons()
         {
             return View();

@@ -120,6 +120,7 @@
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\PropertyGoogleMap.js" />
     <Content Include="Web.config" />
     <Content Include="Views\Default\Index.cshtml" />
   </ItemGroup>
@@ -143,6 +144,7 @@
     <Content Include="Views\Shared\PartialViews\_Header.cshtml" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <Content Include="Views\Default\Buttons.cshtml" />
+    <Content Include="Views\Default\StreetView-Google.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

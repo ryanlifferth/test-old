@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2 style="display: none;">DataMaster Coverage</h2>
+
+<div id="googft-mapCanvas"></div>
+
+@section PageScripts {
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?v=3"></script>
+    <script type="text/javascript">
+        function initialize() {
+            google.maps.visualRefresh = true;
+            var mapDiv = document.getElementById('googft-mapCanvas');
+            //mapDiv.style.width = isMobile ? '100%' : '500px';
+            //mapDiv.style.height = isMobile ? '100%' : '300px';
+            mapDiv.style.width = '100%';
+            mapDiv.style.height = '800px';
+            var map = new google.maps.Map(mapDiv, {
+                //credentials: "AjSx6izDBhCr3ti2xlB9q5BykI34fwnTUAYMPXOAScmyfHGjO7dlMLvs7PSit0vE",
+                center: new google.maps.LatLng(38.36815722265442, -101.90212770684235),
+                //center: new google.maps.LatLng(41.31033017180204, -112.08258349609378),
+                zoom: 5,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            layer = new google.maps.FusionTablesLayer({
+                map: map,
+                heatmap: { enabled: false },
+                query: {
+                    select: "col4",
+                    from: "11XjGrwqb5OjNYs971kOCiUVygs3a7nsHdNIXlW-6",
+                    where: "'DataMaster' >= 1 and 'DataMaster' <= 2",
+                    //where: "'State-County' in " +
+                    ////       "('UT-Box Elder','UT-Davis','UT-Salt Lake','UT-Utah','UT-Weber')",
+                    //       "('AZ-Coconino','AZ-Graham','AZ-Greenlee','AZ-Maricopa','AZ-Pima','AZ-Pinal','AZ-Santa Cruz','CA-Butte','CA-El Dorado','CA-Glenn','CA-Imperial','CA-Inyo','CA-Lake','CA-Los Angeles','CA-Madera','CA-Marin','CA-Mariposa','CA-Mendocino','CA-Monterey','CA-Napa','CA-Orange','CA-Placer','CA-Riverside','CA-Sacramento','CA-San Benito','CA-San Bernardino','CA-San Diego','CA-San Francisco','CA-San Joaquin','CA-San Mateo','CA-Santa Clara','CA-Santa Cruz','CA-Solano','CA-Sonoma','CA-Stanislaus','CA-Ventura','CA-Yolo'" +
+                    //       ",'CO-Adams','CO-Arapahoe','CO-Boulder','CO-Broomfield','CO-Chaffee','CO-Clear Creek','CO-Denver','CO-Douglas','CO-Elbert','CO-Gilpin','CO-Grand','CO-Jefferson','CO-Larimer','CO-Logan','CO-Morgan','CO-Park','CO-Routt','CO-Summit','CO-Weld','DE-Kent','DE-New Castle'" +
+                    //       ",'FL-Bradford','FL-Broward','FL-Charlotte','FL-Clay','FL-Duval','FL-Gadsden','FL-Glades','FL-Hendry','FL-Hillsborough','FL-Jefferson','FL-Lafayette','FL-Lake','FL-Leon','FL-Liberty','FL-Madison','FL-Manatee','FL-Martin','FL-MiamiDade','FL-Okeechobee','FL-Orange','FL-Osceola','FL-Palm Beach','FL-Pasco','FL-Pinellas','FL-Polk','FL-Putnam'" +
+                    //       ",'FL-St. Johns','FL-St. Lucie'" + 
+                    ////       //",'FL-Sarasota','FL-Seminole','FL-Sumter','FL-Suwannee','FL-Taylor','FL-Union','FL-Volusia','FL-Wakulla'" +
+                    ////       //",'GA-Barrow','GA-Bartow'" +
+                    ////       //",'GA-Butts','GA-Carroll','GA-Cherokee','GA-Cobb','GA-Coweta','GA-Dawson','GA-DeKalb','GA-Douglas','GA-Fayette','GA-Fulton','GA-Gwinnett','GA-Henry','GA-Jasper','GA-Lamar','GA-Morgan','GA-Newton','GA-Paulding','GA-Pike','GA-Rockdale','GA-Spalding','GA-Walton','ID-Ada','ID-Adams','ID-Boise','ID-Elmore','ID-Gem','ID-Jerome','ID-Owyhee','ID-Payette','ID-Twin Falls','ID-Valley','ID-Washington','IN-Boone','IN-Brown','IN-Decatur','IN-Hamilton','IN-Hancock','IN-Hendricks','IN-Johnson','IN-Madison','IN-Marion','IN-Montgomery','IN-Morgan','IN-Putnam','IN-Shelby','KS-Atchison','KS-Bourbon','KS-Coffey','KS-Douglas','KS-Jefferson','KS-Leavenworth','KS-Linn','KS-Miami','KS-Osage','KS-Wyandotte','MA-Bristol','MA-Essex','MA-Franklin','MA-Hampden','MA-Hampshire','MA-Middlesex','MA-Norfolk','MA-Plymouth','MA-Suffolk','MA-Worcester','MD-Allegany','MD-Anne Arundel','MD-Baltimore','MD-Baltimore City','MD-Calvert','MD-Caroline','MD-Carroll','MD-Cecil','MD-Charles','MD-Dorchester','MD-Frederick','MD-Garrett','MD-Harford','MD-Howard','MD-Kent','MD-Montgomery','MD-Prince George's','MD-Queen Anne's','MD-Saint Mary's','MD-Somerset','MD-Talbot','MD-Washington','MD-Wicomico','MD-Worcester','MI-Alcona','MI-Alger','MI-Alpena','MI-Antrim','MI-Arenac','MI-Bay','MI-Benzie','MI-Charlevoix','MI-Cheboygan','MI-Chippewa','MI-Clare','MI-Clinton','MI-Crawford','MI-Delta','MI-Eaton','MI-Emmet','MI-Genesee','MI-Gladwin','MI-Grand Traverse','MI-Gratiot','MI-Huron','MI-Ingham','MI-Ionia','MI-Iosco','MI-Isabella','MI-Jackson','MI-Kalkaska','MI-Kent','MI-Lake','MI-Lapeer','MI-Leelanau','MI-Lenawee','MI-Livingston','MI-Mackinac','MI-Macomb','MI-Manistee','MI-Marquette','MI-Mason','MI-Mecosta','MI-Midland','MI-Missaukee','MI-Monroe','MI-Montcalm','MI-Montmorency','MI-Newaygo','MI-Oakland','MI-Oceana','MI-Ogemaw','MI-Osceola','MI-Oscoda','MI-Otsego','MI-Presque Isle','MI-Roscommon','MI-Saginaw','MI-St. Clair','MI-Tuscola','MI-Wayne','MI-Wexford','MN-Anoka','MN-Benton','MN-Carver','MN-Chisago','MN-Dakota','MN-Hennepin','MN-Isanti','MN-Ramsey','MN-Scott','MN-Sherburne','MN-Washington','MN-Wright','MO-Bates','MO-Buchanan','MO-Caldwell','MO-Carroll','MO-Cass','MO-Clay','MO-Clinton','MO-Daviess','MO-DeKalb','MO-Henry','MO-Jackson','MO-Johnson','MO-Lafayette','MO-Platte','MO-Ray','MO-Saint Clair','NV-Clark','NV-Nye','NJ-Burlington','NJ-Camden','NJ-Gloucester','NJ-Mercer','NJ-Ocean','NJ-Salem','NY-Nassau','NY-Queens','NY-Suffolk','OH-Ashtabula','OH-Belmont','OH-Carroll','OH-Columbiana','OH-Coshocton','OH-Cuyahoga','OH-Geauga','OH-Guernsey','OH-Harrison','OH-Jefferson','OH-Lake','OH-Lorain','OH-Mahoning','OH-Morgan','OH-Muskingum','OH-Noble','OH-Perry','OH-Portage','OH-Stark','OH-Summit','OH-Trumbull','OH-Tuscarawas','OR-Baker','OR-Clackamas','OR-Columbia','OR-Coos','OR-Curry','OR-Douglas','OR-Gilliam','OR-Hood River','OR-Lane','OR-Morrow','OR-Multnomah','OR-Sherman','OR-Umatilla','OR-Union','OR-Wallowa','OR-Wasco','OR-Washington','OR-Yamhill','PA-Beaver','PA-Berks','PA-Bucks','PA-Chester','PA-Delaware','PA-Franklin','PA-Fulton','PA-Greene','PA-Montgomery','PA-Philadelphia','PA-Washington','TN-Cannon','TN-Davidson','TN-DeKalb','TN-Dickson','TN-Franklin','TN-Marshall','TN-Montgomery','TN-Robertson','TN-Rutherford','TN-Sumner','TN-Williamson','TN-Wilson','TX-Anderson','TX-Atascosa','TX-Bandera','TX-Bastrop','TX-Bexar','TX-Brazoria','TX-Burleson','TX-Burnet','TX-Caldwell','TX-Collin','TX-Grayson','TX-Guadalupe','TX-Harris','TX-Henderson','TX-Hill','TX-Hood','TX-Howard','TX-Hunt','TX-Johnson','TX-Kaufman','TX-Kendall','TX-Comal','TX-Cooke','TX-Dallas','TX-Denton','TX-Eastland','TX-Ellis','TX-Erath','TX-Fannin','TX-Fort Bend','TX-Freestone','TX-Galveston','TX-Kerr','TX-Lamar','TX-Medina','TX-Midland','TX-Montague','TX-Montgomery','TX-Navarro','TX-Grayson','TX-Guadalupe','TX-Harris','TX-Henderson','TX-Hill','TX-Hood','TX-Howard','TX-Hunt','TX-Johnson','TX-Kaufman','TX-Kendall','TX-Parker','TX-Red River','TX-Rockwall','TX-Smith','TX-Somervell','TX-Kerr','TX-Lamar','TX-Medina','TX-Midland','TX-Montague','TX-Montgomery','TX-Navarro','TX-Tarrant','TX-Taylor','TX-Travis','TX-Van Zandt','TX-Walker','TX-Waller','TX-Williamson','TX-Wilson','TX-Wise','TX-Wood','TX-Young','UT-Box Elder','UT-Davis','UT-Salt Lake','UT-Utah','UT-Weber','VA-Arlington','VA-Caroline','VA-Clarke','VA-Culpeper','VA-Fairfax','VA-Fauquier','VA-Frederick','VA-King George','VA-Loudoun','VA-Madison','VA-Orange','VA-Page','VA-Prince William','VA-Rappahannock','VA-Shenandoah','VA-Spotsylvania','VA-Stafford','VA-Warren','VA-City of Alexandria','WA-Clark','WA-Klickitat','WA-Skamania','WA-Walla Walla','WV-Berkeley','WV-Boone','WV-Grant','WV-Hampshire','WV-Hancock','WV-Hardy','WV-Jefferson','WV-Marshall','WV-Mineral','WV-Morgan','WV-Ohio','WV-Wetzel'" +
+                    //       ")",
+                },
+                options: {
+                    styleId: 307,
+                    templateId: 650
+                }
+            });
+
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+}
+
+
+

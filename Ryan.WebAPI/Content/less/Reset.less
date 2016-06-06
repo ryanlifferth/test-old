@@ -1,0 +1,57 @@
+﻿/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    border-radius: 0;
+    max-width: 400px;
+}
+
+header {
+    border-radius: 0;
+}
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Large Devices, Wide Screens */
+@media (min-width : 1200px) {
+    .container {
+        max-width: 1170px;
+    }
+}
+
+/* Medium Devices, Desktops */
+@media (min-width : 992px) {
+    .container {
+        max-width: 970px;
+    }
+}
+
+/* Small Devices, Tablets */
+@media (min-width : 768px) {
+    .container {
+        width: 750px;
+    }
+}
+
+/* Extra Small Devices, Phones */
+@media (min-width : 480px) {
+    .container {
+        width: auto;
+    }
+}
+
+/* Custom, iPhone Retina */
+@media (min-width : 320px) {
+    .container {
+        width: auto;
+    }
+}

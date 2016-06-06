@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "Content/Site.css",
+    "inputFile": "Content/less/Site.less"
+  },
+  {
+    "outputFile": "Content/CompGridSizing.css",
+    "inputFile": "Content/less/CompGridSizing.less"
+  }
+]

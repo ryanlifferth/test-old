@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "StreetViewGoogle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Street View - Google</h2>
+
+<div class="map-container">
+    <div id="google-mapCanvas" class="map-canvas"></div>
+    <div id="google-streetMapCanvas" class="street-map-canvas"></div>
+</div>
+
+
+@section PageScripts {
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=geometry"></script>
+    <script src="~/Scripts/PropertyGoogleMap.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            // Call the PropertyGoogleMap javascript class
+            var propertyMap = new PropertyGoogleMap();
+            //propertyMap.subjectAddress = "325 E Gordon Ave, Layton, UT 84041";
+            //propertyMap.subjectAddress = "549 W Muskmelon Way, Saratoga Springs, UT 84045";
+            //propertyMap.subjectAddress = "929 South Arbor Way West, Layton, UT 84041";
+            propertyMap.subjectAddress = "2939 N 725 W, Layton, UT 84041";
+            propertyMap.addSubjectInfoContentWindow = false;
+            propertyMap.mapCanvas = $('#google-mapCanvas');
+            propertyMap.addSubjectStreetMapView = true;
+            propertyMap.streetMapCanvas = $('#google-streetMapCanvas');
+            propertyMap.init();
+
+        });
+    </script>
+}

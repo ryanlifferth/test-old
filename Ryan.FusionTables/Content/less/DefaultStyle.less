@@ -1,0 +1,128 @@
+﻿@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700);
+@import url(https://fonts.googleapis.com/css?family=Mr+Bedfort&effect=shadow-multiple);
+@import url(https://fonts.googleapis.com/css?family=Rancho&effect=shadow-multiple);
+
+@import "Reset.less";
+
+@header-color: #2b5c87;
+
+body {
+    font-size: 14px;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+}
+
+/* Header */
+header {
+    /*background-color: #11283f;*/
+    background-color: @header-color;
+    height: 70px;
+
+    a.logo {
+        color: #fff;
+        display: inline-block;
+        height: auto;
+        margin: 0 0 3px 0;
+        padding: 0 95px 0 0;
+        position: relative;
+        text-decoration: none;
+
+        h1 {
+            font-family: Rancho, 'Mr Bedfort', Lato;
+            font-size: 60px;
+            letter-spacing: 2px;
+            margin: 0;
+            text-shadow: .04em .04em 0 @header-color,.08em .08em 0 #aaa;
+        }
+
+        .logo-img {
+            background-image: url(../images/glasses-moustache-white-shadow.png);
+            display: inline-block;
+            height: 57px;
+            position: absolute;
+            right: 0;
+            text-shadow: .04em .04em 0 @header-color,.08em .08em 0 #aaa;
+            top: 17px;
+            transform: rotate(10deg);
+            -webkit-transform: rotate(10deg); /* Chrome, Safari, Opera */
+            -ms-transform: rotate(10deg); /* IE 9 */
+            width: 104px;
+        }
+    }
+
+    ul.nav {
+        float: right;
+
+        li {
+
+            &.active {
+                background-color: #fff;
+
+                a {
+                    color: @header-color;
+                    cursor: default;
+
+                    &:hover {
+                        background-color: transparent;
+                    }
+                }
+            }
+
+            a {
+                color: #fff;
+                font-family: Lato;
+                font-size: 26px;
+                height: 70px;
+                padding: 25px 35px 0;
+                text-align: center;
+                text-transform: uppercase;
+
+                &:hover {
+                    background-color: #aa1c03;
+                }
+            }
+        }
+    }
+}
+
+/* Body */
+#body {
+    min-height: 300px;
+    position: relative;
+
+    padding-bottom: 10px;
+    padding-top: 10px;
+
+    &.container {
+        max-width: none;
+        width: auto;
+    }
+}
+
+.container {
+    max-width: none;
+    width: auto;
+}
+
+/* Footer */
+footer {
+
+    &.container {
+        border-top: 1px dotted #707070;
+        clear: both;
+        color: #707070;
+        font-size: 12px;
+        margin: 0 auto;
+        padding: 5px;
+    }
+}
+
+
+#googft-mapCanvas {
+    border: 1px solid #000;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}

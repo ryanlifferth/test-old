@@ -1,0 +1,387 @@
+﻿@using Ryan.DragAndDrop.Models
+@using System.Drawing
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    //Image subjectImage = ViewBag.subjectImage ?? null;
+    //string subjectImageString = ViewBag.subjectImageString;
+    List<string> parcelImageStrings = ViewBag.parcelImageStrings;
+
+    var tempParcels = new List<dynamic> {
+        new { MlsNumber = "1234", Address = new Address { AddressLine1 = "15015 NE GLISAN ST", City = "Portland", State = "OR", Zip = "97230" } },
+        new { MlsNumber = "5678", Address = new Address { AddressLine1 = "1913 NE 148TH PL", City = "Portland", State = "OR", Zip = "97230" } },
+        new { MlsNumber = "9012", Address = new Address { AddressLine1 = "4515 NE 84TH AVE", City = "Portland", State = "OR", Zip = "97230" } },
+        new { MlsNumber = "3456", Address = new Address { AddressLine1 = "8602 NE MILTON ST", City = "Portland", State = "OR", Zip = "97230" } },
+        new { MlsNumber = "2233", Address = new Address { AddressLine1 = "6454 NE KILLINGSWORTH CT", City = "Portland", State = "OR", Zip = "97230" } },
+        new { MlsNumber = "4455", Address = new Address { AddressLine1 = "1026 NE 87TH AVE", City = "Portland", State = "OR", Zip = "97230" } },
+        new { MlsNumber = "1234", Address = new Address { AddressLine1 = "3235 NE 111TH DR", City = "Portland", State = "OR", Zip = "97230" } },
+        new { MlsNumber = "5678", Address = new Address { AddressLine1 = "758 NE 94TH AVE", City = "Portland", State = "OR", Zip = "97230" } },
+        new { MlsNumber = "9012", Address = new Address { AddressLine1 = "8602 NE Milton Street", City = "Portland", State = "OR", Zip = "97230" } },
+        new { MlsNumber = "3456", Address = new Address { AddressLine1 = "8445 NE BRAZEE ST", City = "Portland", State = "OR", Zip = "97230" } },
+        new { MlsNumber = "2233", Address = new Address { AddressLine1 = "16314 NE FARGO ST", City = "Portland", State = "OR", Zip = "97230" } },
+        new { MlsNumber = "4455", Address = new Address { AddressLine1 = "18659 NE Multnomah TER", City = "Portland", State = "OR", Zip = "97230" } }
+    };
+
+    var subjectGridItemWidth = 245; // subject grid item width + margin
+    var compGridItemWidth = 230;
+    var compParcelCount = 6;
+    var compsWidth = compGridItemWidth * compParcelCount;  // this is the internal container
+
+}
+
+<h2>Comp Grid Example</h2>
+
+
+@*<img src="data:image/png;base64,@subjectImageString" alt="subject" />
+    <img src="@Url.Action("GetPhoto")" alt="subject 2" style="width: 160px; height: auto;" />*@
+@*<img src="@Url.Action("GetPhoto", new { indexNumber = 3 })" alt="subject 2" style="height: 90px; width: auto; border: 1px solid #000;" />*@
+
+<div class="comps-grid-container">
+
+    <div class="grid-headers">
+        <div class="grid-header">
+            <label style="display: inline-block;">Form</label>
+            <span style="margin-left: 5px; font-weight: bold;">1004 UAD</span>
+        </div>
+    </div>
+    <div class="grid-item subject">
+        <h1>Subject</h1>
+        <div class="row">
+            <div class="col-md-12">
+                @ParcelPhoto(parcelImageStrings[0])
+
+                <div class="parcel-detail-link-container">
+                    <a href="#">Listing</a>
+                    <a href="#">Deeds</a>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="address">2939 NW 725th Street</div>
+                <div class="address-sub">Portland, OR 97230</div>
+            </div>
+        </div>
+    </div>
+    <div class="comp-container">
+        <div class="comps" id="Comps">
+            @for (int i = 1; i <= compParcelCount; i++)
+            {
+                var first = i == 1 ? "first" : string.Empty;
+                <div class="grid-item @first" id="gridItem@(i)" draggable="true">
+                    <h1>
+                        @*<span class="fa fa-bars"></span>*@
+                        <span class="draggable-icon"></span>
+                        Comp @i
+                    </h1>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @ParcelPhoto(parcelImageStrings[i])
+                            <a href="#" class="move-col">comp @i</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="address">@tempParcels[i - 1].Address.AddressLine1</div>
+                            <div class="address-sub">@tempParcels[i - 1].Address.City, @tempParcels[i - 1].Address.State @tempParcels[i - 1].Address.Zip</div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+</div>
+
+
+<div class="hmm-error">
+    <div class="text top">hmm...</div>
+    <div class="icon"></div>
+    <div class="text bottom">
+        ...looks like you've reached the <span class="begin">beginning</span><span class="end">end</span>
+    </div>
+</div>
+
+
+@section PageStyles {
+    @*<link href="~/Content/CompGridSizing.css" rel="stylesheet" type="text/css" />*@
+}
+
+@section PageScripts {
+   
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // TODO:  Encapsulate this into a function so that it can be called on different events (e.g., window resize, add/delete comp, etc.)
+
+            function FitCompGridToPage() {
+                "use strict";
+                ///<summary>
+                /// The summary goes here
+                ///</summary>
+                var self = this;
+
+                /* PROPERTIES */
+                self.subjectGridItemWidth = "";
+                self.allCompsWidth = "";
+                self.containerBody = {};
+                self.compOuterContainer = {};
+                self.compInnerContainer = {};
+                self.subjectGridItem = {};
+                self.footerContainer = {};
+
+                /* FIELDS */
+                var bodyInnerContainerWidth = 0;
+                var bodyOuterContainerWidth = 0;
+                var compsContainerWidth = 0;
+
+                /* CONSTRUCTOR */
+                self.init = function() {
+                    //TODO: Do some basic validation to make sure that all objects are not null
+
+                    // Get the existing container widths
+                    bodyInnerContainerWidth = self.containerBody.outerWidth(false);  // Gets the width of the container without margins, padding, and border, so we know how wide we can go
+                    //bodyOuterContainerWidth = self.containerBody.outerWidth(true);   // Gets the width of the container with margins, padding, and border (due to true bool)
+                    bodyOuterContainerWidth = $(window).width();  //TEMP until firefox/jquery fix issue where outerWidth doesn't calculate the value of left/right margin: auto
+                    compsContainerWidth = self.compOuterContainer.outerWidth(true);  // Gets the width of the outer comps container
+
+                    self.sizeGridElements();
+                };
+
+                self.onResize = function(newWindowWidth) {
+                    // TODO:  Executed on browser resize, add or delete grid item
+                    bodyOuterContainerWidth = newWindowWidth;  // Gets the width of new window
+                    if (bodyOuterContainerWidth < bodyInnerContainerWidth) {
+                        bodyInnerContainerWidth = bodyOuterContainerWidth;
+                    }
+                    self.sizeGridElements();
+                };
+
+                /* METHODS */
+                /* Public Methods */
+                self.sizeGridElements = function() {
+                    if (bodyInnerContainerWidth < self.subjectGridItemWidth + self.allCompsWidth) {
+                        // Need to widen the .container#body element
+                        // Determine how wide to expand the the .container#body element
+                        if (bodyOuterContainerWidth < self.subjectGridItemWidth + self.allCompsWidth) {
+                            // Need to expand it to the full viewport and add scrollable properties to the comps-container element
+                            // Go to the widest possible and then add scrollable components
+                            self.containerBody.outerWidth(bodyOuterContainerWidth - 30); // -30 for 15px padding on each side
+                            self.compInnerContainer.outerWidth(self.allCompsWidth);
+                            self.compOuterContainer.addClass("horizontal-scroll").addClass("top-scrollbar");
+                            self.subjectGridItem.addClass("scrolling-top-margin");
+                        } else {
+                            // Determine how wide to expand the .container#body element
+                            self.containerBody.outerWidth(self.subjectGridItemWidth + self.allCompsWidth);
+
+                            // remove scrolling class properties (they may not be there, but on resize events they may be there)
+                            self.compOuterContainer.removeClass("horizontal-scroll").removeClass("top-scrollbar");
+                            self.subjectGridItem.removeClass("scrolling-top-margin");
+                        }
+
+                        // Widen the footer too - just to add consistency
+                        self.footerContainer.outerWidth(self.containerBody.outerWidth());
+                    }
+                };
+
+                /* Private Methods */
+
+                return self;
+            }
+
+            var fit = new FitCompGridToPage();
+            fit.subjectGridItemWidth = @subjectGridItemWidth;
+            fit.allCompsWidth = @compsWidth;  //compGridItemWidth * compParcelCount (calculated above)
+            fit.containerBody = $(".container#body");
+            fit.compOuterContainer = $(".comp-container");
+            fit.compInnerContainer = $(".comps");
+            fit.subjectGridItem = $(".grid-item.subject");
+            fit.footerContainer = $("footer.container");
+            fit.init();
+
+            $(window).resize(function() {
+                fit.onResize($( window ).width());
+            });
+
+
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // RESOURCES USED:
+            // - http://jsfiddle.net/mmmz/8
+
+            $(".comps > .grid-item *")
+                .on("focus", function (e) {
+                    $(e.target).closest(".grid-item").addClass("grid-item-focus");
+                })
+                .on("focusout", function (e) {
+                    $(e.target).closest(".grid-item").removeClass("grid-item-focus");
+                });
+
+            $(".comps > .grid-item").on("keyup", function (e) {
+                if (e.shiftKey && e.ctrlKey && e.keyCode == 39) {
+                    // CTRL + SHIFT + ->
+                    e.stopPropagation();
+
+                    console.log("move right");
+                    moveGridItem(e, "right");
+
+                } else if (e.shiftKey && e.ctrlKey && e.keyCode == 37) {
+                    // CTRL + SHIFT + <-
+                    e.stopPropagation();
+                    console.log("move left");
+                    moveGridItem(e, "left");
+                }
+            });
+
+            var moveGridItem = function (event, direction) {
+
+                var parentOffset = $(event.target).offset();
+                parentOffset.top -= 75;
+                var errorDisplayDelay = 1400;
+                if (direction === "right" && $(event.target).parents(".grid-item").next().length === 0) {
+                    //alert('you are already at the end');
+                    parentOffset.left -= 430;
+
+                    $(".hmm-error > .text.bottom > .end").show();
+                    $(".hmm-error > .text.bottom > .begin").hide();
+                    $(".hmm-error").css({ top: parentOffset.top, left: parentOffset.left })
+                                   .fadeIn("fast").delay(errorDisplayDelay).fadeOut("slow");
+                    return;
+                } else if (direction === "left" && $(event.target).parents(".grid-item").prev().length === 0) {
+                    //alert('you are at the begining');
+                    parentOffset.left -= 525;
+
+                    $(".hmm-error > .text.bottom > .begin").show();
+                    $(".hmm-error > .text.bottom > .end").hide();
+                    $(".hmm-error").css({ top: parentOffset.top, left: parentOffset.left })
+                                   .fadeIn("fast").delay(errorDisplayDelay).fadeOut("slow");
+                    return;
+                }
+
+
+                // Animation for moving a grid item
+                //  - addClass("dragging"): shows the animation of resizing (smaller) and opacity
+                //  - delay(nn): in place to let the animation above time to finish before moving on to the ".then()" call
+                //  - animate({ left/right...}): gives the appearance of moving to the right/left
+                //  - css({left/right: -NNpx}): sets a staring point for the animation that follows (see next step)
+                //  - animate({ left/right: 0 }): gives the appearance of moving from the right/left
+                //  - next().after(this): moves the .grid-item to after the next sibling, if there is one
+                //  - removeClass("dragging"): removes resize and opacity to set back to normal
+                //  - .focus(): sets focus back to the item it was on
+                var step1Animation = direction === "right" ? { left: '100px' } : { left: '-100px' };
+                var step2CssProperties = direction === "right" ? { left: '-30px' } : { left: '30px' };
+                var step3Animation = { left: 0 };
+                $.when(
+                    $(event.target).parents(".grid-item").addClass("dragging").delay(10).animate(step1Animation)
+                    )
+                    .then(function () {
+                        $(this).css(step2CssProperties).animate(step3Animation);
+                        if (direction === "right") {
+                            $(this).next().after(this);
+                        } else {
+                            $(this).prev().before(this);
+                        }
+                    })
+                    .then(function () {
+                        $(this).removeClass("dragging", 10);
+                        $(event.target).focus();
+                    });
+
+            }
+
+            // RESOURCES USED:
+            // - https://nemetht.wordpress.com/drag-and-drop-with-html5-and-jquery/
+            // - http://www.sitepoint.com/a-drag-and-drop-planning-board-with-html5/
+            // - https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API
+            // - http://www.html5rocks.com/en/tutorials/dnd/basics/
+            // - http://stackoverflow.com/questions/23309597/html5-drag-and-drop-using-jquery-not-jquery-ui
+
+            $(".comps > .grid-item").on("dragstart", function (e) {
+                e.originalEvent.dataTransfer.setData("Text", this.id);
+                e.originalEvent.dataTransfer.dropEffect = "move";
+                $(this).addClass("dragging");
+                $(this).next().addClass("dragging-sibling");
+            });
+
+            $(".comps > .grid-item").on("dragover", function (e) {
+                var event = e.originalEvent;
+                if (event.preventDefault) {
+                    event.preventDefault();
+                }
+
+                //if ($(this).is(":first-child")) {
+                //    console.log("First child");
+                //}
+
+                $(this).addClass("drag-over");
+
+                event.dataTransfer.dropEffect = "move";
+                return false;
+            });
+
+            $(".comps > .grid-item").on("dragleave", function (e) {
+                $(this).removeClass("drag-over");
+            });
+
+            $(".comps > .grid-item").on("drop", function (e) {
+                var event = e.originalEvent;
+                if (event.stopPropagation) {
+                    event.stopPropagation();
+                }
+
+                var dataTransfer = event.dataTransfer;
+                var draggedId = dataTransfer.getData('Text');
+                var draggedElement = $('#' + draggedId);
+                //$(e.target).append(draggedElement);
+                //if ($(e.target).hasClass(""))
+                var draggable = $(e.target).attr("draggable");
+                if (typeof draggable !== typeof undefined && draggable !== false) {
+                    // This IS the parent object
+                    $(e.target).after(draggedElement);
+                } else {
+                    // This IS NOT the parent object, find the parent object
+                    $(e.target).parents(".grid-item").after(draggedElement);
+                }
+
+                // redraw borders
+                $(".comps > .grid-item").removeClass("first");
+                $(".comps > .grid-item:first").addClass("first"); // add to the first comp
+
+
+                //var column = e.originalEvent.dataTransfer.getData("Text");
+                //e.target.appendChild(document.getElementById(column));
+
+                event.preventDefault();
+            });
+
+            $(".comps > .grid-item").on("dragend", function (e) {
+                $(this).removeClass("dragging");
+                $(".comps > .grid-item").removeClass("drag-over").removeClass("dragging-sibling");
+            });
+
+        });
+    </script>
+}
+
+@helper ParcelPhoto(string imageString)
+{
+    if (string.IsNullOrEmpty(imageString))
+    {
+            <div class="item-photo">
+                <span class="fa fa-picture-o fa-5x photo-icon"></span>
+                <span class="fa fa-plus fa-2x add-photo-icon"></span>
+            </div>
+    }
+    else
+    {
+            <div class="item-photo">
+                @*<img src="@photoUrl" alt="" style="height: 100px; width: auto; border: 1px solid #000;" />*@
+                <img src="data:image/png;base64,@imageString" alt="" />
+            </div>
+    }
+}

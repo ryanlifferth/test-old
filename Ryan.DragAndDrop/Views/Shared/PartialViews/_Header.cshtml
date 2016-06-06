@@ -1,0 +1,51 @@
+
+<header>
+    <div class="container">
+        <a href="@Url.Action("Index", "Default")" class="logo navbar-brand">
+            <h1 class="font-effect-shadow-multiple">Ryan.Drag&Drop</h1>
+            <span class="logo-img"></span>
+        </a>
+        <ul class="nav navbar-nav">
+            @BuildMenuItem("Home", "Index", "Default")
+            @BuildMenuItem("About Us", "About-Us", "Default")
+        </ul>
+    </div>
+</header>
+
+@functions {
+
+
+    private HtmlString BuildMenuItem(string text, string action, string controller, string liClasses = "", string linkClasses = "")
+    {
+        var link = new System.UriBuilder(Request.Url.AbsoluteUri) { Path = Url.Action(action, controller) }.Uri;
+        var currentPage = Request.Url;
+        var liCss = string.IsNullOrEmpty(liClasses) ? new System.Text.StringBuilder() : new System.Text.StringBuilder(liClasses).Append(" ");
+
+        if (link.AbsoluteUri == currentPage.AbsoluteUri)
+        {
+            liCss.Append("active");
+        }
+        else if (currentPage.AbsolutePath == "/Default/Index" && (controller.ToLower() == "default" && action.ToLower() == "index"))
+        {
+            // Home page
+            liCss.Append("active");
+        }
+        else if (currentPage.AbsolutePath == "/" && (controller.ToLower() == "default" && action.ToLower() == "index"))
+        {
+            // Home page
+            liCss.Append("active");
+        }
+
+        var sb = new System.Text.StringBuilder(@"<li class="""+ liCss.ToString() + @""">");
+
+        sb.Append(@"<a href=""" + Url.Action(action, controller) + @"""");
+        if (!string.IsNullOrEmpty(linkClasses)) sb.Append(@" class=""").Append(linkClasses).Append(@"""");
+        sb.Append(@">");
+        sb.Append(Html.Raw(text)).Append(@"</a>");
+
+        sb.Append(@"</li>");
+
+        return new HtmlString(sb.ToString());
+    }
+
+}

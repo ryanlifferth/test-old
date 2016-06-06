@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan", "Ryan\Ryan.csproj", "{44BE207E-B868-43D3-8452-2F42C19750A0}"
 EndProject
@@ -26,6 +26,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.Generics", "Ryan.Generics\Ryan.Generics.csproj", "{05A0F4AA-C475-4DDE-960D-54D6DA79DECA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.AngularJS", "Ryan.AngularJS\Ryan.AngularJS.csproj", "{AE424023-3F67-457D-9576-A418AB86E12E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.WebAPI", "Ryan.WebAPI\Ryan.WebAPI.csproj", "{4280DA89-08F6-4DC0-9BE8-F75C49E80E34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.FusionTables", "Ryan.FusionTables\Ryan.FusionTables.csproj", "{7AC7E5E6-BFD5-4F8B-9031-9DCEE27541E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.DragAndDrop", "Ryan.DragAndDrop\Ryan.DragAndDrop.csproj", "{DD929B45-7A88-4C6B-A49B-A649AB2DB6DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +87,18 @@ Global
 		{AE424023-3F67-457D-9576-A418AB86E12E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE424023-3F67-457D-9576-A418AB86E12E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE424023-3F67-457D-9576-A418AB86E12E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4280DA89-08F6-4DC0-9BE8-F75C49E80E34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4280DA89-08F6-4DC0-9BE8-F75C49E80E34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4280DA89-08F6-4DC0-9BE8-F75C49E80E34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4280DA89-08F6-4DC0-9BE8-F75C49E80E34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AC7E5E6-BFD5-4F8B-9031-9DCEE27541E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AC7E5E6-BFD5-4F8B-9031-9DCEE27541E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AC7E5E6-BFD5-4F8B-9031-9DCEE27541E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AC7E5E6-BFD5-4F8B-9031-9DCEE27541E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD929B45-7A88-4C6B-A49B-A649AB2DB6DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD929B45-7A88-4C6B-A49B-A649AB2DB6DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD929B45-7A88-4C6B-A49B-A649AB2DB6DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD929B45-7A88-4C6B-A49B-A649AB2DB6DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

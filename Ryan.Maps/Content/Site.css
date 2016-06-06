@@ -81,9 +81,9 @@ header ul.nav li.active a:hover {
 header ul.nav li a {
   color: #fff;
   font-family: Lato;
-  font-size: 26px;
+  font-size: 22px;
   height: 70px;
-  padding: 25px 25px 0;
+  padding: 25px 20px 0;
   text-align: center;
   text-transform: uppercase;
 }
@@ -117,6 +117,21 @@ footer.container {
 /* Google Map */
 #googft-mapCanvas {
   margin: 10px 10px 20px 20px;
+}
+.map-container .map-canvas,
+.map-container .street-map-canvas {
+  background-color: #fff;
+  border: 1px solid #000;
+  display: inline-block;
+  margin: 10px 10px 20px 20px;
+}
+.map-container .map-canvas {
+  height: 300px;
+  width: 600px;
+}
+.map-container .street-map-canvas {
+  height: 300px;
+  width: 400px;
 }
 .property-info {
   padding: 0;

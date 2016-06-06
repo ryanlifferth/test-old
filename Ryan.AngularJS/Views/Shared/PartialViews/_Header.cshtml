@@ -14,8 +14,7 @@
 </header>
 
 @functions {
-
-    
+        
     private HtmlString BuildMenuItem(string text, string action, string controller, string liClasses = "", string linkClasses = "")
     {
         var link = new System.UriBuilder(Request.Url.AbsoluteUri) { Path = Url.Action(action, controller) }.Uri;
