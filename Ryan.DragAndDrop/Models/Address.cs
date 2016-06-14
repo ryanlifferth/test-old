@@ -8,7 +8,7 @@ namespace Ryan.DragAndDrop.Models
 {
     public class Address
     {
-        #region "Properties" 
+        #region Properties
 
         public string AddressLine1 { get; set; }
 

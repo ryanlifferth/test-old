@@ -18,6 +18,11 @@ h2 {
     @grid-blue: #327fba;
     @grid-border: #abadb3;
     @grid-green: #00bb3f;
+    /*@grid-label-bg: rgba(84, 84, 84, 0.3);*/
+    @grid-label-bg: rgba(0,114,188,0.2);
+    @grid-row-height: 30px;
+    @tall-grid-height: 50px;
+    @double-grid-height: 60px;
 
     .grid-headers {
 
@@ -55,7 +60,7 @@ h2 {
         width: 230px;
 
         &.grid-item-focus {
-            box-shadow: 0 0 2px 3px rgba(255,242,0,0.4);
+            box-shadow: 0 0 2px 2px rgba(255,242,0,0.3);
         }
 
         h1 {
@@ -86,17 +91,15 @@ h2 {
             margin-left: 0;
             margin-right: 0;
 
-
             .col-md-12 {
-                padding-left: 6px;
-                padding-right: 0;
+                padding: 0;
             }
 
             .item-photo {
                 cursor: pointer;
                 display: inline-block;
                 height: 100px;
-                margin: 5px 0 0 0;
+                margin: 4px 0 0 4px;
                 position: relative;
                 width: 133px;
                 float: left;
@@ -128,10 +131,11 @@ h2 {
             .parcel-detail-link-container {
                 display: block;
                 float: left;
-                margin: 36px 0 0 1px;
+                margin: 34px 0 0 1px;
                 padding: 0;
                 vertical-align: middle;
-                width: 96px;
+                width: 89px;
+
 
                 a {
                     background-color: rgba(50, 127, 186, 0.85);
@@ -152,15 +156,233 @@ h2 {
                 }
             }
 
-            .address {
-                font-size: 15.5px;
-                font-weight: bold;
-                line-height: normal;
+            address {
+                margin: 5px 0 15px;
+                padding-left: 4px;
+
+                .address {
+                    font-size: 15.5px;
+                    font-weight: bold;
+                    line-height: normal;
+                }
+
+                .address-sub {
+                    font-size: 0.9em;
+                    line-height: 11px;
+                }
             }
 
-            .address-sub {
-                font-size: 0.9em;
-                line-height: 11px;
+            &.grid-row {
+                border-top: 1px solid @grid-border;
+
+                div[class^="col-"] {
+                    padding: 6px 0 6px 2px;
+                    height: @grid-row-height;
+
+                    .form-control {
+                        background-color: transparent;
+                        border: none;
+                        border-radius: 0;
+                        height: @grid-row-height;
+                        padding: 0 4px;
+
+                        @placeholder-color: rgba(0,114,188,0.3);
+                        /*@placeholder-color: rgba(171, 173, 179,0.6);*/
+                        &::-webkit-input-placeholder {
+                            color: @placeholder-color;
+                            font-size: 12px;
+                        }
+
+                        &::-moz-placeholder {
+                            color: @placeholder-color;
+                            font-size: 12px;
+                        }
+
+                        &:-moz-placeholder {
+                            color: @placeholder-color;
+                            font-size: 12px;
+                        }
+
+                        &:-ms-input-placeholder {
+                            color: @placeholder-color;
+                            font-size: 12px;
+                        }
+                    }
+
+                    .input-group {
+                        .form-control {
+                            box-shadow: none;
+                        }
+                    }
+
+                    .form-focus-focus {
+                        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+                    }
+
+                    .input-group-addon {
+                        border: none;
+                        border-radius: 0;
+                        background-color: transparent;
+                        color: rgba(0,0,0,0.4);
+                        padding: 3.5px 0 0 3px;
+
+                        &.trailing {
+                            padding: 3.5px 2px 0 0;
+                        }
+
+                        &.sm {
+                            font-size: 0.8em;
+                        }
+                    }
+
+                    input[type=number] {
+                        -moz-appearance: textfield;
+
+                        &::-webkit-inner-spin-button,
+                        &::-webkit-outer-spin-button {
+                            -webkit-appearance: none;
+                            margin: 0;
+                        }
+                    }
+
+                    &.adjust-plus-minus {
+                        text-align: center;
+
+                        a {
+                            color: rgba(0,0,0,0.25);
+                            font-size: 1.2em;
+                            margin-top: 10px;
+
+                            /*font-size: 28px;
+                            font-weight: bold;
+                            display: inline-block;
+                            margin-top: 4px;
+                            line-height: 17px;
+                            padding: 0 3px 0.5px 3px;*/
+                            
+                            &.selected {
+                                color: @grid-blue;
+                                text-shadow: 0 0 2px @grid-green;
+                            }
+
+                            &:hover, &:focus {
+                                color: @grid-blue;
+                                outline: none;
+                                text-decoration: none;
+                                text-shadow: 0 0 2px @grid-green;
+                            }
+
+                            &:last-child {
+                                margin-left: 30px;
+                            }
+                        }
+                    }
+
+                    &.adjusted-sales-price {
+                        height: @double-grid-height;
+
+                        .container-fluid {
+                            padding-left: 0;
+                            padding-right: 0;
+
+                            .row {
+
+                                .input-group-addon {
+                                    font-size: 0.9em;
+                                    padding-right: 1px;
+                                }
+
+                                &:first-child {
+                                    border-bottom: 1px solid @grid-border;
+                                }
+                            }
+                        }
+
+                        .input-group {
+
+                            &.vert-align {
+                                height: 60px;
+
+                                .form-control {
+                                    height: 60px;
+                                }
+                            }
+                        }
+
+                        &.grid-label {
+                            padding-top: 21px;
+                        }
+                    }
+
+                    &.grid-adjust {
+                        background-color: rgba(0,114,188,0.03);
+
+                        input {
+                            text-align: right;
+                        }
+                    }
+
+                    &.grid-input {
+                        padding: 0;
+                    }
+
+                    &.grid-label {
+                        background-color: @grid-label-bg;
+                        font-family: 'PT Sans', Lato;
+                        font-size: 12px;
+                        white-space: nowrap;
+
+                        &.label-header {
+                            font-style: italic;
+                            font-weight: bold;
+                            text-align: center;
+                        }
+                    }
+
+                    &.room-count {
+                        height: @tall-grid-height;
+                        white-space: normal;
+
+                        &.grid-input {
+                            padding: 0;
+                        }
+
+                        .container-fluid {
+                            margin: 0;
+                            padding: 0;
+
+                            .row {
+                                .grid-label {
+                                    border-bottom: 1px solid @grid-border;
+                                    border-right: 1px solid @grid-border;
+                                    height: auto;
+                                    padding: 1px 0;
+                                    text-align: center;
+
+                                    &:last-child {
+                                        border-right: none;
+                                    }
+                                }
+
+                                .grid-input {
+                                    border-right: 1px solid @grid-border;
+
+                                    &:last-child {
+                                        border-right: none;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    &:first-child {
+                        border-right: 1px solid @grid-border;
+                    }
+
+                    &.col-md-12 {
+                        border-right: none;
+                    }
+                }
             }
         }
 
@@ -178,10 +400,15 @@ h2 {
                 background-color: @grid-blue;
                 padding-left: 10px;
             }
+
+            .parcel-detail-link-container {
+                width: 98px;
+            }
         }
 
         &.first {
             border-left: 1px solid @grid-border;
+            width: 231px;
         }
 
         &.dragging {
@@ -199,7 +426,7 @@ h2 {
         }
 
         &.drag-over {
-            border-right: 6px dotted @grid-blue;
+            border-right: 3px dotted @grid-blue;
 
             &.dragging {
                 border-right: 1px solid @grid-border;
@@ -228,6 +455,13 @@ h2 {
             padding: 0;
             white-space: nowrap;
         }
+    }
+}
+
+/* Chrome hack */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .comps-grid-container .grid-item .row .parcel-detail-link-container {
+        margin-top: 35px;
     }
 }
 

@@ -7,25 +7,25 @@
     //string subjectImageString = ViewBag.subjectImageString;
     List<string> parcelImageStrings = ViewBag.parcelImageStrings;
 
-    var tempParcels = new List<dynamic> {
-        new { MlsNumber = "1234", Address = new Address { AddressLine1 = "15015 NE GLISAN ST", City = "Portland", State = "OR", Zip = "97230" } },
-        new { MlsNumber = "5678", Address = new Address { AddressLine1 = "1913 NE 148TH PL", City = "Portland", State = "OR", Zip = "97230" } },
-        new { MlsNumber = "9012", Address = new Address { AddressLine1 = "4515 NE 84TH AVE", City = "Portland", State = "OR", Zip = "97230" } },
-        new { MlsNumber = "3456", Address = new Address { AddressLine1 = "8602 NE MILTON ST", City = "Portland", State = "OR", Zip = "97230" } },
-        new { MlsNumber = "2233", Address = new Address { AddressLine1 = "6454 NE KILLINGSWORTH CT", City = "Portland", State = "OR", Zip = "97230" } },
-        new { MlsNumber = "4455", Address = new Address { AddressLine1 = "1026 NE 87TH AVE", City = "Portland", State = "OR", Zip = "97230" } },
-        new { MlsNumber = "1234", Address = new Address { AddressLine1 = "3235 NE 111TH DR", City = "Portland", State = "OR", Zip = "97230" } },
-        new { MlsNumber = "5678", Address = new Address { AddressLine1 = "758 NE 94TH AVE", City = "Portland", State = "OR", Zip = "97230" } },
-        new { MlsNumber = "9012", Address = new Address { AddressLine1 = "8602 NE Milton Street", City = "Portland", State = "OR", Zip = "97230" } },
-        new { MlsNumber = "3456", Address = new Address { AddressLine1 = "8445 NE BRAZEE ST", City = "Portland", State = "OR", Zip = "97230" } },
-        new { MlsNumber = "2233", Address = new Address { AddressLine1 = "16314 NE FARGO ST", City = "Portland", State = "OR", Zip = "97230" } },
-        new { MlsNumber = "4455", Address = new Address { AddressLine1 = "18659 NE Multnomah TER", City = "Portland", State = "OR", Zip = "97230" } }
+    var tempParcels = new List<Parcel> {
+        new Parcel { MlsNumber = "1234", Address = new Address { AddressLine1 = "15015 NE GLISAN ST", City = "Portland", State = "OR", Zip = "97230" } },
+        new Parcel { MlsNumber = "5678", Address = new Address { AddressLine1 = "1913 NE 148TH PL", City = "Portland", State = "OR", Zip = "97230" } },
+        new Parcel { MlsNumber = "9012", Address = new Address { AddressLine1 = "4515 NE 84TH AVE", City = "Portland", State = "OR", Zip = "97230" } },
+        new Parcel { MlsNumber = "3456", Address = new Address { AddressLine1 = "8602 NE MILTON ST", City = "Portland", State = "OR", Zip = "97230" } },
+        new Parcel { MlsNumber = "2233", Address = new Address { AddressLine1 = "6454 NE KILLINGSWORTH CT", City = "Portland", State = "OR", Zip = "97230" } },
+        new Parcel { MlsNumber = "4455", Address = new Address { AddressLine1 = "1026 NE 87TH AVE", City = "Portland", State = "OR", Zip = "97230" } },
+        new Parcel { MlsNumber = "1234", Address = new Address { AddressLine1 = "3235 NE 111TH DR", City = "Portland", State = "OR", Zip = "97230" } },
+        new Parcel { MlsNumber = "5678", Address = new Address { AddressLine1 = "758 NE 94TH AVE", City = "Portland", State = "OR", Zip = "97230" } },
+        new Parcel { MlsNumber = "9012", Address = new Address { AddressLine1 = "8602 NE Milton Street", City = "Portland", State = "OR", Zip = "97230" } },
+        new Parcel { MlsNumber = "3456", Address = new Address { AddressLine1 = "8445 NE BRAZEE ST", City = "Portland", State = "OR", Zip = "97230" } },
+        new Parcel { MlsNumber = "2233", Address = new Address { AddressLine1 = "16314 NE FARGO ST", City = "Portland", State = "OR", Zip = "97230" } },
+        new Parcel { MlsNumber = "4455", Address = new Address { AddressLine1 = "18659 NE Multnomah TER", City = "Portland", State = "OR", Zip = "97230" } }
     };
 
     var subjectGridItemWidth = 245; // subject grid item width + margin
     var compGridItemWidth = 230;
     var compParcelCount = 6;
-    var compsWidth = compGridItemWidth * compParcelCount;  // this is the internal container
+    var compsWidth = (compGridItemWidth * compParcelCount) + 1;  // this is the internal container (+1 to account for the extra width of the first comp - due to the extra border)
 
 }
 
@@ -38,57 +38,28 @@
 
 <div class="comps-grid-container">
 
+
     <div class="grid-headers">
         <div class="grid-header">
             <label style="display: inline-block;">Form</label>
             <span style="margin-left: 5px; font-weight: bold;">1004 UAD</span>
         </div>
     </div>
-    <div class="grid-item subject">
-        <h1>Subject</h1>
-        <div class="row">
-            <div class="col-md-12">
-                @ParcelPhoto(parcelImageStrings[0])
 
-                <div class="parcel-detail-link-container">
-                    <a href="#">Listing</a>
-                    <a href="#">Deeds</a>
-                </div>
+    @Html.Partial("_SubjectGrid", null, new ViewDataDictionary { { "parcelImageStrings", parcelImageStrings } })
 
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="address">2939 NW 725th Street</div>
-                <div class="address-sub">Portland, OR 97230</div>
-            </div>
-        </div>
-    </div>
     <div class="comp-container">
         <div class="comps" id="Comps">
             @for (int i = 1; i <= compParcelCount; i++)
             {
                 var first = i == 1 ? "first" : string.Empty;
-                <div class="grid-item @first" id="gridItem@(i)" draggable="true">
-                    <h1>
-                        @*<span class="fa fa-bars"></span>*@
-                        <span class="draggable-icon"></span>
-                        Comp @i
-                    </h1>
-                    <div class="row">
-                        <div class="col-md-12">
-                            @ParcelPhoto(parcelImageStrings[i])
-                            <a href="#" class="move-col">comp @i</a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="address">@tempParcels[i - 1].Address.AddressLine1</div>
-                            <div class="address-sub">@tempParcels[i - 1].Address.City, @tempParcels[i - 1].Address.State @tempParcels[i - 1].Address.Zip</div>
-                        </div>
-                    </div>
-
-                </div>
+                @Html.Partial("_CompGrid", null,
+                              new ViewDataDictionary
+                               {
+                                  { "parcelImageStrings", parcelImageStrings },
+                                  { "comp", tempParcels[i - 1] },
+                                  { "compNumber", i }
+                               })
             }
         </div>
     </div>
@@ -111,7 +82,21 @@
 }
 
 @section PageScripts {
-   
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".input-group > .form-control").on("focus", function() {
+                // Add the focus box-shadow
+                $(this).parent().addClass("form-focus-focus");
+            })
+            .on("blur", function() {
+                // Add the focus box-shadow
+                $(this).parent().removeClass("form-focus-focus");
+            });
+
+        });
+    </script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             // TODO:  Encapsulate this into a function so that it can be called on different events (e.g., window resize, add/delete comp, etc.)
@@ -214,6 +199,8 @@
             // RESOURCES USED:
             // - http://jsfiddle.net/mmmz/8
 
+            var parcelDetailLinkContainerWidth = $(".comps > .grid-item .parcel-detail-link-container").width();  // Get the default width of the .parcel-detail-link-container element
+
             $(".comps > .grid-item *")
                 .on("focus", function (e) {
                     $(e.target).closest(".grid-item").addClass("grid-item-focus");
@@ -305,7 +292,10 @@
                 e.originalEvent.dataTransfer.setData("Text", this.id);
                 e.originalEvent.dataTransfer.dropEffect = "move";
                 $(this).addClass("dragging");
-                $(this).next().addClass("dragging-sibling");
+
+                $(this).next()
+                    .addClass("dragging-sibling")
+                    .find(".parcel-detail-link-container").outerWidth(parcelDetailLinkContainerWidth - 2);  // adjust width so that the buttons don't overflow when the drag border appears and the extra border (.dragging-sibling) is added
             });
 
             $(".comps > .grid-item").on("dragover", function (e) {
@@ -361,7 +351,10 @@
 
             $(".comps > .grid-item").on("dragend", function (e) {
                 $(this).removeClass("dragging");
-                $(".comps > .grid-item").removeClass("drag-over").removeClass("dragging-sibling");
+                $(".comps > .grid-item")
+                    .removeClass("drag-over")
+                    .removeClass("dragging-sibling")
+                    .find(".parcel-detail-link-container").outerWidth(parcelDetailLinkContainerWidth);  // Adjust back to normal width
             });
 
         });
@@ -370,18 +363,18 @@
 
 @helper ParcelPhoto(string imageString)
 {
-    if (string.IsNullOrEmpty(imageString))
-    {
-            <div class="item-photo">
-                <span class="fa fa-picture-o fa-5x photo-icon"></span>
-                <span class="fa fa-plus fa-2x add-photo-icon"></span>
-            </div>
-    }
-    else
-    {
-            <div class="item-photo">
-                @*<img src="@photoUrl" alt="" style="height: 100px; width: auto; border: 1px solid #000;" />*@
-                <img src="data:image/png;base64,@imageString" alt="" />
-            </div>
-    }
+if (string.IsNullOrEmpty(imageString))
+{
+        <div class="item-photo">
+            <span class="fa fa-picture-o fa-5x photo-icon"></span>
+            <span class="fa fa-plus fa-2x add-photo-icon"></span>
+        </div>
+}
+else
+{
+        <div class="item-photo">
+            @*<img src="@photoUrl" alt="" style="height: 100px; width: auto; border: 1px solid #000;" />*@
+            <img src="data:image/png;base64,@imageString" alt="" />
+        </div>
+}
 }

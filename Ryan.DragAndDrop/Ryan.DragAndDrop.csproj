@@ -202,6 +202,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\Parcel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +224,8 @@
     </None>
     <None Include="compilerconfig.json" />
     <Content Include="scripts\jquery-1.9.1.min.map" />
+    <Content Include="Views\Default\PartialViews\_SubjectGrid.cshtml" />
+    <Content Include="Views\Default\PartialViews\_CompGrid.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
