@@ -24,7 +24,7 @@
 
     var subjectGridItemWidth = 245; // subject grid item width + margin
     var compGridItemWidth = 230;
-    var compParcelCount = 6;
+    var compParcelCount = 1;
     var compsWidth = (compGridItemWidth * compParcelCount) + 1;  // this is the internal container (+1 to account for the extra width of the first comp - due to the extra border)
 
 }
@@ -38,11 +38,13 @@
 
 <div class="comps-grid-container">
 
-
     <div class="grid-headers">
         <div class="grid-header">
             <label style="display: inline-block;">Form</label>
             <span style="margin-left: 5px; font-weight: bold;">1004 UAD</span>
+
+            <a href="#" class="btn btn-default" data-toggle="modal" data-target="#addComps">Add Comps</a>
+
         </div>
     </div>
 
@@ -62,6 +64,12 @@
                                })
             }
         </div>
+
+        @if (compParcelCount <= 1)
+        {
+            @Html.Partial("_CompImport")
+        }
+
     </div>
     <div class="clearfix"></div>
 
@@ -227,12 +235,12 @@
 
             var moveGridItem = function (event, direction) {
 
-                var parentOffset = $(event.target).offset();
-                parentOffset.top -= 75;
+                var parentOffset = $(event.target).closest(".grid-item").position();
+                parentOffset.top += 45;
                 var errorDisplayDelay = 1400;
                 if (direction === "right" && $(event.target).parents(".grid-item").next().length === 0) {
                     //alert('you are already at the end');
-                    parentOffset.left -= 430;
+                    parentOffset.left += 85;
 
                     $(".hmm-error > .text.bottom > .end").show();
                     $(".hmm-error > .text.bottom > .begin").hide();
@@ -241,7 +249,7 @@
                     return;
                 } else if (direction === "left" && $(event.target).parents(".grid-item").prev().length === 0) {
                     //alert('you are at the begining');
-                    parentOffset.left -= 525;
+                    parentOffset.left -= 10;
 
                     $(".hmm-error > .text.bottom > .begin").show();
                     $(".hmm-error > .text.bottom > .end").hide();
@@ -359,6 +367,36 @@
 
         });
     </script>
+
+    <script type="text/javascript">
+        // TODO:  Extract to encapsulated JS
+        $(".search-type li").on("click", function () {
+
+            var targetElementWidth = $(this).outerWidth(true);
+            var targetElementLeftPosition = $(this).position().left;
+            var pointerElementWidth = $(".selected-caret").outerWidth(true);
+            var pointerLocation = targetElementLeftPosition + (targetElementWidth / 2) - (pointerElementWidth / 2);  // this is the center of the target element
+            // NOTE:  We subtract (pointerElementWidth / 2) because
+            //        we position the pointer with a left margin
+
+            // Move the pointer
+            $(".selected-caret").animate({ left: pointerLocation + 'px' }, 100);
+
+            // remove "selected" class from all and add it to the selected item
+            $(".search-type li").removeClass("selected");
+            $(this).addClass("selected");
+
+            // Hide the old search params and show the newly selected params
+            var searchType = $(this).attr("data-search-type");
+            if (searchType === "manual") {
+                $(".comp-search-params").fadeOut("slow");
+            } else {
+                $(".comp-search-params").hide();
+            }
+            $(".comp-search-params[data-search-type='" + searchType + "']").fadeIn();
+        });
+    </script>
+
 }
 
 @helper ParcelPhoto(string imageString)

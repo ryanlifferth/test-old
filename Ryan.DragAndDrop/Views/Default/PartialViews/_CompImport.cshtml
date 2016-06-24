@@ -1,0 +1,109 @@
+﻿
+
+
+<div id="addComps" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="comp-search">
+
+                    <div class="search-container">
+                        <ul class="search-type">
+                            <li data-search-type="mls-file" class="selected">File Import</li>
+                            <li data-search-type="address">Address</li>
+                            <li data-search-type="mls">MLS Number</li>
+                            <li data-search-type="public-record">APN/Tax ID</li>
+                            <content class="selected-caret fa fa-caret-down fa-lg"></content>
+                        </ul>
+                    </div>
+                    <div class="clearfix bottom-spacer"></div>
+
+                    <div data-search-type="address" class="comp-search-params">
+                        <h3>Load your Comps by Address</h3>
+
+                        @{  using (Html.BeginForm("AddressSearch", "Comps", FormMethod.Post, new { @name = "AddressSearch", @id = "AddressSearch" }))
+            {
+                Html.AntiForgeryToken();
+                                <div class="input-group">
+                                    <input type="text" id="mlsNumber" name="mlsNumber" placeholder="Enter an address" ng-model="subject.address" class="" />
+                                    <input type="submit" value="search" id="mlsSearch" name="mlsSearch" class="btn btn-success" />
+                                </div>
+                            }
+                        }
+                        <p class="top">Search for your comps via property address.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus hendrerit nunc, non pulvinar felis pretium eu. Proin aliquet velit non nulla egestas, ac commodo nisi semper. Sed at tortor at tellus mattis euismod.</p>
+                    </div>
+
+                    <div data-search-type="mls-file" class="comp-search-params">
+
+                        <h3>Get Your Comps from an MLS File</h3>
+
+                        @{  using (Html.BeginForm("MlsFileImport", "Comps", FormMethod.Post, new { @name = "MlsFileImport", @id = "MlsFileImport", enctype = "multipart/form-data", @class = string.Empty }))
+            {
+                Html.AntiForgeryToken();
+
+                                <span class="btn btn-file mls-file-button">
+                                    <input type="file" id="mcMlsFile" name="mcMlsFile" />
+                                    <a href="#" id="mcMlsFileButton" class="btn btn-file-link">
+                                        <span class="fa fa-folder-open-o fa-3x"></span>
+                                        <span class="btn-main-text">Open</span>
+                                        <span class="btn-sub-text">MLS file...</span>
+                                    </a>
+                                </span>
+
+                                <div class="selected-file">
+                                    <div class="file-name no-file">No file selected</div>
+                                    <div class="file-type">(.csv, .txt, .dtmstr, etc.)</div>
+                                </div>
+                            }
+                        }
+                        <p class="top">Get your comps from an MLS export file.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus hendrerit nunc, non pulvinar felis pretium eu. Proin aliquet velit non nulla egestas, ac commodo nisi semper. Sed at tortor at tellus mattis euismod.</p>
+                    </div>
+
+                    <div data-search-type="mls" class="comp-search-params">
+                        <h3>Load your Comps by MLS Number</h3>
+
+                        @{  using (Html.BeginForm("MlsSearch", "Comps", FormMethod.Post, new { @name = "MlsSearch", @id = "MlsSearch" }))
+            {
+                Html.AntiForgeryToken();
+                                <div class="input-group">
+                                    <label>MLS #</label>
+                                    <input type="text" id="mlsNumber" name="mlsNumber" placeholder="MLS Number(s)" ng-model="subject.MlsNumber" class="" />
+                                    <input type="submit" value="search" id="mlsSearch" name="mlsSearch" class="btn btn-success" />
+                                </div>
+                                <div class="sub-note">To search for more than one property, separate numbers with a comma(,)</div>
+                            }
+                        }
+                        <p class="top">Search for your comps via the MLS number.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus hendrerit nunc, non pulvinar felis pretium eu. Proin aliquet velit non nulla egestas, ac commodo nisi semper. Sed at tortor at tellus mattis euismod.</p>
+                    </div>
+
+                    <div data-search-type="public-record" class="comp-search-params">
+                        <h3>Load your Comps by Assessor's Parcel Number/Tax ID</h3>
+
+                        @{  using (Html.BeginForm("ApnSearch", "Comps", FormMethod.Post, new { @name = "ApnSearch", @id = "ApnSearch" }))
+            {
+                Html.AntiForgeryToken();
+                                <div class="input-group">
+                                    <label>Assessors Parcel Number</label>
+                                    <input type="text" id="apn" name="apn" ng-model="subject.Apn" placeholder="Assessor's Parcel Number(s)" class="" />
+                                    <input type="submit" value="search" id="mlsSearch" name="mlsSearch" class="btn btn-success" />
+                                </div>
+                                <div class="sub-note">To search for more than one property, separate numbers with a comma(,)</div>
+                            }
+                        }
+                        <p class="top">Search for your comps via the APN/Tax ID.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus hendrerit nunc, non pulvinar felis pretium eu. Proin aliquet velit non nulla egestas, ac commodo nisi semper. Sed at tortor at tellus mattis euismod.</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

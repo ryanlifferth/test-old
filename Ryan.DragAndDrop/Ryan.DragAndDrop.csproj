@@ -118,10 +118,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\CompGridSizing.css" />
-    <Content Include="Content\CompGridSizing.min.css">
-      <DependentUpon>CompGridSizing.css</DependentUpon>
-    </Content>
     <Content Include="Content\images\glasses-moustache-white-shadow.png" />
     <Content Include="Content\lib\bootstrap-theme.css" />
     <Content Include="Content\lib\bootstrap-theme.min.css" />
@@ -185,6 +181,7 @@
     <Content Include="Content\lib\bootstrap.css.map" />
     <Content Include="Content\lib\bootstrap.min.css.map" />
     <Content Include="Content\less\CompGridSizing.less" />
+    <Content Include="Content\less\CompSearch.less" />
     <None Include="scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
@@ -226,6 +223,7 @@
     <Content Include="scripts\jquery-1.9.1.min.map" />
     <Content Include="Views\Default\PartialViews\_SubjectGrid.cshtml" />
     <Content Include="Views\Default\PartialViews\_CompGrid.cshtml" />
+    <Content Include="Views\Default\PartialViews\_CompImport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
