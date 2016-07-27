@@ -1,9 +1,7 @@
-﻿using System;
-using Ryan.DragAndDrop.Common;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Ryan.DragAndDrop.Common;
 using System.Web.Mvc;
+using System.Web.Routing;
+using System.Web.Http;
 using System.Web.Routing;
 
 namespace Ryan.DragAndDrop
@@ -13,6 +11,7 @@ namespace Ryan.DragAndDrop
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+            GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             ViewEngines.Engines.Add(new MyRazorViewEngine());
         }

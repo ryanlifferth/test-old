@@ -1,0 +1,299 @@
+﻿@{
+    var parcelImageStrings = ViewData["parcelImageStrings"] as List<string>;
+}
+
+
+<div class="grid-item subject">
+    <h1>Subject</h1>
+    <div class="row">
+        <div class="col-md-12">
+            @ParcelPhoto(parcelImageStrings.FirstOrDefault())
+
+            <div class="parcel-detail-link-container">
+                <a href="#">Listing</a>
+                <a href="#">Deeds</a>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <address>
+                <div class="address">2939 NW 725th Street</div>
+                <div class="address-sub">Portland, OR 97230</div>
+            </address>
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-12 grid-label">
+            Proximity to Subject
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Sale Price
+        </div>
+        <div class="col-md-6 grid-input">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input type="number" id="SubjectSalePrice" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Sale Price/GLA
+        </div>
+        <div class="col-md-6 grid-input">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input type="number" id="SubjectGlaPrice" class="form-control">
+                <span class="input-group-addon trailing sm">sqft</span>
+            </div>
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-12 grid-label">
+            Data Source(s)
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-12 grid-label">
+            Verification Source(s)
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label label-header">
+            VALUE ADJUSTMENTS
+        </div>
+        <div class="col-md-6 grid-label label-header">
+            DESCRIPTION
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-12 grid-label">
+            Sale or Financing
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-12 grid-label">
+            Concessions
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-12 grid-label">
+            Date of Sale
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Location
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectLocation" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Leasehold/Fee Simple
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectFeeSimple" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Site
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectSite" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            View
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectView" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Design (Style)
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectDesign" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Quality of Construction
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectQuality" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Actual Age
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="number" id="SubjectAge" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Condition
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectCondition" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label room-count">
+            Above Grade Room Count
+        </div>
+        <div class="col-md-6 room-count grid-input">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4 grid-label">total</div>
+                    <div class="col-md-4 grid-label">bed</div>
+                    <div class="col-md-4 grid-label">bath</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 grid-input">
+                        <input type="number" id="SubjectTotalRoomCount" class="form-control">
+                    </div>
+                    <div class="col-md-4 grid-input">
+                        <input type="number" id="SubjectBedroomCount" class="form-control">
+                    </div>
+                    <div class="col-md-4 grid-input">
+                        <input type="number" id="SubjectBathroomCount" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Gross Living Area
+        </div>
+        <div class="col-md-6 grid-input">
+            <div class="input-group">
+                <input type="number" id="SubjectGla" class="form-control">
+                <span class="input-group-addon trailing sm">sqft</span>
+            </div>
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Basement & Finished
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectBasementAndFinished" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Rooms Below Grade
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectRoomsBelowGrade" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Functional Utility
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectFunctionalUtility" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Heating/Cooling
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectHeatingCooling" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Energy Efficient Items
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectEnergyEfficient" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Garage/Carport
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectParking" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Porch/Patio/Deck
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectPorch" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Extra Item 1
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectExtraItem1" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Extra Item 2
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectExtraItem2" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label">
+            Extra Item 3
+        </div>
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SubjectExtraItem3" class="form-control">
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-12 grid-label">
+            Net Adjustment (Total)
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-12 grid-label adjusted-sales-price">
+            Adjusted Sale Price of Comparables
+        </div>
+    </div>
+
+</div>
+
+
+@helper ParcelPhoto(string imageString)
+{
+//TODO:  Extract to helper file
+if (string.IsNullOrEmpty(imageString))
+{
+        <div class="item-photo">
+            <span class="fa fa-picture-o fa-5x photo-icon"></span>
+            <span class="fa fa-plus fa-2x add-photo-icon"></span>
+        </div>
+}
+else
+{
+        <div class="item-photo">
+            @*<img src="@photoUrl" alt="" style="height: 100px; width: auto; border: 1px solid #000;" />*@
+            <img src="data:image/png;base64,@imageString" alt="" />
+        </div>
+}
+}

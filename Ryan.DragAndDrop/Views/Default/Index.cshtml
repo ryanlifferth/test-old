@@ -24,7 +24,7 @@
 
     var subjectGridItemWidth = 245; // subject grid item width + margin
     var compGridItemWidth = 230;
-    var compParcelCount = 1;
+    var compParcelCount = 5;
     var compsWidth = (compGridItemWidth * compParcelCount) + 1;  // this is the internal container (+1 to account for the extra width of the first comp - due to the extra border)
 
 }
@@ -38,24 +38,22 @@
 
 <div class="comps-grid-container">
 
-    <div class="grid-headers">
-        <div class="grid-header">
-            <label style="display: inline-block;">Form</label>
-            <span style="margin-left: 5px; font-weight: bold;">1004 UAD</span>
+    <div class="grid-header">
+        <label style="display: inline-block;">Form</label>
+        <span style="margin-left: 5px; font-weight: bold;">1004 UAD</span>
 
-            <a href="#" class="btn btn-default" data-toggle="modal" data-target="#addComps">Add Comps</a>
+        <a href="#" class="btn btn-default btn-add-comps" data-toggle="modal" data-target="#addComps">Add Comps</a>
 
-        </div>
     </div>
 
-    @Html.Partial("_SubjectGrid", null, new ViewDataDictionary { { "parcelImageStrings", parcelImageStrings } })
+    @Html.Partial("_SubjectGridSample", null, new ViewDataDictionary { { "parcelImageStrings", parcelImageStrings } })
 
     <div class="comp-container">
         <div class="comps" id="Comps">
             @for (int i = 1; i <= compParcelCount; i++)
             {
                 var first = i == 1 ? "first" : string.Empty;
-                @Html.Partial("_CompGrid", null,
+                @Html.Partial("_CompGridSample", null,
                               new ViewDataDictionary
                                {
                                   { "parcelImageStrings", parcelImageStrings },

@@ -1,0 +1,142 @@
+﻿
+.review-container {
+
+    .row {
+        margin-left: 0;
+        margin-right: 0;
+        min-height: 100px;
+
+        div[class^="col-"] {
+            color: #fff;
+
+            h3 {
+                font-family: Montserrat;
+                font-weight: bold;
+                margin: 0;
+            }
+
+            &.settings {
+                background-color: rgba(84,84,84,1.0);
+                padding: 25px 25px 45px;
+
+                h3 {
+                    display: inline-block;
+                    float: left;
+                    margin: 22px 20px 0 0;
+                }
+
+                .input-group {
+                    display: inline-block;
+
+                    label {
+                        font-size: 12px;
+                        font-weight: normal;
+                        line-height: normal;
+                        margin: 0 0 0 3px;
+                        text-transform: uppercase;
+                    }
+
+                    select {
+                        color: #000;
+                        margin-right: 5px;
+                        min-width: 140px;
+                    }
+                }
+            }
+
+            &.report-section {
+                background-color: rgba(51,122,183,1.0);
+                border-right: 5px solid #fff;
+                height: 200px;
+                padding: 10px 10px 10px 15px;
+
+                h3 {
+                    font-size: 18px;
+                    margin: 0 0 15px -5px;
+                }
+
+                address {
+                    margin-bottom: 12px;
+
+                    .address {
+                        font-size: 20px;
+                        font-weight: bold;
+                        line-height: normal;
+                    }
+
+                    .sub-address {
+                        font-size: 14px;
+                        line-height: 11px;
+                    }
+                }
+
+                .measured-gla {
+                    margin-top: 15px;
+
+                    label {
+                        color: #fff;
+                        display: block;
+                        font-size: 15px;
+                        font-weight: 300;
+                        margin: 6px 0 0 10px;
+                    }
+
+                    .input-group {
+                        width: 225px;
+                        input[type='text'] {
+                            display: inline-block;
+                        }
+                    }
+                }
+
+                h4 {
+                    font-size: 20px;
+                    font-weight: 300;
+                    margin: 0;
+
+                    &.graphs-included {
+                        margin-top: 23px;
+                    }
+                }
+
+                &:last-child {
+                    border-right: 0;
+                }
+
+                @none-bg-color: rgba(211,211,211,1.0);
+
+                &.none {
+                    background-color: @none-bg-color;
+                    color: rgba(84,84,84,1.0);
+
+                    h4 {
+                        margin-top: 30px;
+                    }
+
+                    .btn-default {
+                        background-color: rgba(0,0,0,0.05);
+                        border-color: rgba(0,0,0,0.17);
+                        border-radius: 3px;
+                        margin-right: 20px;
+                        margin-top: 20px;
+
+                        &:hover {
+                            background-color: rgba(0,0,0, 0.1);
+                            border-color: #adadad;
+                        }
+                    }
+
+                    &.subject {
+                        .btn-default {
+                            margin-top: 42px;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.row-bottom-spacer {
+            margin-bottom: 10px;
+        }
+    }
+}

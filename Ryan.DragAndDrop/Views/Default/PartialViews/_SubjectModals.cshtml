@@ -1,0 +1,44 @@
+﻿@{
+    var subjectObject = (dynamic)ViewData["Subject"];
+
+    var compNumber = "Subject";
+        var subject = subjectObject.StandardizedParcel;
+        var propertyPhotoList = ((IEnumerable<dynamic>)subject.PropertyPhotoList)
+                                    .Cast<dynamic>()
+                                    .Select(x => new { EncodedPhoto = x.EncodedPhoto.ToString(), Title = x.Title.ToString() })
+                                    .ToList();
+
+        <!-- Photo Modal -->
+        <div class="modal fade" id="ImagesCompModal@(compNumber)" role="dialog">
+            <div class="modal-dialog img-modal" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">@compNumber Images</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="pics-container">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <img src="data:image/png;base64,@propertyPhotoList[0].EncodedPhoto" class="main-img" title="@propertyPhotoList[0].Title" />
+                                    <span class="img-title">
+                                        @propertyPhotoList[0].Title
+                                    </span>
+                                </div>
+                                <div class="col-md-5">
+                                    @foreach (var photo in propertyPhotoList)
+                                    {
+                                        var selected = photo == propertyPhotoList.First() ? "selected" : string.Empty;
+                                        <img src="data:image/png;base64,@photo.EncodedPhoto" class="thumbnail-img @selected" title="@photo.Title" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+}

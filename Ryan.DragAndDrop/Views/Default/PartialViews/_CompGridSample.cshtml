@@ -1,0 +1,350 @@
+﻿@using Ryan.DragAndDrop.Models
+@{
+    var parcelImageStrings = ViewData["parcelImageStrings"] as List<string>;
+    var comp = ViewData["comp"] as Parcel;
+    var compNumber = (int)ViewData["compNumber"];
+    var first = compNumber == 1 ? "first" : string.Empty;
+    var compVar = String.Format("Comp{0}", compNumber);
+}
+
+
+<div class="grid-item @first" id="gridItem@(compNumber)" draggable="true">
+    <h1>
+        @*<span class="fa fa-bars"></span>*@
+        <span class="draggable-icon"></span>
+        Comp @compNumber
+    </h1>
+    <div class="row">
+        <div class="col-md-12">
+            @ParcelPhoto(parcelImageStrings[compNumber])
+
+            <div class="parcel-detail-link-container">
+                <a href="#">Listing</a>
+                <a href="#">Deeds</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <address>
+                <div class="address">@comp.Address.AddressLine1</div>
+                <div class="address-sub">@comp.Address.City, @comp.Address.State @comp.Address.Zip</div>
+            </address>
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-12 grid-input">
+            <input type="text" id="Proximity@(compVar)" placeholder="proximity to subject" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-12 grid-input">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input type="number" id="SalePrice@(compVar)" placeholder="sale price" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-12 grid-input">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input type="number" id="GlaPrice@(compVar)" placeholder="sale price/GLA" class="form-control" />
+                <span class="input-group-addon trailing sm">sqft</span>
+            </div>
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-12 grid-input">
+            <input type="text" id="DataSource@(compVar)" placeholder="data source(s)" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-12 grid-input">
+            <input type="text" id="VerificationSource@(compVar)" placeholder="verification source(s)" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-label label-header">
+            DESCRIPTION
+        </div>
+        <div class="col-md-6 grid-label label-header">
+            +(-) $ Adjustment
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="SaleFinance@(compVar)" placeholder="sale or financing" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="SaleFinanceAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="Concessions@(compVar)" placeholder="concessions" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="ConcessionsAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="DateOfSale@(compVar)" placeholder="date of sale" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="DateOfSaleAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="Location@(compVar)" placeholder="location" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="LocationAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="FeeSimple@(compVar)" placeholder="leasehold/fee simple" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="FeeSimpleAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="number" id="Site@(compVar)" placeholder="site" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="SiteAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="View@(compVar)" placeholder="view" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="ViewAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="Design@(compVar)" placeholder="design (style)" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="DesignAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="Quality@(compVar)" placeholder="quality of const" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="QualityAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="Age@(compVar)" placeholder="actual age" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="AgeAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="Condition@(compVar)" placeholder="condition" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="ConditionAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input room-count">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4 grid-label">total</div>
+                    <div class="col-md-4 grid-label">bed</div>
+                    <div class="col-md-4 grid-label">bath</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 grid-input">
+                        <input type="number" id="TotalRoomCount@(compVar)" class="form-control" />
+                    </div>
+                    <div class="col-md-4 grid-input">
+                        <input type="number" id="BedroomCount@(compVar)" class="form-control" />
+                    </div>
+                    <div class="col-md-4 grid-input">
+                        <input type="number" id="BathroomCount@(compVar)" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 grid-input room-count">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12 grid-label">&nbsp;</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 grid-adjust grid-input">
+                        <input type="number" id="RoomCountAdjust@(compVar)" placeholder="" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <div class="input-group">
+                <input type="number" id="Gla@(compVar)" placeholder="GLA" class="form-control" />
+                <span class="input-group-addon trailing sm">sqft</span>
+            </div>
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="GlaAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="BasementAndFinished@(compVar)" placeholder="basement/finished" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="BasementAndFinishedAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="RoomsBelowGrade@(compVar)" placeholder="rooms below grd" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="RoomsBelowGradeAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="FunctionalUtility@(compVar)" placeholder="functional util" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="FunctionalUtilityAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="HeatingCooling@(compVar)" placeholder="heat/cool" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="HeatingCoolingAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="EnergyEfficient@(compVar)" placeholder="energy effct items" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="EnergyEfficientAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="Parking@(compVar)" placeholder="garage/carport" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="ParkingAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="Porch@(compVar)" placeholder="porch/patio/deck" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="PorchAdjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="ExtraItem1@(compVar)" placeholder="extra item 1" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="ExtraItem1Adjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="ExtraItem2@(compVar)" placeholder="extra item 2" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="ExtraItem2Adjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input">
+            <input type="text" id="ExtraItem3@(compVar)" placeholder="extra item 3" class="form-control" />
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <input type="number" id="ExtraItem3Adjust@(compVar)" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input adjust-plus-minus">
+            <a href="#" class="fa fa-plus fa-lg"></a>
+            <a href="#" class="fa fa-minus fa-lg selected"></a>
+        </div>
+        <div class="col-md-6 grid-input grid-adjust">
+            <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input type="number" id="NetAdjustTotal@(compVar)" placeholder="" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="row grid-row">
+        <div class="col-md-6 grid-input adjusted-sales-price">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 grid-label">net adj.</div>
+                    <div class="col-md-6 grid-input">
+                        <div class="input-group">
+                            <input type="number" id="NetAdjust@(compVar)" placeholder="" class="form-control" />
+                            <span class="input-group-addon">%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 grid-label">gross adj.</div>
+                    <div class="col-md-6 grid-input">
+                        <div class="input-group">
+                            <input type="number" id="GrossAdjust@(compVar)" placeholder="" class="form-control" />
+                            <span class="input-group-addon">%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 grid-input grid-adjust adjusted-sales-price">
+            <div class="input-group vert-align">
+                <span class="input-group-addon">$</span>
+                <input type="number" id="AdjustedSalesPrice@(compVar)" placeholder="" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@helper ParcelPhoto(string imageString)
+{
+//TODO:  Extract to helper file
+if (string.IsNullOrEmpty(imageString))
+{
+        <div class="item-photo">
+            <span class="fa fa-picture-o fa-5x photo-icon"></span>
+            <span class="fa fa-plus fa-2x add-photo-icon"></span>
+        </div>
+}
+else
+{
+        <div class="item-photo">
+            @*<img src="@photoUrl" alt="" style="height: 100px; width: auto; border: 1px solid #000;" />*@
+            <img src="data:image/png;base64,@imageString" alt="" />
+        </div>
+}
+}

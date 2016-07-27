@@ -77,6 +77,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -86,6 +95,14 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -118,6 +135,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\CompGridSizing.css" />
+    <Content Include="Content\CompGridSizing.min.css">
+      <DependentUpon>CompGridSizing.css</DependentUpon>
+    </Content>
     <Content Include="Content\images\glasses-moustache-white-shadow.png" />
     <Content Include="Content\lib\bootstrap-theme.css" />
     <Content Include="Content\lib\bootstrap-theme.min.css" />
@@ -125,6 +146,10 @@
     <Content Include="Content\lib\bootstrap.min.css" />
     <Content Include="Content\lib\font-awesome.css" />
     <Content Include="Content\lib\font-awesome.min.css" />
+    <Content Include="Content\ReportReview.css" />
+    <Content Include="Content\ReportReview.min.css">
+      <DependentUpon>ReportReview.css</DependentUpon>
+    </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Content\Site.min.css">
       <DependentUpon>Site.css</DependentUpon>
@@ -182,6 +207,10 @@
     <Content Include="Content\lib\bootstrap.min.css.map" />
     <Content Include="Content\less\CompGridSizing.less" />
     <Content Include="Content\less\CompSearch.less" />
+    <Content Include="Content\files\ChosenParcel.json" />
+    <Content Include="Content\less\ReportReview.less" />
+    <Content Include="App_Code\Helpers\ParcelHelpers.cshtml" />
+    <Content Include="Content\files\DataSources.json" />
     <None Include="scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
@@ -193,12 +222,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Common\MyRazorViewEngine.cs" />
+    <Compile Include="Controllers\AddressVerificationServiceController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\ChosenParcelModel.cs" />
     <Compile Include="Models\Parcel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -224,6 +256,14 @@
     <Content Include="Views\Default\PartialViews\_SubjectGrid.cshtml" />
     <Content Include="Views\Default\PartialViews\_CompGrid.cshtml" />
     <Content Include="Views\Default\PartialViews\_CompImport.cshtml" />
+    <Content Include="Views\Default\Grid-jQuery.cshtml" />
+    <Content Include="Views\Default\Grid-Angular.cshtml" />
+    <Content Include="Views\Default\PartialViews\_SubjectGridSample.cshtml" />
+    <Content Include="Views\Default\PartialViews\_CompGridSample.cshtml" />
+    <Content Include="Views\Default\PartialViews\_CompModals.cshtml" />
+    <Content Include="Views\Default\Pics.cshtml" />
+    <Content Include="Views\Default\PartialViews\_SubjectModals.cshtml" />
+    <Content Include="Views\Default\Report-Review.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -236,6 +276,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ryan.AddressVerification\Ryan.AddressVerification.csproj">
+      <Project>{2ca5211b-bd90-4f45-ac02-9fbd24061e24}</Project>
+      <Name>Ryan.AddressVerification</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.FusionTables", "Ryan.F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.DragAndDrop", "Ryan.DragAndDrop\Ryan.DragAndDrop.csproj", "{DD929B45-7A88-4C6B-A49B-A649AB2DB6DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.AddressVerification", "Ryan.AddressVerification\Ryan.AddressVerification.csproj", "{2CA5211B-BD90-4F45-AC02-9FBD24061E24}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{DD929B45-7A88-4C6B-A49B-A649AB2DB6DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD929B45-7A88-4C6B-A49B-A649AB2DB6DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD929B45-7A88-4C6B-A49B-A649AB2DB6DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CA5211B-BD90-4F45-AC02-9FBD24061E24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CA5211B-BD90-4F45-AC02-9FBD24061E24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CA5211B-BD90-4F45-AC02-9FBD24061E24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CA5211B-BD90-4F45-AC02-9FBD24061E24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

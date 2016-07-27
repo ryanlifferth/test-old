@@ -1,0 +1,91 @@
+﻿@model dynamic
+@{
+    ViewBag.Title = "Pics";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    var compCount = Model.Comparables.Count;
+
+    var comp = Model.Comparables[0].StandardizedParcel;
+    var compNumber = 1;
+    var propertyPhotoList = ((IEnumerable<dynamic>)comp.PropertyPhotoList)
+                                    .Cast<dynamic>()
+                                    .Select(x => new { EncodedPhoto = x.EncodedPhoto.ToString(), Title = x.Title.ToString() })
+                                    .ToList();
+}
+
+<h2>Pics</h2>
+comp count: @compCount
+
+
+
+@*@media (min-width: 768px)
+    .modal-dialog {
+        width: 600px;
+        margin: 30px auto;*@
+<div class="comps-grid-container">
+
+    <div style="width: 750px; margin: 20px auto; border: 1px solid #000; box-shadow:2px 2px 3px rgba(0,0,0,0.4); min-height: 200px; padding: 15px;">
+
+        <div class="pics-container">
+            <div class="row">
+                <div class="col-md-7">
+                    <img src="data:image/png;base64,@propertyPhotoList[0].EncodedPhoto" class="main-img" title="@propertyPhotoList[0].Title" />
+                    <span class="img-title">
+                        @propertyPhotoList[0].Title
+                    </span>
+                </div>
+                <div class="col-md-5">
+                    @foreach (var photo in propertyPhotoList)
+                    {
+                        var selected = photo == propertyPhotoList.First() ? "selected" : string.Empty;
+                        <img src="data:image/png;base64,@photo.EncodedPhoto" class="thumbnail-img @selected" title="@photo.Title" />
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+@section PageScripts {
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var originalImageSrc, originalImageTitle;
+            var ignoreThumbHover = false;
+
+            $(".pics-container .thumbnail-img").on("click focus", function () {
+                var thumb = $(this)
+                $(".thumbnail-img").removeClass("selected");
+                thumb.addClass("selected");
+                // get the main img
+                $(this).closest(".pics-container").find(".main-img").attr({ src: thumb.attr("src"), alt: thumb.attr("alt"), title: thumb.attr("title") });
+                $(this).closest(".pics-container").find(".img-title").text(thumb.attr("title"));
+                
+                ignoreThumbHover = true;
+            })
+            .hover(
+                function () {
+                    // hover in 
+                    originalImageSrc = $(this).closest(".pics-container").find(".main-img").attr("src");
+                    originalImageTitle = $(this).closest(".pics-container").find(".main-img").attr("title");
+
+                    var thumb = $(this);
+                    $(this).closest(".pics-container").find(".main-img").attr({ src: thumb.attr("src"), alt: thumb.attr("alt"), title: thumb.attr("title") });
+                    $(this).closest(".pics-container").find(".img-title").text(thumb.attr("title"));
+                },
+                function () {
+                    if (!ignoreThumbHover) {
+                        $(this).closest(".pics-container").find(".main-img").attr({ src: originalImageSrc, alt: originalImageTitle, title: originalImageTitle });
+                        $(this).closest(".pics-container").find(".img-title").text(originalImageTitle);
+                    }
+                    ignoreThumbHover = false;
+                }
+            );
+
+
+        });
+    </script>
+
+}

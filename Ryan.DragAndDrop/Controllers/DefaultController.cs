@@ -1,4 +1,7 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -20,6 +23,64 @@ namespace Ryan.DragAndDrop.Controllers
 
             ViewBag.parcelImageStrings = GetParcelImageList();
 
+            return View();
+        }
+
+        // GET: Grid jQuery
+        [ActionName("grid-jquery")]
+        public ActionResult GridJquery()
+        {
+            dynamic chosenParcel;
+            // read JSON directly from a file
+            using (var file = System.IO.File.OpenText(HttpContext.Server.MapPath("~/Content/files/ChosenParcel.json")))
+            {
+                using (var reader = new JsonTextReader(file))
+                {
+                    chosenParcel = (JObject)JToken.ReadFrom(reader);
+                }
+            }
+
+            dynamic dataSources;
+            using (var file = System.IO.File.OpenText(HttpContext.Server.MapPath("~/Content/files/DataSources.json")))
+            {
+                using (var reader = new JsonTextReader(file))
+                {
+                    dataSources = (JArray)JToken.ReadFrom(reader);
+                }
+            }
+            ViewBag.DataSources = dataSources;
+
+            return View(chosenParcel);
+        }
+
+        // GET: Grid Angular
+        [ActionName("grid-angular")]
+        public ActionResult GridAngular()
+        {
+            return View();
+        }
+
+        // GET: Pics
+        public ActionResult Pics()
+        {
+            dynamic chosenParcel;
+            var filePath = HttpContext.Server.MapPath("~/Content/files/ChosenParcel.json");
+            // read JSON directly from a file
+            using (var file = System.IO.File.OpenText(filePath))
+            {
+                using (var reader = new JsonTextReader(file))
+                {
+                    chosenParcel = (JObject)JToken.ReadFrom(reader);
+                }
+            }
+
+            return View(chosenParcel);
+        }
+
+        // GET: Report-Review
+        [ActionName("report-review")]
+        public ActionResult ReportReview()
+        {
             return View();
         }
 

@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "Review & fine tune your report before exporting";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    bool subject = true;
+    string subjectAddress = "549 W Muskmelon Way";
+    string subjectAddressCityStateZip = "Saratoga Springs, Utah 84045";
+    int subjectDiscrepancyCount = 5;
+    string discrepancyText = "discrepancies";
+    
+
+    var marketConditions = true;
+    var mcCount = 89;
+    var graphsIncluded = true;
+    
+    
+    var comparables = true;
+    var compCount = 6;
+    var compText = "properties";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="review-container">
+    <div class="row row-bottom-spacer">
+        <div class="col-md-12 settings">
+            <h3>Settings</h3>
+            <div class="input-group">
+                <label>Form</label>
+                @Html.DropDownList("SelectedForm", new List<SelectListItem> { new SelectListItem { Value = "", Text = "" } }, new { @class = "form-control" })
+            </div>
+            <div class="input-group">
+                <label>Profile</label>
+                @Html.DropDownList("SelectedProfileList", new List<SelectListItem> { new SelectListItem { Value = "", Text = "" } }, new { @class = "form-control" })
+            </div>
+            <div class="input-group">
+                <label>Form Software</label>
+                @Html.DropDownList("SelectedFormSoftware", new List<SelectListItem> { new SelectListItem { Value = "", Text = "" } }, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 report-section subject @(subject ? "" : "none")">
+            <h3>Subject</h3>
+            @if (subject)
+            {
+                <address>
+                    <div class="address">@subjectAddress</div>
+                    <div class="sub-address">@subjectAddressCityStateZip</div>
+                </address>
+                <h4 class="discrepancies">
+                    @string.Format("{0} unresolved {1} found", subjectDiscrepancyCount, discrepancyText)
+                </h4>
+                <div class="measured-gla">
+                    <label>Measured GLA:</label>
+                    <div class="input-group">
+                        @Html.TextBox("MeasuredGla", null, new { @class = "form-control" })
+                        <span class="input-group-addon">sf</span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <h4>No Subject information present</h4>
+
+                @Html.ActionLink("Add Subject Info", "Index", "Subject", new { @class = "btn btn-default pull-right" })
+            }
+        </div>
+        <div class="col-md-4 report-section @(marketConditions ? "" : "none")">
+            <h3>Market Conditions</h3>
+            @if (marketConditions)
+            {
+                <h4>
+                    @mcCount properties
+                </h4>
+                <h4 class="graphs-included">
+                    <span class="fa fa-check fa-lg"></span>
+                    graphs included
+                </h4>
+            }
+            else
+            {
+                <h4>No Market Conditions information present</h4>
+                @Html.ActionLink("Add Market Condition Info", "Index", "MarketConditions", new { @class = "btn btn-default pull-right" })
+            }
+        </div>
+        <div class="col-md-4 report-section @(comparables ? "" : "none")">
+            <h3>Comparables</h3>
+            @if (comparables)
+            {
+                <h4>@string.Format("{0} {1}", compCount, compText)</h4>
+            }
+            else
+            {
+                <h4>No Comparable Property information present</h4>
+                @Html.ActionLink("Add Comparable Info", "Index", "Comps", new { @class = "btn btn-default pull-right" })
+            }
+        </div>
+    </div>
+
+    <div class="row nav-row">
+        <a href="#" class="btn btn-default btn-nav btn-lg pull-right">Export to Appraisal Report</a>
+    </div>
+</div>
+
+@section PageStyles {
+    <link href="~/Content/ReportReview.css" rel="stylesheet" type="text/css" />
+}

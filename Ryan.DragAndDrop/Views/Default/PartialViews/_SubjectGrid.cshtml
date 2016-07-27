@@ -1,5 +1,19 @@
 ﻿@{
-    var parcelImageStrings = ViewData["parcelImageStrings"] as List<string>;
+    var subject = (dynamic)ViewData["subjectStandardizedParcel"];
+    var dataSources = (dynamic)ViewData["DataSources"];
+
+    //var propertyPhotoList = ((IEnumerable<dynamic>) subject.PropertyPhotoList)
+    //                            .Cast<dynamic>()
+    //                            .Select(x => x.EncodedPhoto.ToString())
+    //                            .Cast<string>()
+    //                            .Select(x => x.ToString())
+    //                            .ToList();
+    var propertyPhotoList = ((IEnumerable<dynamic>)subject.PropertyPhotoList)
+                                  .Cast<dynamic>()
+                                  .Select(x => new { EncodedPhoto = x.EncodedPhoto.ToString(), Title = x.Title.ToString() })
+                                  .ToList();
+    var selectedPhoto = subject.SelectedPhoto.EncodedPhoto.ToString();
+    
 }
 
 
@@ -7,7 +21,7 @@
     <h1>Subject</h1>
     <div class="row">
         <div class="col-md-12">
-            @ParcelPhoto(parcelImageStrings.FirstOrDefault())
+            @ParcelPhoto(selectedPhoto, propertyPhotoList, "Subject")
 
             <div class="parcel-detail-link-container">
                 <a href="#">Listing</a>
@@ -16,13 +30,14 @@
 
         </div>
     </div>
-    <div class="row">
+    <div class="row grid-row address-row">
         <div class="col-md-12">
             <address>
-                <div class="address">2939 NW 725th Street</div>
-                <div class="address-sub">Portland, OR 97230</div>
+                <div class="address">@subject.AddressLine1.Value</div>
+                <div class="address-sub">@subject.City.Value, @subject.State.Value @subject.Zip.Value</div>
             </address>
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout("address")
     </div>
     <div class="row grid-row">
         <div class="col-md-12 grid-label">
@@ -36,9 +51,11 @@
         <div class="col-md-6 grid-input">
             <div class="input-group">
                 <span class="input-group-addon">$</span>
-                <input type="number" id="SubjectSalePrice" class="form-control">
+                <input type="text" id="SalePriceSubject" value="@int.Parse(subject.SalePrice.Value.ToString()).ToString("N0")" pattern="[0-9]*" class="form-control">
             </div>
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
+        
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
@@ -47,10 +64,11 @@
         <div class="col-md-6 grid-input">
             <div class="input-group">
                 <span class="input-group-addon">$</span>
-                <input type="number" id="SubjectGlaPrice" class="form-control">
+                <input type="number" id="GlaPriceSubject" value="@decimal.Parse(subject.SalePricePerGrossLivingArea.Value.ToString()).ToString("F")" class="form-control">
                 <span class="input-group-addon trailing sm">sqft</span>
             </div>
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-12 grid-label">
@@ -90,64 +108,72 @@
             Location
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectLocation" class="form-control">
+            <input type="text" id="LocationSubject" value="@subject.Location.Value" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Leasehold/Fee Simple
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectFeeSimple" class="form-control">
+            <input type="text" id="FeeSimpleSubject" value="@subject.LeaseholdFeeSimple.Value" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Site
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectSite" class="form-control">
+            <input type="text" id="SiteSubject" value="@subject.SiteArea.Value" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             View
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectView" class="form-control">
+            <input type="text" id="ViewSubject" value="@subject.View.Value" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Design (Style)
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectDesign" class="form-control">
+            <input type="text" id="DesignSubject" value="@subject.DesignStyle.Value" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Quality of Construction
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectQuality" class="form-control">
+            <input type="text" id="QualitySubject" value="@subject.QualityOfConstruction.Value" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Actual Age
         </div>
         <div class="col-md-6 grid-input">
-            <input type="number" id="SubjectAge" class="form-control">
+            <input type="text" id="AgeSubject" value="@subject.EffectiveAge.Value" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Condition
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectCondition" class="form-control">
+            <input type="text" id="ConditionSubject" value="@subject.Condition.Value" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label room-count">
@@ -162,17 +188,18 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4 grid-input">
-                        <input type="number" id="SubjectTotalRoomCount" class="form-control">
+                        <input type="text" id="TotalRoomCountSubject" value="@subject.TotalAboveGradeRooms.Value" class="form-control">
                     </div>
                     <div class="col-md-4 grid-input">
-                        <input type="number" id="SubjectBedroomCount" class="form-control">
+                        <input type="text" id="BedroomCountSubject" value="@subject.TotalAboveGradeBedrooms.Value" class="form-control">
                     </div>
                     <div class="col-md-4 grid-input">
-                        <input type="number" id="SubjectBathroomCount" class="form-control">
+                        <input type="text" id="BathroomCountSubject" value="@subject.TotalAboveGradeBathrooms.Value" class="form-control">
                     </div>
                 </div>
             </div>
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
@@ -180,90 +207,101 @@
         </div>
         <div class="col-md-6 grid-input">
             <div class="input-group">
-                <input type="number" id="SubjectGla" class="form-control">
+                <input type="text" id="GlaSubject" value="@int.Parse(subject.AboveGradeGla.ToString()).ToString("N0")" class="form-control">
                 <span class="input-group-addon trailing sm">sqft</span>
             </div>
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Basement & Finished
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectBasementAndFinished" class="form-control">
+            <input type="text" id="BasementAndFinishedSubject" value="" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Rooms Below Grade
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectRoomsBelowGrade" class="form-control">
+            <input type="text" id="RoomsBelowGradeSubject" value="" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Functional Utility
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectFunctionalUtility" class="form-control">
+            <input type="text" id="FunctionalUtilitySubject" value="@subject.FunctionalUtility.Value" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Heating/Cooling
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectHeatingCooling" class="form-control">
+            <input type="text" id="HeatingCoolingSubject" value="" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Energy Efficient Items
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectEnergyEfficient" class="form-control">
+            <input type="text" id="EnergyEfficientSubject" value="" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Garage/Carport
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectParking" class="form-control">
+            <input type="text" id="ParkingSubject" value="@subject.GarageCarport" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Porch/Patio/Deck
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectPorch" class="form-control">
+            <input type="text" id="PorchSubject" value="@subject.PorchPatioDeck" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Extra Item 1
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectExtraItem1" class="form-control">
+            <input type="text" id="ExtraItem1Subject" value="@subject.ExtraLineItem" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Extra Item 2
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectExtraItem2" class="form-control">
+            <input type="text" id="ExtraItem2Subject" value="@subject.ExtraLineItem2" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label">
             Extra Item 3
         </div>
         <div class="col-md-6 grid-input">
-            <input type="text" id="SubjectExtraItem3" class="form-control">
+            <input type="text" id="ExtraItem3Subject" value="@subject.ExtraLineItem3" class="form-control">
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-12 grid-label">
@@ -279,7 +317,7 @@
 </div>
 
 
-@helper ParcelPhoto(string imageString)
+@helper ParcelPhoto(string imageString, dynamic propertyPhotoList, string compNumber)
 {
 //TODO:  Extract to helper file
 if (string.IsNullOrEmpty(imageString))
@@ -291,9 +329,10 @@ if (string.IsNullOrEmpty(imageString))
 }
 else
 {
-        <div class="item-photo">
+        <div class="item-photo" data-toggle="modal" data-target="#ImagesCompModal@(compNumber)">
             @*<img src="@photoUrl" alt="" style="height: 100px; width: auto; border: 1px solid #000;" />*@
             <img src="data:image/png;base64,@imageString" alt="" />
         </div>
-}
+        
+    }
 }

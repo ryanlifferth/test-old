@@ -7,7 +7,11 @@
         </a>
         <ul class="nav navbar-nav">
             @BuildMenuItem("Home", "Index", "Default")
-            @BuildMenuItem("About Us", "About-Us", "Default")
+            @BuildMenuItem("Grid", "grid-jquery", "Default", null, null, "jQuery")
+            @BuildMenuItem("Grid", "grid-angular", "Default", null, null, "Angular")
+            @BuildMenuItem("Pics", "pics", "Default")
+            @BuildMenuItem("Report", "report-review", "Default", null, null, "Review")
+            @*@BuildMenuItem("About Us", "About-Us", "Default")*@
         </ul>
     </div>
 </header>
@@ -15,7 +19,7 @@
 @functions {
 
 
-    private HtmlString BuildMenuItem(string text, string action, string controller, string liClasses = "", string linkClasses = "")
+    private HtmlString BuildMenuItem(string text, string action, string controller, string liClasses = "", string linkClasses = "", string subText = "")
     {
         var link = new System.UriBuilder(Request.Url.AbsoluteUri) { Path = Url.Action(action, controller) }.Uri;
         var currentPage = Request.Url;
@@ -41,7 +45,9 @@
         sb.Append(@"<a href=""" + Url.Action(action, controller) + @"""");
         if (!string.IsNullOrEmpty(linkClasses)) sb.Append(@" class=""").Append(linkClasses).Append(@"""");
         sb.Append(@">");
-        sb.Append(Html.Raw(text)).Append(@"</a>");
+        sb.Append(Html.Raw(text));
+        if (!string.IsNullOrEmpty(subText)) sb.Append(@"<span class=""menu-sub-text"">").Append(Html.Raw(subText)).Append("</span>");
+        sb.Append(@"</a>");
 
         sb.Append(@"</li>");
 

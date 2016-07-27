@@ -1,10 +1,32 @@
 ﻿@using Ryan.DragAndDrop.Models
 @{
-    var parcelImageStrings = ViewData["parcelImageStrings"] as List<string>;
-    var comp = ViewData["comp"] as Parcel;
+    var comp = (dynamic)ViewData["compStandardizedParcel"];
+    var compPrePrioritizedList = (dynamic)ViewData["compPrePrioritizedList"];
+    var dataSources = (dynamic)ViewData["DataSources"];
+
+    //var propertyPhotoList = ((IEnumerable<dynamic>)comp.PropertyPhotoList)
+    //                            .Cast<dynamic>()
+    //                            .Select(x => x.EncodedPhoto.ToString())
+    //                            .Cast<string>()
+    //                            .Select(x => x.ToString())
+    //                            .ToList();
+    var sourceData = ((IEnumerable<dynamic>)compPrePrioritizedList).Cast<dynamic>().ToList();
+
+    var propertyPhotoList = ((IEnumerable<dynamic>)comp.PropertyPhotoList)
+                          .Cast<dynamic>()
+                          .Select(x => new { EncodedPhoto = x.EncodedPhoto.ToString(), Title = x.Title.ToString() })
+                          .ToList();
+    var selectedPhoto = comp.SelectedPhoto.EncodedPhoto.ToString();
+
     var compNumber = (int)ViewData["compNumber"];
     var first = compNumber == 1 ? "first" : string.Empty;
     var compVar = String.Format("Comp{0}", compNumber);
+
+    var salePrice = comp.SalePrice != null ? int.Parse(comp.SalePrice.ToString()).ToString("N0") : string.Empty;
+    var pricePerSqFt = comp.SalePricePerGrossLivingArea != null ? decimal.Parse(comp.SalePricePerGrossLivingArea.ToString()).ToString("F") : string.Empty;
+    var aboveGradeGla = comp.AboveGradeGla != null ? int.Parse(comp.AboveGradeGla.ToString()).ToString("N0") : string.Empty;
+
+    //string.Format("{$0:#}", Convert.ToInt16()
 }
 
 
@@ -16,7 +38,7 @@
     </h1>
     <div class="row">
         <div class="col-md-12">
-            @ParcelPhoto(parcelImageStrings[compNumber])
+            @ParcelPhoto(selectedPhoto, propertyPhotoList, compNumber.ToString())
 
             <div class="parcel-detail-link-container">
                 <a href="#">Listing</a>
@@ -24,24 +46,40 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
+    <div class="row grid-row address-row">
+        <div class="col-md-12" tabindex="0">
             <address>
-                <div class="address">@comp.Address.AddressLine1</div>
-                <div class="address-sub">@comp.Address.City, @comp.Address.State @comp.Address.Zip</div>
+                <div class="address">@comp.AddressLine1</div>
+                <div class="address-sub">@comp.City, @comp.State @comp.Zip</div>
             </address>
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout("address")
     </div>
     <div class="row grid-row">
         <div class="col-md-12 grid-input">
-            <input type="text" id="Proximity@(compVar)" placeholder="proximity to subject" class="form-control" />
+            <input type="text" id="Proximity@(compVar)" value="@comp.ProximityToSubject" placeholder="proximity to subject" class="form-control" />
         </div>
     </div>
     <div class="row grid-row">
         <div class="col-md-12 grid-input">
             <div class="input-group">
                 <span class="input-group-addon">$</span>
-                <input type="number" id="SalePrice@(compVar)" placeholder="sale price" class="form-control" />
+                <input type="text" id="SalePrice@(compVar)" value="@salePrice" placeholder="sale price" class="form-control" />
+            </div>
+        </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
+        <div class="data-source-content hide">
+            <div class="data-source-grid">
+                @foreach (var item in sourceData)
+                {
+                    var selected = sourceData.IndexOf(item) == 0 ? "selected" : "";
+                    <div class="source-item-row @selected">
+                        <label class="col source-item-name">
+                            @dataSources[sourceData.IndexOf(item)].DisplayName
+                        </label>
+                        <div class="col source-item-value">@item["SalePrice"]</div>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -49,20 +87,23 @@
         <div class="col-md-12 grid-input">
             <div class="input-group">
                 <span class="input-group-addon">$</span>
-                <input type="number" id="GlaPrice@(compVar)" placeholder="sale price/GLA" class="form-control" />
+                <input type="text" id="GlaPrice@(compVar)" value="@pricePerSqFt" placeholder="sale price/GLA" class="form-control" />
                 <span class="input-group-addon trailing sm">sqft</span>
             </div>
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-12 grid-input">
-            <input type="text" id="DataSource@(compVar)" placeholder="data source(s)" class="form-control" />
+            <input type="text" id="DataSource@(compVar)" value="@comp.DataSources" placeholder="data source(s)" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-12 grid-input">
-            <input type="text" id="VerificationSource@(compVar)" placeholder="verification source(s)" class="form-control" />
+            <input type="text" id="VerificationSource@(compVar)" value="@comp.VerificationSources" placeholder="verification source(s)" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-label label-header">
@@ -74,91 +115,102 @@
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="SaleFinance@(compVar)" placeholder="sale or financing" class="form-control" />
+            <input type="text" id="SaleFinance@(compVar)" value="" placeholder="sale or financing" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="SaleFinanceAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="Concessions@(compVar)" placeholder="concessions" class="form-control" />
+            <input type="text" id="Concessions@(compVar)" value="@comp.Concessions" placeholder="concessions" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="ConcessionsAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="DateOfSale@(compVar)" placeholder="date of sale" class="form-control" />
+            <input type="text" id="DateOfSale@(compVar)" value="@comp.DateOfSale" placeholder="date of sale" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="DateOfSaleAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="Location@(compVar)" placeholder="location" class="form-control" />
+            <input type="text" id="Location@(compVar)" value="@comp.Location" placeholder="location" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="LocationAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="FeeSimple@(compVar)" placeholder="leasehold/fee simple" class="form-control" />
+            <input type="text" id="FeeSimple@(compVar)" value="@comp.LeaseholdFeeSimple" placeholder="leasehold/fee simple" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="FeeSimpleAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="number" id="Site@(compVar)" placeholder="site" class="form-control" />
+            <input type="number" id="Site@(compVar)" value="@comp.SiteArea" placeholder="site" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="SiteAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="View@(compVar)" placeholder="view" class="form-control" />
+            <input type="text" id="View@(compVar)" value="@comp.View" placeholder="view" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="ViewAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="Design@(compVar)" placeholder="design (style)" class="form-control" />
+            <input type="text" id="Design@(compVar)" value="@comp.DesignStyle" placeholder="design (style)" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="DesignAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="Quality@(compVar)" placeholder="quality of const" class="form-control" />
+            <input type="text" id="Quality@(compVar)" value="@comp.QualityOfConstruction" placeholder="quality of const" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="QualityAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="Age@(compVar)" placeholder="actual age" class="form-control" />
+            <input type="text" id="Age@(compVar)" value="@comp.EffectiveAge" placeholder="actual age" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="AgeAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="Condition@(compVar)" placeholder="condition" class="form-control" />
+            <input type="text" id="Condition@(compVar)" value="@comp.Condition" placeholder="condition" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="ConditionAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input room-count">
@@ -170,13 +222,13 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4 grid-input">
-                        <input type="number" id="TotalRoomCount@(compVar)" class="form-control" />
+                        <input type="text" id="TotalRoomCount@(compVar)" value="@comp.TotalAboveGradeRooms" class="form-control" />
                     </div>
                     <div class="col-md-4 grid-input">
-                        <input type="number" id="BedroomCount@(compVar)" class="form-control" />
+                        <input type="text" id="BedroomCount@(compVar)" value="@comp.TotalAboveGradeBedrooms" class="form-control" />
                     </div>
                     <div class="col-md-4 grid-input">
-                        <input type="number" id="BathroomCount@(compVar)" class="form-control" />
+                        <input type="text" id="BathroomCount@(compVar)" value="@comp.TotalAboveGradeBathrooms" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -193,25 +245,28 @@
                 </div>
             </div>
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout("room-count")
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
             <div class="input-group">
-                <input type="number" id="Gla@(compVar)" placeholder="GLA" class="form-control" />
+                <input type="text" id="Gla@(compVar)" value="@aboveGradeGla" placeholder="GLA" class="form-control" />
                 <span class="input-group-addon trailing sm">sqft</span>
             </div>
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="GlaAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="BasementAndFinished@(compVar)" placeholder="basement/finished" class="form-control" />
+            <input type="text" id="BasementAndFinished@(compVar)" value="" placeholder="basement/finished" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="BasementAndFinishedAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
@@ -220,14 +275,16 @@
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="RoomsBelowGradeAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="FunctionalUtility@(compVar)" placeholder="functional util" class="form-control" />
+            <input type="text" id="FunctionalUtility@(compVar)" value="@comp.FunctionalUtility" placeholder="functional util" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="FunctionalUtilityAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
@@ -236,54 +293,61 @@
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="HeatingCoolingAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="EnergyEfficient@(compVar)" placeholder="energy effct items" class="form-control" />
+            <input type="text" id="EnergyEfficient@(compVar)" value="@comp.EnergyEfficientItems" placeholder="energy effct items" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="EnergyEfficientAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="Parking@(compVar)" placeholder="garage/carport" class="form-control" />
+            <input type="text" id="Parking@(compVar)" value="@comp.GarageCarport" placeholder="garage/carport" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="ParkingAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="Porch@(compVar)" placeholder="porch/patio/deck" class="form-control" />
+            <input type="text" id="Porch@(compVar)" value="@comp.PorchPatioDeck" placeholder="porch/patio/deck" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="PorchAdjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="ExtraItem1@(compVar)" placeholder="extra item 1" class="form-control" />
+            <input type="text" id="ExtraItem1@(compVar)" value="@comp.ExtraLineItem" placeholder="extra item 1" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="ExtraItem1Adjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="ExtraItem2@(compVar)" placeholder="extra item 2" class="form-control" />
+            <input type="text" id="ExtraItem2@(compVar)" value="@comp.ExtraLineItem2" placeholder="extra item 2" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="ExtraItem2Adjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input">
-            <input type="text" id="ExtraItem3@(compVar)" placeholder="extra item 3" class="form-control" />
+            <input type="text" id="ExtraItem3@(compVar)" value="@comp.ExtraLineItem3" placeholder="extra item 3" class="form-control" />
         </div>
         <div class="col-md-6 grid-input grid-adjust">
             <input type="number" id="ExtraItem3Adjust@(compVar)" placeholder="" class="form-control" />
         </div>
+        @Helpers.ParcelHelpers.BuildInputFlyout()
     </div>
     <div class="row grid-row">
         <div class="col-md-6 grid-input adjust-plus-minus">
@@ -293,7 +357,7 @@
         <div class="col-md-6 grid-input grid-adjust">
             <div class="input-group">
                 <span class="input-group-addon">$</span>
-                <input type="number" id="NetAdjustTotal@(compVar)" placeholder="" class="form-control" />
+                <input type="text" id="NetAdjustTotal@(compVar)" placeholder="" class="form-control" />
             </div>
         </div>
     </div>
@@ -323,14 +387,14 @@
         <div class="col-md-6 grid-input grid-adjust adjusted-sales-price">
             <div class="input-group vert-align">
                 <span class="input-group-addon">$</span>
-                <input type="number" id="AdjustedSalesPrice@(compVar)" placeholder="" class="form-control" />
+                <input type="text" id="AdjustedSalesPrice@(compVar)" placeholder="" class="form-control" />
             </div>
         </div>
     </div>
 
 </div>
 
-@helper ParcelPhoto(string imageString)
+@helper ParcelPhoto(string imageString, dynamic propertyPhotoList, string compNumber)
 {
 //TODO:  Extract to helper file
 if (string.IsNullOrEmpty(imageString))
@@ -342,9 +406,10 @@ if (string.IsNullOrEmpty(imageString))
 }
 else
 {
-        <div class="item-photo">
+        <div class="item-photo" data-toggle="modal" data-target="#ImagesCompModal@(compNumber)">
             @*<img src="@photoUrl" alt="" style="height: 100px; width: auto; border: 1px solid #000;" />*@
             <img src="data:image/png;base64,@imageString" alt="" />
         </div>
+
 }
 }

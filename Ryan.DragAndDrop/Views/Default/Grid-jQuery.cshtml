@@ -1,0 +1,539 @@
+﻿@model dynamic
+@{
+    ViewBag.Title = "Grid - jQuery";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    var compCount = Model.Comparables.Count;
+
+    var subjectGridItemWidth = 245; // subject grid item width + margin
+    var compGridItemWidth = 230;
+    var compsWidth = (compGridItemWidth * compCount) + 1;  // this is the internal container (+1 to account for the extra width of the first comp - due to the extra border)
+
+    var dataSources = ViewBag.DataSources != null ? ViewBag.DataSources : null;
+}
+
+<h2>Grid - jQuery</h2>
+
+<div class="comps-grid-container">
+
+    <div class="grid-header">
+        <label style="display: inline-block;">Form</label>
+        <span style="margin-left: 5px; font-weight: bold;">1004 UAD</span>
+
+
+        <a href="#" class="btn btn-default btn-add-comps" data-toggle="modal" data-target="#addComps">Add Comps</a>
+        <span class="comp-count">
+            comp count
+            <span class="count">@compCount</span>
+        </span>
+
+    </div>
+
+    @Html.Partial("_SubjectGrid", null, new ViewDataDictionary { { "subjectStandardizedParcel", Model.Subject.StandardizedParcel }, { "DataSources", dataSources } })
+
+    <div class="comp-container">
+        <div class="comps" id="Comps">
+            @for (int i = 1; i <= compCount; i++)
+            {
+                var first = i == 1 ? "first" : string.Empty;
+                @Html.Partial("_CompGrid", null,
+                              new ViewDataDictionary
+                               {
+                                  { "compStandardizedParcel", Model.Comparables[i - 1].StandardizedParcel },
+                                  { "compPrePrioritizedList", Model.Comparables[i - 1].PrePrioritizedList },
+                                  { "DataSources", dataSources },
+                                  { "compNumber", i }
+                               })
+            }
+        </div>
+
+        @if (compCount <= 1)
+        {
+            @Html.Partial("_CompImport")
+        }
+
+    </div>
+    <div class="clearfix"></div>
+
+    @*
+        // We have to put the modal outside of the comp-container grid, otherwise there is strange
+        // behavior when there is scrolling with that element.*@
+    @Html.Partial("_CompModals", null, new ViewDataDictionary { { "Comparables", Model.Comparables } })
+
+    @Html.Partial("_SubjectModals", null, new ViewDataDictionary { { "Subject", Model.Subject } })
+
+
+</div>
+
+
+@section PageScripts {
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".input-group > .form-control").on("focus", function() {
+                // Add the focus box-shadow
+                $(this).parent().addClass("form-focus-focus");
+            })
+            .on("blur", function() {
+                // Add the focus box-shadow
+                $(this).parent().removeClass("form-focus-focus");
+            });
+
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // TODO:  Encapsulate this into a function so that it can be called on different events (e.g., window resize, add/delete comp, etc.)
+
+            function FitCompGridToPage() {
+                "use strict";
+                ///<summary>
+                /// The summary goes here
+                ///</summary>
+                var self = this;
+
+                /* PROPERTIES */
+                self.subjectGridItemWidth = "";
+                self.allCompsWidth = "";
+                self.containerBody = {};
+                self.compOuterContainer = {};
+                self.compInnerContainer = {};
+                self.subjectGridItem = {};
+                self.footerContainer = {};
+
+                /* FIELDS */
+                var bodyInnerContainerWidth = 0;
+                var bodyOuterContainerWidth = 0;
+                var compsContainerWidth = 0;
+
+                /* CONSTRUCTOR */
+                self.init = function() {
+                    //TODO: Do some basic validation to make sure that all objects are not null
+
+                    // Get the existing container widths
+                    bodyInnerContainerWidth = self.containerBody.outerWidth(false);  // Gets the width of the container without margins, padding, and border, so we know how wide we can go
+                    //bodyOuterContainerWidth = self.containerBody.outerWidth(true);   // Gets the width of the container with margins, padding, and border (due to true bool)
+                    bodyOuterContainerWidth = $(window).width();  //TEMP until firefox/jquery fix issue where outerWidth doesn't calculate the value of left/right margin: auto
+                    compsContainerWidth = self.compOuterContainer.outerWidth(true);  // Gets the width of the outer comps container
+
+                    self.sizeGridElements();
+                };
+
+                self.onResize = function(newWindowWidth) {
+                    // TODO:  Executed on browser resize, add or delete grid item
+                    bodyOuterContainerWidth = newWindowWidth;  // Gets the width of new window
+                    if (bodyOuterContainerWidth < bodyInnerContainerWidth) {
+                        bodyInnerContainerWidth = bodyOuterContainerWidth;
+                    }
+                    self.sizeGridElements();
+                };
+
+                /* METHODS */
+                /* Public Methods */
+                self.sizeGridElements = function() {
+                    if (bodyInnerContainerWidth < self.subjectGridItemWidth + self.allCompsWidth) {
+                        // Need to widen the .container#body element
+                        // Determine how wide to expand the the .container#body element
+                        if (bodyOuterContainerWidth < self.subjectGridItemWidth + self.allCompsWidth) {
+                            // Need to expand it to the full viewport and add scrollable properties to the comps-container element
+                            // Go to the widest possible and then add scrollable components
+                            self.containerBody.outerWidth(bodyOuterContainerWidth - 30); // -30 for 15px padding on each side
+                            self.compInnerContainer.outerWidth(self.allCompsWidth);
+                            self.compOuterContainer.addClass("horizontal-scroll").addClass("top-scrollbar");
+                            self.subjectGridItem.addClass("scrolling-top-margin");
+                        } else {
+                            // Determine how wide to expand the .container#body element
+                            self.containerBody.outerWidth(self.subjectGridItemWidth + self.allCompsWidth);
+
+                            // remove scrolling class properties (they may not be there, but on resize events they may be there)
+                            self.compOuterContainer.removeClass("horizontal-scroll").removeClass("top-scrollbar");
+                            self.subjectGridItem.removeClass("scrolling-top-margin");
+                        }
+
+                        // Widen the footer too - just to add consistency
+                        self.footerContainer.outerWidth(self.containerBody.outerWidth());
+                    }
+                };
+
+                /* Private Methods */
+
+                return self;
+            }
+
+            var fit = new FitCompGridToPage();
+            fit.subjectGridItemWidth = @subjectGridItemWidth;
+            fit.allCompsWidth = @compsWidth;  //compGridItemWidth * compCount (calculated above)
+            fit.containerBody = $(".container#body");
+            fit.compOuterContainer = $(".comp-container");
+            fit.compInnerContainer = $(".comps");
+            fit.subjectGridItem = $(".grid-item.subject");
+            fit.footerContainer = $("footer.container");
+            fit.init();
+
+            $(window).resize(function() {
+                fit.onResize($( window ).width());
+            });
+
+
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // RESOURCES USED:
+            // - http://jsfiddle.net/mmmz/8
+
+            var parcelDetailLinkContainerWidth = $(".comps > .grid-item .parcel-detail-link-container").width();  // Get the default width of the .parcel-detail-link-container element
+
+            $(".comps > .grid-item *")
+                .on("focus", function (e) {
+                    $(e.target).closest(".grid-item").addClass("grid-item-focus");
+                })
+                .on("focusout", function (e) {
+                    $(e.target).closest(".grid-item").removeClass("grid-item-focus");
+                });
+
+            $(".comps > .grid-item").on("keyup", function (e) {
+                if (e.shiftKey && e.ctrlKey && e.keyCode == 39) {
+                    // CTRL + SHIFT + ->
+                    e.stopPropagation();
+
+                    console.log("move right");
+                    moveGridItem(e, "right");
+
+                } else if (e.shiftKey && e.ctrlKey && e.keyCode == 37) {
+                    // CTRL + SHIFT + <-
+                    e.stopPropagation();
+                    console.log("move left");
+                    moveGridItem(e, "left");
+                }
+            });
+
+            var moveGridItem = function (event, direction) {
+
+                var parentOffset = $(event.target).closest(".grid-item").position();
+                parentOffset.top += 45;
+                var errorDisplayDelay = 1400;
+                if (direction === "right" && $(event.target).parents(".grid-item").next().length === 0) {
+                    //alert('you are already at the end');
+                    parentOffset.left += 85;
+
+                    $(".hmm-error > .text.bottom > .end").show();
+                    $(".hmm-error > .text.bottom > .begin").hide();
+                    $(".hmm-error").css({ top: parentOffset.top, left: parentOffset.left })
+                                   .fadeIn("fast").delay(errorDisplayDelay).fadeOut("slow");
+                    return;
+                } else if (direction === "left" && $(event.target).parents(".grid-item").prev().length === 0) {
+                    //alert('you are at the begining');
+                    parentOffset.left -= 10;
+
+                    $(".hmm-error > .text.bottom > .begin").show();
+                    $(".hmm-error > .text.bottom > .end").hide();
+                    $(".hmm-error").css({ top: parentOffset.top, left: parentOffset.left })
+                                   .fadeIn("fast").delay(errorDisplayDelay).fadeOut("slow");
+                    return;
+                }
+
+
+                // Animation for moving a grid item
+                //  - addClass("dragging"): shows the animation of resizing (smaller) and opacity
+                //  - delay(nn): in place to let the animation above time to finish before moving on to the ".then()" call
+                //  - animate({ left/right...}): gives the appearance of moving to the right/left
+                //  - css({left/right: -NNpx}): sets a staring point for the animation that follows (see next step)
+                //  - animate({ left/right: 0 }): gives the appearance of moving from the right/left
+                //  - next().after(this): moves the .grid-item to after the next sibling, if there is one
+                //  - removeClass("dragging"): removes resize and opacity to set back to normal
+                //  - .focus(): sets focus back to the item it was on
+                var step1Animation = direction === "right" ? { left: '100px' } : { left: '-100px' };
+                var step2CssProperties = direction === "right" ? { left: '-30px' } : { left: '30px' };
+                var step3Animation = { left: 0 };
+                $.when(
+                    $(event.target).parents(".grid-item").addClass("dragging").delay(10).animate(step1Animation)
+                    )
+                    .then(function () {
+                        $(this).css(step2CssProperties).animate(step3Animation);
+                        if (direction === "right") {
+                            $(this).next().after(this);
+                        } else {
+                            $(this).prev().before(this);
+                        }
+                    })
+                    .then(function () {
+                        $(this).removeClass("dragging", 10);
+                        $(event.target).focus();
+                    });
+
+            }
+
+            // RESOURCES USED:
+            // - https://nemetht.wordpress.com/drag-and-drop-with-html5-and-jquery/
+            // - http://www.sitepoint.com/a-drag-and-drop-planning-board-with-html5/
+            // - https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API
+            // - http://www.html5rocks.com/en/tutorials/dnd/basics/
+            // - http://stackoverflow.com/questions/23309597/html5-drag-and-drop-using-jquery-not-jquery-ui
+
+            $(".comps > .grid-item").on("dragstart", function (e) {
+                e.originalEvent.dataTransfer.setData("Text", this.id);
+                e.originalEvent.dataTransfer.dropEffect = "move";
+                $(this).addClass("dragging");
+
+                $(this).next()
+                    .addClass("dragging-sibling")
+                    .find(".parcel-detail-link-container").outerWidth(parcelDetailLinkContainerWidth - 2);  // adjust width so that the buttons don't overflow when the drag border appears and the extra border (.dragging-sibling) is added
+            });
+
+            $(".comps > .grid-item").on("dragover", function (e) {
+                var event = e.originalEvent;
+                if (event.preventDefault) {
+                    event.preventDefault();
+                }
+
+                //if ($(this).is(":first-child")) {
+                //    console.log("First child");
+                //}
+
+                $(this).addClass("drag-over");
+
+                event.dataTransfer.dropEffect = "move";
+                return false;
+            });
+
+            $(".comps > .grid-item").on("dragleave", function (e) {
+                $(this).removeClass("drag-over");
+            });
+
+            $(".comps > .grid-item").on("drop", function (e) {
+                var event = e.originalEvent;
+                if (event.stopPropagation) {
+                    event.stopPropagation();
+                }
+
+                var dataTransfer = event.dataTransfer;
+                var draggedId = dataTransfer.getData('Text');
+                var draggedElement = $('#' + draggedId);
+                //$(e.target).append(draggedElement);
+                //if ($(e.target).hasClass(""))
+                var draggable = $(e.target).attr("draggable");
+                if (typeof draggable !== typeof undefined && draggable !== false) {
+                    // This IS the parent object
+                    $(e.target).after(draggedElement);
+                } else {
+                    // This IS NOT the parent object, find the parent object
+                    $(e.target).parents(".grid-item").after(draggedElement);
+                }
+
+                // redraw borders
+                $(".comps > .grid-item").removeClass("first");
+                $(".comps > .grid-item:first").addClass("first"); // add to the first comp
+
+
+                //var column = e.originalEvent.dataTransfer.getData("Text");
+                //e.target.appendChild(document.getElementById(column));
+
+                event.preventDefault();
+            });
+
+            $(".comps > .grid-item").on("dragend", function (e) {
+                $(this).removeClass("dragging");
+                $(".comps > .grid-item")
+                    .removeClass("drag-over")
+                    .removeClass("dragging-sibling")
+                    .find(".parcel-detail-link-container").outerWidth(parcelDetailLinkContainerWidth);  // Adjust back to normal width
+            });
+
+        });
+    </script>
+
+    <script type="text/javascript">
+        // TODO:  Extract to encapsulated JS
+        $(".search-type li").on("click", function () {
+
+            var targetElementWidth = $(this).outerWidth(true);
+            var targetElementLeftPosition = $(this).position().left;
+            var pointerElementWidth = $(".selected-caret").outerWidth(true);
+            var pointerLocation = targetElementLeftPosition + (targetElementWidth / 2) - (pointerElementWidth / 2);  // this is the center of the target element
+            // NOTE:  We subtract (pointerElementWidth / 2) because
+            //        we position the pointer with a left margin
+
+            // Move the pointer
+            $(".selected-caret").animate({ left: pointerLocation + 'px' }, 100);
+
+            // remove "selected" class from all and add it to the selected item
+            $(".search-type li").removeClass("selected");
+            $(this).addClass("selected");
+
+            // Hide the old search params and show the newly selected params
+            var searchType = $(this).attr("data-search-type");
+            if (searchType === "manual") {
+                $(".comp-search-params").fadeOut("slow");
+            } else {
+                $(".comp-search-params").hide();
+            }
+            $(".comp-search-params[data-search-type='" + searchType + "']").fadeIn();
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var adjustmentsSum = function(gridItem) {
+                var sum = 0;
+                $(gridItem).find(".grid-adjust input:not([id^='NetAdjustTotal'], [id^='AdjustedSalesPrice'])").each(function() {
+                    if (!isNaN(parseFloat(this.value.replace(',','')))) {
+                        sum += parseFloat(this.value.replace(',',''));
+                    }
+                });
+                return sum;
+            }
+
+            var updateAdjustmentValues = function(gridItem, sum) {
+                if (sum !== 0) {
+                    $(gridItem).find("input[id^='NetAdjustTotal']").first().val(numberWithCommas(sum));
+                }
+
+                if (!isNaN(parseFloat($(gridItem).find("input[id^='SalePrice']").first().val().replace(',','')))) {
+                    if (parseFloat($(gridItem).find("input[id^='SalePrice']").first().val().replace(',','')) !== 0) {
+                        var adjustedSalesPrice = parseFloat($(gridItem).find("input[id^='SalePrice']").first().val().replace(',','')) + sum;
+                        $(gridItem).find("input[id^='AdjustedSalesPrice']").first().val(numberWithCommas(adjustedSalesPrice));
+                    }
+                }
+            }
+
+            var numberWithCommas = function(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            $(".grid-item").each(function() {
+                // get all adjustments
+                var sum = adjustmentsSum(this);
+
+                updateAdjustmentValues(this, sum);
+            });
+
+            $(".grid-adjust input, input[id^='SalePrice']").on("change", function() {
+                var sum = adjustmentsSum($(this).closest(".grid-item"));
+                updateAdjustmentValues($(this).closest(".grid-item"), sum);
+            });
+
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var originalImageSrc, originalImageTitle;
+            var ignoreThumbHover = false;
+
+            $(".pics-container .thumbnail-img").on("click focus", function () {
+                var thumb = $(this)
+                $(".thumbnail-img").removeClass("selected");
+                thumb.addClass("selected");
+                // get the main img
+                $(this).closest(".pics-container").find(".main-img").attr({ src: thumb.attr("src"), alt: thumb.attr("alt"), title: thumb.attr("title") });
+                $(this).closest(".pics-container").find(".img-title").text(thumb.attr("title"));
+
+                ignoreThumbHover = true;
+            })
+            .hover(
+                function () {
+                    // hover in
+                    originalImageSrc = $(this).closest(".pics-container").find(".main-img").attr("src");
+                    originalImageTitle = $(this).closest(".pics-container").find(".main-img").attr("title");
+
+                    var thumb = $(this);
+                    $(this).closest(".pics-container").find(".main-img").attr({ src: thumb.attr("src"), alt: thumb.attr("alt"), title: thumb.attr("title") });
+                    $(this).closest(".pics-container").find(".img-title").text(thumb.attr("title"));
+                },
+                function () {
+                    if (!ignoreThumbHover) {
+                        $(this).closest(".pics-container").find(".main-img").attr({ src: originalImageSrc, alt: originalImageTitle, title: originalImageTitle });
+                        $(this).closest(".pics-container").find(".img-title").text(originalImageTitle);
+                    }
+                    ignoreThumbHover = false;
+                }
+            );
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            // Focus/blur uses the following methods:
+            // - http://stackoverflow.com/questions/24232772/capture-div-focusout
+            // - http://stackoverflow.com/questions/2407825/how-to-compare-two-elements-in-jquery
+            $(".grid-row:not(.address-row)")
+                .on("focusin", function (e) {
+                    // close all flyouts and popovers that shouldn't be open
+                    $(".flyout").not($(e.currentTarget).closest(".grid-row").find(".flyout")).hide("slide", 100);
+
+                    $(this).find(".flyout").show("slide", 200);
+                })
+                .on("focusout", function(e) {
+                    //var targetGridParent = $(e.relatedTarget).closest(".grid-row");
+                    //var thisGridParent = $(this).closest(".grid-row");
+                    var sameParent = $(e.relatedTarget).closest(".grid-row").is($(this).closest(".grid-row")) ? true : false;
+                    var isThisPopoverOpen = $(this).closest(".grid-row").find(".popover").hasClass("in") ? true : false;
+
+                    //if (!targetGridParent.is(thisGridParent)) {
+                    if (sameParent === false && isThisPopoverOpen === false) {
+                        console.log("should close ");
+                        $(this).find(".flyout").hide("slide", 100);
+                        $("a.pop-source-link").popover("hide");
+                    }
+                });
+
+            $(".address-row")
+                .on("mouseover", function () {
+                    $(this).find(".flyout").show("slide", 200);
+
+                    $(this).find(".flyout > .fa").on("click", function() {
+                        $(this).closest(".grid-row").find("input[type='text']").val("clicked");
+                    });
+                })
+                .on("mouseout", function(e) {
+                    var targetGridParent = $(e.relatedTarget).closest(".grid-row");
+                    var thisGridParent = $(this).closest(".grid-row");
+                    if (!targetGridParent.is(thisGridParent)) {
+                        $(this).find(".flyout").hide("slide", 100);
+                        $(this).find("a.pop-source-link").popover("hide");
+                    }
+                });
+
+
+            $(".flyout > a.pop-source-link").popover({
+                //container: 'body',
+                placement: 'top',
+                trigger: 'manual',
+                title: null,
+                html: true,
+                content: function () {
+                    return $(this).closest(".flyout").next(".data-source-content").html();
+                }
+            }).on("click", function (e) {
+                $(".flyout > a.pop-source-link").not(this).popover("hide");
+                $(this).popover("toggle");
+            });
+
+            $(document.body).on("shown.bs.popover", function() {
+                $(document.body).on("click", ".source-item-row", function (e) {
+                    //$(this).attr("style", "background-color: red;");
+                    var parentGrid = $(this).closest(".grid-row");
+                });
+            });
+
+            $("html").on('click', function (e) {
+
+                if (!$(e.target).closest(".grid-row").find(".popover").hasClass("in")) {
+                    $("a.pop-source-link").popover("hide");
+
+                    if (!$(e.target).closest(".grid-row").find(".flyout").is(":visible")) {
+                        $(".flyout").hide("slide", 100);
+                    }
+                }
+
+            });
+
+        });
+    </script>
+
+}
