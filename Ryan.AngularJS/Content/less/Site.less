@@ -164,4 +164,27 @@
             }
         }
     }
+
+    .loading-container {
+        color: rgba(51,51,51,1.0);
+        font-family: 'PT Sans', Lato;
+        margin: 10px 0 0 20px;
+
+        &.searching {
+            color: #7d7d7d;
+            display: inline-block;
+            margin: 0 0 0 10px;
+
+            .fa-spinner {
+                -webkit-filter: blur(0);
+            }
+
+            .loading-title {
+                font-family: Montserrat;
+                font-size: 16px;
+                margin-left: 3px;
+                text-transform: lowercase;
+            }
+        }
+    }
 }

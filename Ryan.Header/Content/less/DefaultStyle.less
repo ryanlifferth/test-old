@@ -1,0 +1,516 @@
+﻿@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700);
+@import url(https://fonts.googleapis.com/css?family=Mr+Bedfort&effect=shadow-multiple);
+@import url(https://fonts.googleapis.com/css?family=Rancho&effect=shadow-multiple);
+
+@import "Reset.less";
+
+@default-text-color: #373a3c;
+
+body {
+    color: @default-text-color;
+    font-size: 14px;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@header-background-color: rgba(236, 236, 236, 1.0);
+@header-border-color: rgba(137,137,137,0.1);
+@header-font-color: #fff;
+
+@tab-color-subject: rgba(50, 127, 186, 1.0); /*#327fba*/
+@tab-secondary-subject: rgba(116, 173, 216, 1.0); /*#74add8*/
+@tab-color-subject-hover: rgba(50, 127, 186, 0.2);
+@tab-color-market-cond: rgba(50, 127, 186, 1.0);
+@tab-secondary-market-cond: rgba(116, 173, 216, 1.0);
+@tab-color-market-cond-hover: rgba(50, 127, 186, 0.2);
+@tab-color-comps: rgba(50, 127, 186, 1.0);
+@tab-secondary-comps: rgba(116, 173, 216, 1.0);
+@tab-color-comps-hover: rgba(50, 127, 186, 0.2);
+@tab-color-review: rgba(0, 187, 63, 1.0);
+@tab-secondary-review: rgba(99, 221, 141, 1.0);
+@tab-color-review-hover: rgba(0, 187, 63, 0.2);
+
+@footer-font-color: #707070;
+
+/* Header */
+header {
+    transition: height 0.3s;
+
+    .container {
+        position: relative;
+
+        &.navbar {
+            min-height: 0;
+            margin-bottom: 0;
+            border: none;
+        }
+    }
+    /* Header - topLevel */
+    #topLevel {
+        margin-bottom: 0;
+        margin-top: 5px;
+        transition: height 0.3s;
+
+        a#logo {
+            background: url(../../Content/images/web-logo.png) no-repeat 0 0;
+            /*background-size: 50px 50px;*/
+            bottom: 0;
+            display: inline-block;
+            height: 50px;
+            left: 0;
+            margin: 0 5px 1px 0;
+            overflow: auto;
+            padding: 0;
+            transition: all 0.5s;
+            width: 225px;
+
+            &:hover {
+                border: none;
+            }
+        }
+
+        .dropdown {
+
+            &.menu-right {
+                float: right;
+                transition: all 0.5s;
+            }
+
+            &.menu-left {
+                display: inline-block;
+                top: 5px;
+            }
+
+
+
+            a.menu-link {
+
+                img.gravatar-icon {
+                    border-radius: 20px;
+                    -moz-box-shadow: 0 1px 1px #000;
+                    -webkit-box-shadow: 0 1px 1px #000;
+                    box-shadow: 0 1px 1px #000;
+                    /*display: none;      // Hidden by default.  Ajax method will show this a gravatar is found*/
+                    height: 40px;
+                    transition: all 0.3s;
+                    vertical-align: top;
+                    width: 40px;
+                }
+            }
+
+            .dropdown-menu {
+                border: 1px solid rgba(236, 236, 236, 1.0);
+                border-radius: 0;
+                box-shadow: none;
+                font-size: 16px;
+                margin-right: -1px;
+                margin-top: -1px;
+                padding: 0;
+
+                a.dropdown-item {
+                    padding: 0 40px 0 14px;
+
+                    .fa {
+                        width: 30px;
+                    }
+
+                    .menu-text {
+                        border-left: 1px solid rgba(236, 236, 236, 1.0);
+                        display: inline-block;
+                        padding: 6px 0 6px 10px;
+                        transition: all 0.3s;
+                    }
+                }
+
+                .usage {
+                    border-bottom: 1px solid rgba(236, 236, 236, 1.0);
+                    font-family: Lato;
+                    font-size: 18px;
+                    padding: 5px 8px;
+                    text-align: center;
+                    transition: all 0.3s;
+
+                    em {
+                        font-size: 20px;
+                        font-style: normal;
+                        font-weight: bold;
+                    }
+
+                    .billing-cycle {
+                        color: #868686;
+                        display: block;
+                        font-size: 12px;
+
+                        em {
+                            font-size: 1em;
+                        }
+                    }
+
+                    .last-login {
+                        color: #868686;
+                        display: block;
+                        font-size: 12px;
+
+                        em {
+                            font-size: 1em;
+                        }
+                    }
+                }
+            }
+        }
+
+        a.menu-link {
+            border: 1px solid #fff;
+            color: rgba(96, 126, 171, 1.0);
+            /*color: #028e9b;*/
+            display: inline-block;
+            margin-top: 3px;
+            padding: 2px 6px 0 6px;
+            position: relative;
+            text-decoration: none;
+
+            &:hover, &:focus {
+                color: rgba(70, 104, 156,1.0);
+                text-decoration: none;
+                border: 1px solid rgba(236, 236, 236, 1.0);
+            }
+
+            &#Menu2 {
+                margin-left: 0;
+                padding: 3px 6px;
+                vertical-align: bottom;
+            }
+
+            &#Menu {
+                margin-left: 5px;
+                transition: all 0.3s;
+            }
+
+            &#MyProfile {
+                z-index: 100;
+
+                .profile-text {
+                    color: #000;
+                    display: inline-block;
+                    font-size: 1.2em;
+                    float: left;
+                    padding: 4px 5px 0 0;
+                    transition: all 0.3s;
+
+                    .usage {
+                        display: block;
+                        font-size: 0.6em;
+                        line-height: 0.7em;
+                        text-align: right;
+                        transition: all 0.3s;
+                    }
+                }
+
+                &:hover {
+                    .profile-text {
+                        color: rgba(70, 104, 156,1.0);
+                    }
+                }
+            }
+        }
+
+        .horizontal-divider {
+            color: rgba(164, 174, 194, 0.3);
+            display: inline-block;
+            font-size: 32px;
+            font-weight: 100;
+            padding-top: 0;
+        }
+    }
+
+    #secondLevel {
+        background-color: rgba(236,236,236,1.0);
+        border-top: 1px solid @header-border-color;
+        position: relative;
+
+        /* Header - NavBar */
+        .navbar {
+
+            .nav {
+
+                a.nav-link {
+                    background-color: transparent;
+                    border-left: 1px solid @header-border-color;
+                    color: #000;
+                    float: left;
+                    font-size: 20px;
+                    height: 60px;
+                    padding: 5px 10px;
+                    text-align: center;
+                    transition: all 0.3s;
+                    width: 29%;
+
+                    &:hover, &:focus {
+                        background-color: rgba(99,99,99,0.1);
+                    }
+
+                    &.subject:hover, &.subject:focus {
+                        background-color: @tab-color-subject-hover;
+                    }
+
+                    &.market-conditions:hover, &.market-conditions:focus {
+                        background-color: @tab-color-market-cond-hover;
+                    }
+
+                    &.comparables:hover, &.comparables:focus {
+                        background-color: @tab-color-comps-hover;
+                    }
+
+                    &.report-review:hover, &.report-review:focus {
+                        background-color: @tab-color-review-hover;
+                    }
+
+                    &.report-review {
+                        width: 13%;
+                        font-size: 16px;
+                    }
+                    /*&.first {
+                        border-left: none;
+                    }*/
+                    &.last {
+                        border-right: 1px solid @header-border-color;
+                    }
+
+                    &.active {
+                        color: #fff;
+                        cursor: default;
+
+                        &.subject {
+                            background-color: @tab-color-subject;
+                        }
+
+                        &.market-conditions {
+                            background-color: @tab-color-market-cond;
+                        }
+
+                        &.comparables {
+                            background-color: @tab-color-comps;
+                        }
+
+                        &.report-review {
+                            background-color: @tab-color-review;
+                        }
+                    }
+
+                    span {
+                        display: inline-block;
+                        position: relative;
+                        top: 50%;
+                        -moz-transform: translateY(-50%);
+                        -ms-transform: translateY(-50%);
+                        -o-transform: translateY(-50%);
+                        -webkit-transform: translateY(-50%);
+                        transform: translateY(-50%);
+                        -ms-transform-origin-y: translateY(-50%);
+
+                        .step-num {
+                            font-size: 34px;
+                            left: -30px;
+                            position: absolute;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #thirdLevel {
+        position: relative;
+
+        .sub-menu {
+            margin: 0;
+            padding: 0;
+
+            &.market-conditions {
+                .navbar {
+                    .nav {
+                        margin-left: 29%;
+                    }
+                }
+            }
+
+            &.comparables {
+                .navbar {
+                    .nav {
+                        //float: right;         //Used for right alignment within submenu
+                        //margin-right: 25%;    //Used for right alignment within submenu
+                        margin-left: 58%;
+                    }
+                }
+            }
+
+            &.report-review {
+                .navbar {
+                    display: none;
+
+                    .nav {
+                        margin-left: 75%;
+                        //float: right;
+                    }
+                }
+            }
+
+            .navbar {
+
+                .nav {
+                    position: relative;
+
+                    a.nav-link {
+                        color: #000;
+                        float: left;
+                        padding: 10px 15px 9px 15px;
+                        text-decoration: none;
+                        transition: all 0.3s;
+
+                        &:hover {
+                            background-color: rgba(99,99,99,0.1);
+                            text-decoration: none;
+                        }
+
+                        &.active {
+                            background-color: #fff;
+
+                            &:hover {
+                                background-color: #fff;
+                                cursor: default;
+                            }
+                        }
+
+                        .fa {
+                            margin-right: 5px;
+                        }
+                    }
+
+                    &.pull-right {
+                        margin-right: 12px;
+                    }
+                }
+            }
+
+            &.subject {
+                background-color: @tab-secondary-subject;
+            }
+
+            &.market-conditions {
+                background-color: @tab-secondary-market-cond;
+            }
+
+            &.comparables {
+                background-color: @tab-secondary-comps;
+            }
+
+            &.report-review {
+                background-color: @tab-secondary-review;
+            }
+        }
+    }
+
+    &.fixed {
+        background-color: red;
+        position: fixed;
+        width: 100%;
+        z-index: 99;
+
+        #topLevel {
+            height: 0;
+            margin-top: 0;
+
+            &.container {
+                max-width: none;
+                width: 100%;
+            }
+
+            a#logo {
+                background: url(../../Content/images/web-logo-small.png) no-repeat 0 0;
+                height: 39px;
+                left: 10px;
+                position: absolute;
+                top: 5px;
+                width: 92px;
+                z-index: 100;
+            }
+
+            .dropdown {
+                &.menu-right {
+                    z-index: 100;
+
+                    .menu-link {
+                        border-color: transparent;
+
+                        &#Menu {
+                            font-size: 39px;
+                        }
+
+                        &#MyProfile {
+                            .profile-text {
+                                padding-top: 7px;
+
+                                .usage {
+                                    display: none;
+                                }
+                            }
+                            img {
+                                height: auto;
+                                width: 35px;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        #secondLevel {
+            .navbar {
+                .nav {
+                    a.nav-link {
+                        height: 48px;
+                    }
+                }
+            }
+        }
+
+        #thirdLevel {
+            .sub-menu {
+                .navbar {
+                    .nav {
+                        a.nav-link {
+                            border-bottom: 5px;
+                            border-top: 6px;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+}
+
+/* Body */
+#body {
+    min-height: 300px;
+    position: relative;
+
+    .long-body {
+        min-height: 1100px;
+    }
+}
+
+/* Footer */
+footer {
+
+    &.container {
+        border-top: 1px dotted #707070;
+        clear: both;
+        color: #707070;
+        font-size: 12px;
+        margin: 0 auto;
+        padding: 5px;
+    }
+}

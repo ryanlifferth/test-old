@@ -1,0 +1,181 @@
+@using System.Security.Cryptography;
+@using System.Text;
+@{
+    var gravatarImgUrl = string.Format("http://www.gravatar.com/avatar/{0}{1}{2}", HashEmail("ryanlifferth@gmail.com"), "?size=40", "&d=404");
+    var showGravatar = true;
+
+    // Make sure Gravatar returns a valid icon, not the default (not found) icon
+    try
+    {
+        var request = HttpWebRequest.Create(gravatarImgUrl);
+        var response = request.GetResponse();
+        showGravatar = true;
+    }
+    catch (WebException ex)
+    {
+        /*if (ex.Message.Contains("404"))
+        {
+            gravatar.StatusCode = 404;
+            gravatar.StatusMessage = "Image not found for email address " + email;
+        }*/
+        showGravatar = false;
+    }
+}
+
+
+<header>
+    <div class="container" id="topLevel">
+        <a href="@Url.Action("Index", "Default")" id="logo" class="navbar-brand"></a>
+        <div class="dropdown menu-right">
+            <a href="javascript:void(0);" id="Menu" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle menu-link pull-right fa fa-bars fa-3x"></a>
+
+            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="Menu">
+                @BuildMenuItemActionLink("New Appraisal", "fa-plus-square")
+                @BuildMenuItemActionLink("Open", "fa-folder-open-o")
+                @BuildMenuItemActionLink("Save", "fa-floppy-o")
+                @BuildMenuItemActionLink("Customize Fields", string.Empty)
+                @BuildMenuItemActionLink("Appraiser Tools", "fa-wrench")
+                @BuildMenuItemModalLink("Settings", "fa-cog", "#settingsModal")
+                @BuildMenuItemActionLink("Help", "fa-question-circle")
+                @BuildMenuItemActionLink("Exit", "fa-sign-out")
+            </ul>
+            @Html.Partial("_MenuModals")
+        </div>
+        <div class="dropdown menu-right">
+            <a href="#" id="MyProfile" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="menu-link pull-right">
+                <span class="profile-text">Ryan Lifferth<span class="usage">29 appraisals this month</span></span>
+
+                @{
+                    if (showGravatar)
+                    {
+                        <img src="@gravatarImgUrl" class="gravatar-icon" alt="User Avatar" />
+                    }
+                    else
+                    {
+                        <i class="fa fa-user fa-3x"></i>
+                    }
+                }
+            </a>
+
+
+            <ul class="dropdown-menu dropdown-menu-right" id="MyProfileDropdown" aria-labelledby="MyProfile">
+                <li class="usage">
+                    <em>29</em> appraisals this month
+                    <span class="last-login"><em>last login</em> 4 hours ago</span>
+                    <span class="billing-cycle"><em>12 days</em> left in this billing cycle</span>
+                </li>
+                @BuildMenuItemActionLink("My Profile", "")
+                @BuildMenuItemActionLink("Change Password", string.Empty)
+                @BuildMenuItemActionLink("Sign Out", "fa-sign-out")
+
+            </ul>
+        </div>
+    </div>
+    <div id="secondLevel">
+        <div class="container navbar">
+            <nav class="nav">
+                @BuildActionLink(1, "Subject", "Index", "Default", "nav-link subject first", "subject")
+                @BuildActionLink(2, "Market Conditions", "Index", "MarketConditions", "nav-link market-conditions", "market-conditions")
+                @BuildActionLink(3, "Comparables", "Index", "Comps", "nav-link comparables", "comps")
+                @BuildActionLink(4, "Report Review", "Index", "ReportReview", "nav-link report-review last", "report-review")
+            </nav>
+        </div>
+    </div>
+    <div id="thirdLevel">
+        @{ BuildSubMenu(); }
+    </div>
+</header>
+
+
+
+
+
+
+@functions {
+    string _selectedMenuItem = "DEFAULT";
+
+    private HtmlString BuildActionLink(int stepNumber,
+                                   string text,
+                                   string action,
+                                   string controller,
+                                   string cssClasses = "",
+                                   string mainMenuCssClassIdentifier = "")
+    {
+        var css = string.IsNullOrEmpty(cssClasses) ? new System.Text.StringBuilder() : new System.Text.StringBuilder(cssClasses).Append(" ");
+
+        if (Helpers.NavigationHelpers.IsCurrentPageThisController(controller))
+        {
+            css.Append("active");
+            _selectedMenuItem = mainMenuCssClassIdentifier;
+        }
+
+        var label = string.Format(@"<span><span class=""step-num"">{0}</span>{1}</span>", stepNumber.ToString(), text);
+
+        if (controller == "ReportReview")
+        {
+            label = string.Format(@"<span>{0}</span>", text);
+        }
+
+        return new HtmlString(@"<a href=""" + Url.Action(action, controller) + @""" class=""" + css.ToString() + @""">" + Html.Raw(label) + "</a>");
+    }
+
+
+    private void BuildSubMenu()
+    {
+        if (string.IsNullOrEmpty(_selectedMenuItem)) return;
+
+        switch (_selectedMenuItem)
+        {
+            case "market-conditions":
+                Html.RenderPartial("_MarketConditionsSubMenu");
+                break;
+            case "comps":
+                Html.RenderPartial("_CompsSubMenu");
+                break;
+            case "report-review":
+                Html.RenderPartial("_ReportReviewSubMenu");
+                break;
+            default:
+                Html.RenderPartial("_SubjectSubMenu");
+                break;
+        }
+    }
+
+
+    private HtmlString BuildMenuItemActionLink(string linkText, string iconClassName, string additionalLinkClasses = "")
+    {
+        var icon = string.IsNullOrEmpty(iconClassName) ? @"<i class=""fa""></i>" : string.Format(@"<i class=""fa {0} fa-lg""></i>", iconClassName);
+        var label = string.Format(@"<span class=""menu-text"">{0}</span>", linkText);
+        return new HtmlString(string.Format(@"<li><a href=""#"" class=""dropdown-item {2}"">{0}{1}</a></li>", icon, label, additionalLinkClasses));
+    }
+
+    private HtmlString BuildMenuItemModalLink(string linkText, string iconClassName, string dataTarget, string additionalLinkClasses = "")
+    {
+        var icon = string.IsNullOrEmpty(iconClassName) ? @"<i class=""fa""></i>" : string.Format(@"<i class=""fa {0} fa-lg""></i>", iconClassName);
+        var label = string.Format(@"<span class=""menu-text"">{0}</span>", linkText);
+        return new HtmlString(string.Format(@"<li><a href=""#"" class=""dropdown-item {2}"" data-toggle=""modal"" data-target=""{3}"">{0}{1}</a></li>", icon, label, additionalLinkClasses, dataTarget));
+    }
+
+    private string HashEmail(string email)
+    {
+        // Create a new instance of the MD5CryptoServiceProvider object.
+        MD5 md5Hasher = MD5.Create();
+
+        // Convert the input string to a byte array and compute the hash.
+        byte[] data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(email));
+
+        // Create a new Stringbuilder to collect the bytes
+        // and create a string.
+        var sb = new StringBuilder();
+
+        // Loop through each byte of the hashed data
+        // and format each one as a hexadecimal string.
+        for (int i = 0; i < data.Length; i++)
+        {
+            sb.Append(data[i].ToString("x2"));
+        }
+
+        return sb.ToString();  // Return the hexadecimal string.
+    }
+
+}

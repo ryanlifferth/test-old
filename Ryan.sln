@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan", "Ryan\Ryan.csproj", "{44BE207E-B868-43D3-8452-2F42C19750A0}"
 EndProject
@@ -33,7 +33,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.FusionTables", "Ryan.F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.DragAndDrop", "Ryan.DragAndDrop\Ryan.DragAndDrop.csproj", "{DD929B45-7A88-4C6B-A49B-A649AB2DB6DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.AddressVerification", "Ryan.AddressVerification\Ryan.AddressVerification.csproj", "{2CA5211B-BD90-4F45-AC02-9FBD24061E24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.AddressUtility", "Ryan.AddressUtility\Ryan.AddressUtility.csproj", "{2CA5211B-BD90-4F45-AC02-9FBD24061E24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.Header", "Ryan.Header\Ryan.Header.csproj", "{482C1F74-9703-47D6-B748-3C806D247590}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.Maps.Win", "Ryan.Maps.Win\Ryan.Maps.Win.csproj", "{68225082-8E1E-497B-B20F-4A0E747CE180}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +109,14 @@ Global
 		{2CA5211B-BD90-4F45-AC02-9FBD24061E24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CA5211B-BD90-4F45-AC02-9FBD24061E24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CA5211B-BD90-4F45-AC02-9FBD24061E24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{482C1F74-9703-47D6-B748-3C806D247590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{482C1F74-9703-47D6-B748-3C806D247590}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{482C1F74-9703-47D6-B748-3C806D247590}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{482C1F74-9703-47D6-B748-3C806D247590}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68225082-8E1E-497B-B20F-4A0E747CE180}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68225082-8E1E-497B-B20F-4A0E747CE180}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68225082-8E1E-497B-B20F-4A0E747CE180}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68225082-8E1E-497B-B20F-4A0E747CE180}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

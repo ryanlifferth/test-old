@@ -1,0 +1,68 @@
+﻿@using System.Globalization
+@using System.Web.Mvc
+
+@functions {
+
+    public static bool IsCurrentPageThisController(string controller)
+    {
+        if (!string.IsNullOrEmpty(Request.RequestContext.RouteData.Values["Controller"].ToString()))
+        {
+            var currentPageController = Request.RequestContext.RouteData.Values["Controller"].ToString();
+            if (currentPageController.ToLower() == controller.ToLower())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static bool IsCurrentPageThisControllerAction(string controller, string action)
+    {
+        var currentController = Request.RequestContext.RouteData.Values["Controller"].ToString().ToLower();
+        var currentAction = Request.RequestContext.RouteData.Values["action"].ToString().ToLower();
+
+        if (currentController == controller.ToLower() && currentAction == action.ToLower())
+        {
+            return true;
+        }
+        else if (Request.RequestContext.HttpContext.Request.ApplicationPath == "/" && (controller.ToLower() == "default" && action.ToLower() == "index"))
+        {
+            return true;
+        }
+        //else if (currentPage.AbsolutePath == "/" && (controller.ToLower() == "home" && action.ToLower() == "index"))
+        //{
+        //    // Home page
+        //    //css.Append("active");
+        //    return true;
+        //}
+
+        return false;
+    }
+
+
+    public static HtmlString BuildSubMenuActionLink(string text,
+                                                    string action,
+                                                    string controller,
+                                                    UrlHelper url,
+                                                    System.Web.Mvc.HtmlHelper html,
+                                                    string cssClasses = "",
+                                                    string iconCssClasses = "")
+    {
+        var css = string.IsNullOrEmpty(cssClasses) ? new System.Text.StringBuilder() : new System.Text.StringBuilder(cssClasses).Append(" ");
+
+        if (IsCurrentPageThisControllerAction(controller, action))
+        {
+            css.Append("active");
+        }
+
+        var label = string.Format(@"<span class=""{0}""></span>{1}", iconCssClasses, text);
+        //<a href="@Url.Action("Index", "Default")" class="nav-link active"><span class="fa fa-folder-open-o fa-lg"></span>Import</a>
+
+
+        return new HtmlString(@"<a href=""" + url.Action(action, controller) + @""" class=""" + css.ToString() + @""">" + html.Raw(label) + "</a>");
+    }
+
+
+}
+
+

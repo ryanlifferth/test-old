@@ -278,9 +278,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ryan.AddressVerification\Ryan.AddressVerification.csproj">
+    <ProjectReference Include="..\Ryan.AddressUtility\Ryan.AddressUtility.csproj">
       <Project>{2ca5211b-bd90-4f45-ac02-9fbd24061e24}</Project>
-      <Name>Ryan.AddressVerification</Name>
+      <Name>Ryan.AddressUtility</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

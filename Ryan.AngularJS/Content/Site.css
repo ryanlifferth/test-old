@@ -277,3 +277,22 @@ footer.container {
 .row#jsonEditSample table tbody tr td input[type="text"].changed {
   color: #ed1c24;
 }
+.row .loading-container {
+  color: #333333;
+  font-family: 'PT Sans', Lato;
+  margin: 10px 0 0 20px;
+}
+.row .loading-container.searching {
+  color: #7d7d7d;
+  display: inline-block;
+  margin: 0 0 0 10px;
+}
+.row .loading-container.searching .fa-spinner {
+  -webkit-filter: blur(0);
+}
+.row .loading-container.searching .loading-title {
+  font-family: Montserrat;
+  font-size: 16px;
+  margin-left: 3px;
+  text-transform: lowercase;
+}

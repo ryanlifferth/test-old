@@ -1,0 +1,218 @@
+﻿<UserControl x:Class="Ryan.Maps.Win.Spinner"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Ryan.Maps.Win"
+             xmlns:core="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             Background="Transparent"
+             d:DesignHeight="45" d:DesignWidth="45">
+    <UserControl.Resources>
+        <KeyTime x:Key="tick1">00:00:00</KeyTime>
+        <KeyTime x:Key="tick2">00:00:00.15</KeyTime>
+        <KeyTime x:Key="tick3">00:00:00.3</KeyTime>
+        <KeyTime x:Key="tick4">00:00:00.45</KeyTime>
+        <KeyTime x:Key="tick5">00:00:00.6</KeyTime>
+        <KeyTime x:Key="tick6">00:00:00.75</KeyTime>
+        <KeyTime x:Key="tick7">00:00:00.8</KeyTime>
+        <KeyTime x:Key="tick8">00:00:00.95</KeyTime>
+        <core:Double x:Key="opacity1">1.0</core:Double>
+        <core:Double x:Key="opacity2">0.6</core:Double>
+        <core:Double x:Key="opacity3">0.4</core:Double>
+        <core:Double x:Key="opacity4">0.2</core:Double>
+        <core:Double x:Key="opacity5">1.0</core:Double>
+        <core:Double x:Key="opacity6">1.0</core:Double>
+        <core:Double x:Key="opacity7">1.0</core:Double>
+        <core:Double x:Key="opacity8">1.0</core:Double>
+        <SolidColorBrush x:Key="progressCirclesColor" Color="#f5f5f5" />
+        <Storyboard x:Key="ProgressAnimation" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="circle1" Storyboard.TargetProperty="Opacity">
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick1}" Value="{StaticResource opacity1}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick2}" Value="{StaticResource opacity2}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick3}" Value="{StaticResource opacity3}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick4}" Value="{StaticResource opacity4}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick5}" Value="{StaticResource opacity5}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick6}" Value="{StaticResource opacity6}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick7}" Value="{StaticResource opacity7}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick8}" Value="{StaticResource opacity8}"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="circle2" Storyboard.TargetProperty="Opacity">
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick1}" Value="{StaticResource opacity8}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick2}" Value="{StaticResource opacity1}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick3}" Value="{StaticResource opacity2}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick4}" Value="{StaticResource opacity3}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick5}" Value="{StaticResource opacity4}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick6}" Value="{StaticResource opacity5}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick7}" Value="{StaticResource opacity6}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick8}" Value="{StaticResource opacity7}"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="circle3" Storyboard.TargetProperty="Opacity">
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick1}" Value="{StaticResource opacity7}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick2}" Value="{StaticResource opacity8}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick3}" Value="{StaticResource opacity1}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick4}" Value="{StaticResource opacity2}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick5}" Value="{StaticResource opacity3}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick6}" Value="{StaticResource opacity4}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick7}" Value="{StaticResource opacity5}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick8}" Value="{StaticResource opacity6}"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="circle4" Storyboard.TargetProperty="Opacity">
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick1}" Value="{StaticResource opacity6}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick2}" Value="{StaticResource opacity7}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick3}" Value="{StaticResource opacity8}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick4}" Value="{StaticResource opacity1}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick5}" Value="{StaticResource opacity2}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick6}" Value="{StaticResource opacity3}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick7}" Value="{StaticResource opacity4}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick8}" Value="{StaticResource opacity5}"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="circle5" Storyboard.TargetProperty="Opacity">
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick1}" Value="{StaticResource opacity5}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick2}" Value="{StaticResource opacity6}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick3}" Value="{StaticResource opacity7}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick4}" Value="{StaticResource opacity8}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick5}" Value="{StaticResource opacity1}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick6}" Value="{StaticResource opacity2}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick7}" Value="{StaticResource opacity3}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick8}" Value="{StaticResource opacity4}"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="circle6" Storyboard.TargetProperty="Opacity">
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick1}" Value="{StaticResource opacity4}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick2}" Value="{StaticResource opacity5}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick3}" Value="{StaticResource opacity6}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick4}" Value="{StaticResource opacity7}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick5}" Value="{StaticResource opacity8}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick6}" Value="{StaticResource opacity1}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick7}" Value="{StaticResource opacity2}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick8}" Value="{StaticResource opacity3}"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="circle7" Storyboard.TargetProperty="Opacity">
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick1}" Value="{StaticResource opacity3}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick2}" Value="{StaticResource opacity4}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick3}" Value="{StaticResource opacity5}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick4}" Value="{StaticResource opacity6}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick5}" Value="{StaticResource opacity7}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick6}" Value="{StaticResource opacity8}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick7}" Value="{StaticResource opacity1}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick8}" Value="{StaticResource opacity2}"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="circle8" Storyboard.TargetProperty="Opacity">
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick1}" Value="{StaticResource opacity2}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick2}" Value="{StaticResource opacity3}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick3}" Value="{StaticResource opacity4}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick4}" Value="{StaticResource opacity5}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick5}" Value="{StaticResource opacity6}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick6}" Value="{StaticResource opacity7}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick7}" Value="{StaticResource opacity8}"/>
+                <SplineDoubleKeyFrame KeyTime="{StaticResource tick8}" Value="{StaticResource opacity1}"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ProgressAnimation2">
+            <DoubleAnimation
+                Storyboard.TargetName="Container"
+                Storyboard.TargetProperty="(Viewbox.RenderTransform).(RotateTransform.Angle)"
+                From="360"
+                To="0"
+                Duration="0:0:3.0"
+                RepeatBehavior="Forever" />
+        </Storyboard>
+    </UserControl.Resources>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource ProgressAnimation}"/>
+            <BeginStoryboard Storyboard="{StaticResource ProgressAnimation2}"/>
+        </EventTrigger>
+    </UserControl.Triggers>
+
+    <Viewbox x:Name="Container" 
+             Width="{Binding Path=Width, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, FallbackValue=40 }" 
+             Height="{Binding Path=Height, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, FallbackValue=40 }"
+             HorizontalAlignment="Center" 
+             VerticalAlignment="Center"
+             RenderTransformOrigin=".5,.5">
+        <Viewbox.RenderTransform>
+            <RotateTransform Angle="0" />
+        </Viewbox.RenderTransform>
+        <Grid Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Canvas RenderTransformOrigin="0.5,0.5"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Width="120"
+              Height="120">
+
+                <Ellipse x:Name="circle1"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="50"
+                 Canvas.Top="0"
+                 Stretch="Fill"
+                 Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, FallbackValue=#f5f5f5 }"
+                 Opacity="{StaticResource opacity1}" />
+
+                <Ellipse x:Name="circle2"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="85"
+                 Canvas.Top="15"
+                 Stretch="Fill"
+                 Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, FallbackValue=#f5f5f5 }"
+                 Opacity="{StaticResource opacity8}" />
+
+                <Ellipse x:Name="circle3"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="100"
+                 Canvas.Top="50"
+                 Stretch="Fill"
+                 Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, FallbackValue=#f5f5f5 }"
+                 Opacity="{StaticResource opacity7}" />
+
+                <Ellipse x:Name="circle4"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="85"
+                 Canvas.Top="85"
+                 Stretch="Fill"
+                 Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, FallbackValue=#f5f5f5 }"
+                 Opacity="{StaticResource opacity6}" />
+
+                <Ellipse x:Name="circle5"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="50"
+                 Canvas.Top="100"
+                 Stretch="Fill"
+                 Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, FallbackValue=#f5f5f5 }"
+                 Opacity="{StaticResource opacity5}" />
+
+                <Ellipse x:Name="circle6"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="15"
+                 Canvas.Top="85"
+                 Stretch="Fill"
+                 Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, FallbackValue=#f5f5f5 }"
+                 Opacity="{StaticResource opacity4}" />
+
+                <Ellipse x:Name="circle7"
+                 Width="20"
+                 Height="20"
+                 Canvas.Top="50"
+                 Canvas.Left="0"
+                 Stretch="Fill"
+                 Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, FallbackValue=#f5f5f5 }"
+                 Opacity="{StaticResource opacity3}" />
+
+                <Ellipse x:Name="circle8"
+                 Width="20"
+                 Height="20"
+                 Canvas.Top="15"
+                 Canvas.Left="15"
+                 Stretch="Fill"
+                 Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, FallbackValue=#f5f5f5 }"
+                 Opacity="{StaticResource opacity2}" />
+            </Canvas>
+        </Grid>
+    </Viewbox>
+</UserControl>

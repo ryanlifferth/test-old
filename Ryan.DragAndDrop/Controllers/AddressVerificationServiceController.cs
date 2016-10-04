@@ -1,5 +1,5 @@
-﻿using Ryan.AddressVerification;
-using Ryan.AddressVerification.Models;
+﻿using Ryan.AddressUtility;
+using Ryan.AddressUtility.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace Ryan.DragAndDrop.Controllers
         [Route("api/addressverificationservice/{address}")]
         public Address Get(string address)
         {
-            var addressService = new AddressVerification.AddressVerificationRepositories.SmartyStreetsAddressRepository();
+            var addressService = new AddressUtility.Repositories.SmartyStreetsAddressVerificationRepository();
             var responseAddress = addressService.VerifyAddress(address, null, null, null, null, null);
 
             return responseAddress;

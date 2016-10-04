@@ -9,7 +9,7 @@
 
     //var s = propertyData.FirstOrDefault().firstName;
     var json = Newtonsoft.Json.JsonConvert.SerializeObject(propertyData);
-    
+
 }
 
 <h2>Angular Basics</h2>
@@ -89,11 +89,11 @@
     </table>
 </div>
 
-@{ 
+@{
     var myList = new List<string> { "Ryan", "Aimee", "Taylor", "Zach", "Tex", "Jacob" };
 
-    var ryan    = myList.Select(x => { x = "Lifferth." + x; return x; });
-    var rryan   = myList.Select(i => i = "Lifferth." + i);
+    var ryan = myList.Select(x => { x = "Lifferth." + x; return x; });
+    var rryan = myList.Select(i => i = "Lifferth." + i);
     var ryan2 = myList.Select(x => x = "Lifferth, " + x);
 
 }
@@ -101,12 +101,26 @@
     <h3>Serializing Array</h3>
     @JsonConvert.SerializeObject(myList.ToArray());
 
+    <div class="ryan-show" ng-show="showRyan">
+        Hi Ryan!
+    </div>
+
     <br />
     <a href="javascript:void(0)" ng-click='testMyArray(@Html.Raw(JsonConvert.SerializeObject(ryan2.ToArray())))'>Do Something</a>
 </div>
 
+<div class="row" id="controllerAjaxSample" ng-app="ajaxSampleApp" ng-controller="AjaxSampleController">
+    <h3>Ajax Sample</h3>
+    <a href="javascript:void(0)" ng-click="ajaxPost()">Go!</a>
+    <div class="loading-container searching" ng-show="showSearchSpinner === true">
+        <span class="fa fa-spinner fa-spin fa-pulse fa-lg fa-fw"></span>
+        <span class="loading-title">Searching...</span>
+    </div>
+</div>
+
 
 @section PageScripts {
+
 
     <script type="text/javascript">
 
@@ -203,6 +217,7 @@
                    //$scope.init = function (myArray) {
                    //    $scope.myArray = myArray;
                    //};
+                   $scope.showRyan = false;
 
                    $scope.testMyArray = function (theArray) {
                        for (var i = 0; i < theArray.length; i++) {
@@ -214,4 +229,50 @@
         angular.bootstrap(document.getElementById("controllerArraySample"), ['jsonArrayApp']);
     </script>
 
+    <script type="text/javascript">
+        var ajaxSample = angular.module('ajaxSampleApp', []);
+        ajaxSample.controller('AjaxSampleController', ['$scope', '$http', function ($scope, $http) {
+            $scope.showSearchSpinner = false;
+
+            $scope.ajaxPost = function () {
+                //alert('hi');
+                $scope.showSearchSpinner = true;
+
+                var myData = {
+                    apn: '123',
+                    county: {
+                        Name: "Multnomah",
+                        Fips: "41051"
+                    },
+                    federalState: {
+                        StateName: "Oregon",
+                        StateAbbreviation: "OR"
+                    }
+                };
+
+                $http({
+                    method: "POST",
+                    url: "../api/TestApi/SearchByApn",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: myData
+                })
+                .then(
+                    function mySuccess(json) {
+                        alert('success');
+                    },
+                    function myError(response) {
+                        alert('error');
+                    })
+                .finally(function () {
+                    console.log("finally finished repos");
+                    $scope.showSearchSpinner = false;
+                });
+
+            }
+        }]);
+
+        angular.bootstrap(document.getElementById("controllerAjaxSample"), ['ajaxSampleApp']);
+    </script>
 }

@@ -4,8 +4,8 @@
 
 @helper BuildInputFlyout (string additionalClasses = "")
 {
-    <div class="flyout @additionalClasses" data-toggle="popover">
-        <a href="javascript:void(0)" class="fa fa-info-circle fa-2x pop-source-link popover-label" tabindex="-1" title="View data source values (CTRL+Shift+D)"></a>
+    <div class="flyout @additionalClasses">
+        <a href="javascript:void(0)" class="fa fa-info-circle fa-2x pop-source-link popover-label" tabindex="-1" data-toggle="popover" title="View data source values (CTRL+Shift+D)"></a>
         <a href="javascript:void(0)" class="fa fa-gear fa-2x" tabindex="-1" title="Format this field (CTRL+Shift+F)"></a>
     </div>
 }

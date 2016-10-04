@@ -1,0 +1,420 @@
+﻿@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700);
+@import url(https://fonts.googleapis.com/css?family=Mr+Bedfort&effect=shadow-multiple);
+@import url(https://fonts.googleapis.com/css?family=Rancho&effect=shadow-multiple);
+/* Set padding to keep content from hitting the edges */
+.body-content {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+  border-radius: 0;
+  max-width: 400px;
+}
+header {
+  border-radius: 0;
+}
+.container {
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Large Devices, Wide Screens */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1170px;
+  }
+}
+/* Medium Devices, Desktops */
+/*@media (min-width : 992px) {
+    .container {
+        max-width: 970px;
+    }
+}*/
+/* Small Devices, Tablets */
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+/* Extra Small Devices, Phones */
+@media (min-width: 480px) {
+  .container {
+    width: auto;
+  }
+}
+/* Custom, iPhone Retina */
+@media (min-width: 320px) {
+  .container {
+    width: auto;
+  }
+}
+body {
+  color: #373a3c;
+  font-size: 14px;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+/*#327fba*/
+/*#74add8*/
+/* Header */
+header {
+  transition: height 0.3s;
+  /* Header - topLevel */
+}
+header .container {
+  position: relative;
+}
+header .container.navbar {
+  min-height: 0;
+  margin-bottom: 0;
+  border: none;
+}
+header #topLevel {
+  margin-bottom: 0;
+  margin-top: 5px;
+  transition: height 0.3s;
+}
+header #topLevel a#logo {
+  background: url(images/web-logo.png) no-repeat 0 0;
+  /*background-size: 50px 50px;*/
+  bottom: 0;
+  display: inline-block;
+  height: 50px;
+  left: 0;
+  margin: 0 5px 1px 0;
+  overflow: auto;
+  padding: 0;
+  transition: all 0.5s;
+  width: 225px;
+}
+header #topLevel a#logo:hover {
+  border: none;
+}
+header #topLevel .dropdown.menu-right {
+  float: right;
+  transition: all 0.5s;
+}
+header #topLevel .dropdown.menu-left {
+  display: inline-block;
+  top: 5px;
+}
+header #topLevel .dropdown a.menu-link img.gravatar-icon {
+  border-radius: 20px;
+  -moz-box-shadow: 0 1px 1px #000;
+  -webkit-box-shadow: 0 1px 1px #000;
+  box-shadow: 0 1px 1px #000;
+  /*display: none;      // Hidden by default.  Ajax method will show this a gravatar is found*/
+  height: 40px;
+  transition: all 0.3s;
+  vertical-align: top;
+  width: 40px;
+}
+header #topLevel .dropdown .dropdown-menu {
+  border: 1px solid #ececec;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 16px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+}
+header #topLevel .dropdown .dropdown-menu a.dropdown-item {
+  padding: 0 40px 0 14px;
+}
+header #topLevel .dropdown .dropdown-menu a.dropdown-item .fa {
+  width: 30px;
+}
+header #topLevel .dropdown .dropdown-menu a.dropdown-item .menu-text {
+  border-left: 1px solid #ececec;
+  display: inline-block;
+  padding: 6px 0 6px 10px;
+  transition: all 0.3s;
+}
+header #topLevel .dropdown .dropdown-menu .usage {
+  border-bottom: 1px solid #ececec;
+  font-family: Lato;
+  font-size: 18px;
+  padding: 5px 8px;
+  text-align: center;
+  transition: all 0.3s;
+}
+header #topLevel .dropdown .dropdown-menu .usage em {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: bold;
+}
+header #topLevel .dropdown .dropdown-menu .usage .billing-cycle {
+  color: #868686;
+  display: block;
+  font-size: 12px;
+}
+header #topLevel .dropdown .dropdown-menu .usage .billing-cycle em {
+  font-size: 1em;
+}
+header #topLevel .dropdown .dropdown-menu .usage .last-login {
+  color: #868686;
+  display: block;
+  font-size: 12px;
+}
+header #topLevel .dropdown .dropdown-menu .usage .last-login em {
+  font-size: 1em;
+}
+header #topLevel a.menu-link {
+  border: 1px solid #fff;
+  color: #607eab;
+  /*color: #028e9b;*/
+  display: inline-block;
+  margin-top: 3px;
+  padding: 2px 6px 0 6px;
+  position: relative;
+  text-decoration: none;
+}
+header #topLevel a.menu-link:hover,
+header #topLevel a.menu-link:focus {
+  color: #46689c;
+  text-decoration: none;
+  border: 1px solid #ececec;
+}
+header #topLevel a.menu-link#Menu2 {
+  margin-left: 0;
+  padding: 3px 6px;
+  vertical-align: bottom;
+}
+header #topLevel a.menu-link#Menu {
+  margin-left: 5px;
+  transition: all 0.3s;
+}
+header #topLevel a.menu-link#MyProfile {
+  z-index: 100;
+}
+header #topLevel a.menu-link#MyProfile .profile-text {
+  color: #000;
+  display: inline-block;
+  font-size: 1.2em;
+  float: left;
+  padding: 4px 5px 0 0;
+  transition: all 0.3s;
+}
+header #topLevel a.menu-link#MyProfile .profile-text .usage {
+  display: block;
+  font-size: 0.6em;
+  line-height: 0.7em;
+  text-align: right;
+  transition: all 0.3s;
+}
+header #topLevel a.menu-link#MyProfile:hover .profile-text {
+  color: #46689c;
+}
+header #topLevel .horizontal-divider {
+  color: rgba(164, 174, 194, 0.3);
+  display: inline-block;
+  font-size: 32px;
+  font-weight: 100;
+  padding-top: 0;
+}
+header #secondLevel {
+  background-color: #ececec;
+  border-top: 1px solid rgba(137, 137, 137, 0.1);
+  position: relative;
+  /* Header - NavBar */
+}
+header #secondLevel .navbar .nav a.nav-link {
+  background-color: transparent;
+  border-left: 1px solid rgba(137, 137, 137, 0.1);
+  color: #000;
+  float: left;
+  font-size: 20px;
+  height: 60px;
+  padding: 5px 10px;
+  text-align: center;
+  transition: all 0.3s;
+  width: 29%;
+  /*&.first {
+                        border-left: none;
+                    }*/
+}
+header #secondLevel .navbar .nav a.nav-link:hover,
+header #secondLevel .navbar .nav a.nav-link:focus {
+  background-color: rgba(99, 99, 99, 0.1);
+}
+header #secondLevel .navbar .nav a.nav-link.subject:hover,
+header #secondLevel .navbar .nav a.nav-link.subject:focus {
+  background-color: rgba(50, 127, 186, 0.2);
+}
+header #secondLevel .navbar .nav a.nav-link.market-conditions:hover,
+header #secondLevel .navbar .nav a.nav-link.market-conditions:focus {
+  background-color: rgba(50, 127, 186, 0.2);
+}
+header #secondLevel .navbar .nav a.nav-link.comparables:hover,
+header #secondLevel .navbar .nav a.nav-link.comparables:focus {
+  background-color: rgba(50, 127, 186, 0.2);
+}
+header #secondLevel .navbar .nav a.nav-link.report-review:hover,
+header #secondLevel .navbar .nav a.nav-link.report-review:focus {
+  background-color: rgba(0, 187, 63, 0.2);
+}
+header #secondLevel .navbar .nav a.nav-link.report-review {
+  width: 13%;
+  font-size: 16px;
+}
+header #secondLevel .navbar .nav a.nav-link.last {
+  border-right: 1px solid rgba(137, 137, 137, 0.1);
+}
+header #secondLevel .navbar .nav a.nav-link.active {
+  color: #fff;
+  cursor: default;
+}
+header #secondLevel .navbar .nav a.nav-link.active.subject {
+  background-color: #327fba;
+}
+header #secondLevel .navbar .nav a.nav-link.active.market-conditions {
+  background-color: #327fba;
+}
+header #secondLevel .navbar .nav a.nav-link.active.comparables {
+  background-color: #327fba;
+}
+header #secondLevel .navbar .nav a.nav-link.active.report-review {
+  background-color: #00bb3f;
+}
+header #secondLevel .navbar .nav a.nav-link span {
+  display: inline-block;
+  position: relative;
+  top: 50%;
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  -ms-transform-origin-y: translateY(-50%);
+}
+header #secondLevel .navbar .nav a.nav-link span .step-num {
+  font-size: 34px;
+  left: -30px;
+  position: absolute;
+}
+header #thirdLevel {
+  position: relative;
+}
+header #thirdLevel .sub-menu {
+  margin: 0;
+  padding: 0;
+}
+header #thirdLevel .sub-menu.market-conditions .navbar .nav {
+  margin-left: 29%;
+}
+header #thirdLevel .sub-menu.comparables .navbar .nav {
+  margin-left: 58%;
+}
+header #thirdLevel .sub-menu.report-review .navbar {
+  display: none;
+}
+header #thirdLevel .sub-menu.report-review .navbar .nav {
+  margin-left: 75%;
+}
+header #thirdLevel .sub-menu .navbar .nav {
+  position: relative;
+}
+header #thirdLevel .sub-menu .navbar .nav a.nav-link {
+  color: #000;
+  float: left;
+  padding: 10px 15px 9px 15px;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+header #thirdLevel .sub-menu .navbar .nav a.nav-link:hover {
+  background-color: rgba(99, 99, 99, 0.1);
+  text-decoration: none;
+}
+header #thirdLevel .sub-menu .navbar .nav a.nav-link.active {
+  background-color: #fff;
+}
+header #thirdLevel .sub-menu .navbar .nav a.nav-link.active:hover {
+  background-color: #fff;
+  cursor: default;
+}
+header #thirdLevel .sub-menu .navbar .nav a.nav-link .fa {
+  margin-right: 5px;
+}
+header #thirdLevel .sub-menu .navbar .nav.pull-right {
+  margin-right: 12px;
+}
+header #thirdLevel .sub-menu.subject {
+  background-color: #74add8;
+}
+header #thirdLevel .sub-menu.market-conditions {
+  background-color: #74add8;
+}
+header #thirdLevel .sub-menu.comparables {
+  background-color: #74add8;
+}
+header #thirdLevel .sub-menu.report-review {
+  background-color: #63dd8d;
+}
+header.fixed {
+  background-color: red;
+  position: fixed;
+  width: 100%;
+  z-index: 99;
+}
+header.fixed #topLevel {
+  height: 0;
+  margin-top: 0;
+}
+header.fixed #topLevel.container {
+  max-width: none;
+  width: 100%;
+}
+header.fixed #topLevel a#logo {
+  background: url(images/web-logo-small.png) no-repeat 0 0;
+  height: 39px;
+  left: 10px;
+  position: absolute;
+  top: 5px;
+  width: 92px;
+  z-index: 100;
+}
+header.fixed #topLevel .dropdown.menu-right {
+  z-index: 100;
+}
+header.fixed #topLevel .dropdown.menu-right .menu-link {
+  border-color: transparent;
+}
+header.fixed #topLevel .dropdown.menu-right .menu-link#Menu {
+  font-size: 39px;
+}
+header.fixed #topLevel .dropdown.menu-right .menu-link#MyProfile .profile-text {
+  padding-top: 7px;
+}
+header.fixed #topLevel .dropdown.menu-right .menu-link#MyProfile .profile-text .usage {
+  display: none;
+}
+header.fixed #topLevel .dropdown.menu-right .menu-link#MyProfile img {
+  height: auto;
+  width: 35px;
+}
+header.fixed #secondLevel .navbar .nav a.nav-link {
+  height: 48px;
+}
+header.fixed #thirdLevel .sub-menu .navbar .nav a.nav-link {
+  border-bottom: 5px;
+  border-top: 6px;
+}
+/* Body */
+#body {
+  min-height: 300px;
+  position: relative;
+}
+#body .long-body {
+  min-height: 1100px;
+}
+/* Footer */
+footer.container {
+  border-top: 1px dotted #707070;
+  clear: both;
+  color: #707070;
+  font-size: 12px;
+  margin: 0 auto;
+  padding: 5px;
+}

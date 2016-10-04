@@ -198,7 +198,7 @@
             title: title,
             map: map,
             draggable: false
-            //icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=A|FF0000|000000'
+            //,icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=A|FF0000|000000'
             //, icon: 'http://maps.google.com/mapfiles/ms/icons/blue.png'
         });
 

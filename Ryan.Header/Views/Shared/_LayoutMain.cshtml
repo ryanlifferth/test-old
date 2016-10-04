@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/lib/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/lib/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    @RenderSection("DocumentHead", false)
+</head>
+<body>
+    @{ Html.RenderPartial("_Header"); }
+
+    <div id="body" class="container">
+
+        <div class="body-content">
+            @RenderBody()
+        </div>
+    </div>
+
+    <footer class="container">
+        footer
+    </footer>
+
+    <script src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.0.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/UI/main.js"></script>
+    @RenderSection("PageScripts", false)
+</body>
+</html>
