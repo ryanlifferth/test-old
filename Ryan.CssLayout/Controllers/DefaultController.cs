@@ -13,5 +13,12 @@ namespace Ryan.CssLayout.Controllers
         {
             return View();
         }
+
+        public ActionResult Ryan()
+        {
+            return View();
+        }
+
+
     }
 }

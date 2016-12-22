@@ -8,6 +8,8 @@ using Ryan.AddressUtility.Models;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using System.Device;
+using System.Device.Location;
 
 namespace Ryan.AddressUtility.Repositories
 {
@@ -15,31 +17,44 @@ namespace Ryan.AddressUtility.Repositories
     ///     http://dev.virtualearth.net/REST/v1/Routes?wp.0=929%20S%20Arbor%20Way,%20Layton,%20Utah%2084041&wp.1=325%20E%20Gordon%20Ave,%20Layton,%20Utah%2084041&du=mi&ra=routeSummariesOnly&key=Alt3gPG8fTsQ4-zl8x68BRF-nNPx9s4ho-U-oAU-tuo7jnKfkZYt_Cx-La0T533b
     ///     https://msdn.microsoft.com/en-us/library/ff701717.aspx
     /// </summary>
-    public class BingDistanceCalculationRepository : IDistanceCalculation
+    public class BingDrivingDistanceCalculationRepository : IDrivingDistanceCalculation
     {
 
         #region Interface Implementations (IDistanceCalculation)
 
-        public DistanceResponse CalculateDistances(string originAddress, List<string> destinationAddresses)
+        public DistanceResponse CalculateDistances(string originAddress, List<Destination> destinationAddresses)
         {
+            if (string.IsNullOrEmpty(originAddress) || !destinationAddresses.Any())
+            {
+                return new DistanceResponse { StatusCode = 1, StatusMessage = "Origin Address and/or Destination Address(es) are missing." };
+            }
+
             var destinations = new List<Destination>();
+
             foreach (var destination in destinationAddresses)
             {
-                var jsonResponse = GetDistanceFromSubjectBing(originAddress.Replace(" ", "%20"), destination.Replace(" ", "%20"));
+                var jsonResponse = GetDistanceFromSubjectBing(originAddress.Replace(" ", "%20"), destination.Address.FullAddress.Replace(" ", "%20"));
 
                 // Parse the response
                 dynamic resources = (JObject.Parse(jsonResponse) as dynamic).resourceSets[0].resources[0];
                 //DistanceFromOrigin = element.distance.text.Value
                 destinations.Add(new Destination
                 {
-                    Address = destination,
-                    DistanceFromOrigin = Math.Round(resources.travelDistance.Value, 1) == 1.0 ? 
-                                            Math.Round(resources.travelDistance.Value, 1) + " mile" : 
+                    //TODO:Fix so that we put it into the correct destination address
+                    Address = new Address { FullAddress = destination.Address.FullAddress },
+                    DistanceFromOrigin = Math.Round(resources.travelDistance.Value, 1) == 1.0 ?
+                                            Math.Round(resources.travelDistance.Value, 1) + " mile" :
                                             Math.Round(resources.travelDistance.Value, 1) + " miles"
                 });
             }
 
-            return new DistanceResponse { OriginAddress = originAddress, Destinations = destinations };
+            return new DistanceResponse
+            {
+                StatusCode = 0,
+                StatusMessage = "Success",
+                OriginAddress = new Address { FullAddress = originAddress },
+                Destinations = destinations
+            };
         }
 
         #endregion

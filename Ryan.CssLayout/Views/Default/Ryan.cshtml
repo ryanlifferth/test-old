@@ -1,0 +1,58 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Ryan</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700" rel="stylesheet" type="text/css" />
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            background-color: gainsboro;
+            font-size: 14px;
+            font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            margin: 0;
+        }
+
+        .error-loading {
+            position: absolute;
+            text-align: center;
+            top: 50%;
+            width: 100%
+        }
+
+            .error-loading .fa-exclamation-triangle {
+                color: #ffd54d;
+                text-shadow: 1px 1px 1px rgba(128, 128, 128, 1);
+
+                -webkit-text-stroke: 2px #9e0b0f;
+            }
+
+            .error-loading .error-text {
+                color: #9e0b0f;
+                font-size: 40px;
+                font-weight: 400;
+                text-shadow: 1px 1px 1px rgba(128,128,128,0.8);
+                text-transform: uppercase;
+                vertical-align: top;
+            }
+    </style>
+</head>
+<body>
+    <div class="error-loading">
+        <span class="fa fa-exclamation-triangle fa-4x"></span>
+        <span class="error-text">
+            Streetside views
+        </span>
+    </div>
+</body>
+</html>

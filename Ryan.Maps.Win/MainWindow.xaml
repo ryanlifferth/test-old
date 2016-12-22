@@ -4,53 +4,71 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ryan.Maps.Win"
+        xmlns:viewmodels="clr-namespace:Ryan.Maps.Win.ViewModels"
+        xmlns:views="clr-namespace:Ryan.Maps.Win.Views"
         mc:Ignorable="d"
-        Loaded="MainWindow_Loaded"
-        Title="WPF Maps" Height="350" Width="900">
+        Title="WPF Maps">
     <Window.Resources>
-        <Style x:Key="AddressLine1TextBlock" TargetType="{x:Type TextBlock}">
-            <Setter Property="FontFamily"           Value="Segoe UI" />
-            <Setter Property="FontSize"             Value="24" />
-            <Setter Property="FontWeight"           Value="Normal" />
-            <Setter Property="Foreground"           Value="#373a3c" />
-            <Setter Property="Height"               Value="Auto" />
-            <Setter Property="HorizontalAlignment"  Value="Stretch" />
-            <Setter Property="Margin"               Value="0" />
-            <Setter Property="Padding"              Value="0" />
-            <Setter Property="VerticalAlignment"    Value="Top" />
-            <Setter Property="Width"                Value="275" />
+        <DataTemplate DataType="{x:Type viewmodels:ProximityViewModel}">
+            <views:ProximityView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:BingMapViewModel}">
+            <views:BingMapView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:BingStreetsideViewModel}">
+            <views:BingStreetsideView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:BingAddressGeoCodingViewModel}">
+            <views:BingAddressGeoCodingView />
+        </DataTemplate>
+        <Style x:Key="NavButtons" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="10, 0" />
+            <Setter Property="Padding" Value="20,10" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Foreground" Value="Red" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
-        <Style x:Key="AddressLine2TextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource AddressLine1TextBlock}">
-            <Setter Property="FontSize"     Value="18" />
-            <Setter Property="FontWeight"   Value="Light" />
-            <Setter Property="Foreground"   Value="#545454" />
-            <Setter Property="Height"       Value="Auto" />
-            <Setter Property="Margin"       Value="2,-4,0,0" />
-            <Setter Property="Width"        Value="273" />
+        <Style x:Key="NavButtonsSelected" TargetType="Button" BasedOn="{StaticResource NavButtons}">
+            <Setter Property="Background" Value="LightSeaGreen" />
+            <Setter Property="Foreground" Value="White" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="LightSeaGreen"
+                                        Cursor="Arrow"
+                                        Padding="20,10">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
-        <Style x:Key="GridLabel" TargetType="{x:Type TextBlock}">
-            <Setter Property="FontFamily"           Value="Segoe UI Light" />
-            <Setter Property="FontSize"             Value="14" />
-            <Setter Property="FontWeight"           Value="SemiBold" />
-            <Setter Property="Foreground"           Value="#373a3c" />
-            <Setter Property="Margin"               Value="0" />
-            <Setter Property="Padding"              Value="0" />
-            <Setter Property="VerticalAlignment"    Value="Center" />
-            <Setter Property="Width"                Value="120" />
-        </Style>
-        <Style x:Key="GridTextBox" TargetType="{x:Type TextBox}">
-            <Setter Property="FontFamily"           Value="Segoe UI" />
-            <Setter Property="FontSize"             Value="16" />
-            <Setter Property="FontWeight"           Value="Light" />
-            <Setter Property="Foreground"           Value="#373a3c" />
-            <Setter Property="Margin"               Value="0" />
-            <Setter Property="VerticalAlignment"    Value="Center" />
-            <Setter Property="Width"                Value="151" />
-        </Style>
-        <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Window.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
         <TextBlock x:Name="label"
+                   Grid.Column="0"
+                   Grid.Row="0"
                    FontFamily="Segoe UI Light"
                    FontSize="28"
                    Text="WPF Maps"
@@ -65,65 +83,21 @@
                                   BlurRadius="2 " />
             </TextBlock.Effect>
         </TextBlock>
-       
-        <StackPanel Width="829" Orientation="Horizontal" Margin="10,52,10,10" HorizontalAlignment="Left">
-            <Border BorderThickness="1" BorderBrush="LightGray">
-                <StackPanel Orientation="Vertical" Width="275">
-                    <StackPanel  Orientation="Vertical" VerticalAlignment="Top" Margin="5">
-                        <!--AddressLine1-->
-                        <TextBlock x:Name="AddressLine1" 
-                               Text="{Binding Path=SubjectAddress.AddressLine1, Mode=TwoWay, FallbackValue='Address Line 1'}"
-                               Style="{StaticResource AddressLine1TextBlock}" />
-                        <!--AddressLine2-->
-                        <TextBlock x:Name="AddressLine2"
-                               Text="{Binding Path=SubjectAddress.AddressLine2, Mode=TwoWay, FallbackValue='Address Line 2'}"
-                               Style="{StaticResource AddressLine2TextBlock}" />
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-            <Border BorderThickness="0,1,1,1" BorderBrush="LightGray">
-                <StackPanel Orientation="Vertical" Width="275">
-                    <StackPanel  Orientation="Vertical" VerticalAlignment="Top" Margin="5">
-                        <!--AddressLine1-->
-                        <TextBlock x:Name="Comp1AddressLine1" 
-                               Text="{Binding Path=Comp1Address.AddressLine1, Mode=TwoWay, FallbackValue='Address Line 1'}"
-                               Style="{StaticResource AddressLine1TextBlock}" />
-                        <!--AddressLine2-->
-                        <TextBlock x:Name="Comp1AddressLine2"
-                               Text="{Binding Path=Comp1Address.AddressLine2, Mode=TwoWay, FallbackValue='Address Line 2'}"
-                               Style="{StaticResource AddressLine2TextBlock}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Width="275" Margin="0,20,0,0">
-                        <TextBlock Text="proximity to subject" Style="{StaticResource GridLabel}" />
-                        <TextBox Text="{Binding Path=Comp1DistanceFromSubject, Mode=TwoWay}" Style="{StaticResource GridTextBox}" />
-                        <!-- Spinner -->
-                        <local:Spinner Width="15" Height="15" Foreground="#337ab7" Margin="-25,0,0,0" 
-                                       Visibility="{Binding Path=ShowSpinner, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}" />
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-            <Border BorderThickness="0,1,1,1" BorderBrush="LightGray">
-                <StackPanel Orientation="Vertical" Width="275">
-                    <StackPanel  Orientation="Vertical" VerticalAlignment="Top" Margin="5">
-                        <!--AddressLine1-->
-                        <TextBlock x:Name="Comp2AddressLine1" 
-                               Text="{Binding Path=Comp2Address.AddressLine1, Mode=TwoWay, FallbackValue='Address Line 1'}"
-                               Style="{StaticResource AddressLine1TextBlock}" />
-                        <!--AddressLine2-->
-                        <TextBlock x:Name="Comp2AddressLine2"
-                               Text="{Binding Path=Comp2Address.AddressLine2, Mode=TwoWay, FallbackValue='Address Line 2'}"
-                               Style="{StaticResource AddressLine2TextBlock}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Width="275" Margin="0,20,0,0">
-                        <TextBlock Text="proximity to subject" Style="{StaticResource GridLabel}" />
-                        <TextBox Text="{Binding Path=Comp2DistanceFromSubject, Mode=TwoWay}" Style="{StaticResource GridTextBox}" />
-                        <!-- Spinner -->
-                        <local:Spinner Width="15" Height="15" Foreground="#337ab7" Margin="-25,0,0,0" 
-                                       Visibility="{Binding Path=ShowSpinner, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}"/>
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-        </StackPanel>
+
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10, 0">
+                <Button x:Name="proximityButton" Content="Proximity To Subject" Command="{Binding Path=LoadProximityCommand}" Style="{StaticResource NavButtons}" />
+                <Button x:Name="bingMapButton" Content="Bing Maps" Command="{Binding Path=LoadBingMapCommand}" Style="{StaticResource NavButtons}" />
+                <Button x:Name="bingStreetside" Content="Bing Streetside" Command="{Binding Path=LoadBingStreetsideCommand}" Style="{StaticResource NavButtons}" />
+                <Button x:Name="bingAddress" Content="Bing Address" Command="{Binding Path=LoadBingAddressCommand}" Style="{StaticResource NavButtonsSelected}" />
+            </StackPanel>
+
+            <ContentControl Content="{Binding Path=CurrentViewModel}" Grid.Row="1" VerticalContentAlignment="Top"></ContentControl>
+        </Grid>
 
     </Grid>
 </Window>

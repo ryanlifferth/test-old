@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Ryan.AddressUtility.Interfaces
 {
-    public interface IDistanceCalculation
+    public interface IDrivingDistanceCalculation
     {
 
-        DistanceResponse CalculateDistances(string originAddress, List<string> destinationAddresses);
+        DistanceResponse CalculateDistances(string originAddress, List<Destination> destinationAddresses);
 
     }
 

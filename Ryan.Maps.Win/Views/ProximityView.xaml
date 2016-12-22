@@ -1,0 +1,137 @@
+﻿<UserControl x:Class="Ryan.Maps.Win.Views.ProximityView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Ryan.Maps.Win.Views"
+             xmlns:resources="clr-namespace:Ryan.Maps.Win.Resources"
+             mc:Ignorable="d" 
+             Loaded="ProximityView_Loaded"
+             d:DesignHeight="170" d:DesignWidth="850">
+    <UserControl.Resources>
+        <Style x:Key="AddressLine1TextBlock" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily"           Value="Segoe UI" />
+            <Setter Property="FontSize"             Value="24" />
+            <Setter Property="FontWeight"           Value="Normal" />
+            <Setter Property="Foreground"           Value="#373a3c" />
+            <Setter Property="Height"               Value="Auto" />
+            <Setter Property="HorizontalAlignment"  Value="Stretch" />
+            <Setter Property="Margin"               Value="0" />
+            <Setter Property="Padding"              Value="0" />
+            <Setter Property="VerticalAlignment"    Value="Top" />
+            <Setter Property="Width"                Value="275" />
+        </Style>
+        <Style x:Key="AddressLine2TextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource AddressLine1TextBlock}">
+            <Setter Property="FontSize"     Value="18" />
+            <Setter Property="FontWeight"   Value="Light" />
+            <Setter Property="Foreground"   Value="#545454" />
+            <Setter Property="Height"       Value="Auto" />
+            <Setter Property="Margin"       Value="2,-4,0,0" />
+            <Setter Property="Width"        Value="273" />
+        </Style>
+        <Style x:Key="GridLabel" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily"           Value="Segoe UI Light" />
+            <Setter Property="FontSize"             Value="14" />
+            <Setter Property="FontWeight"           Value="SemiBold" />
+            <Setter Property="Foreground"           Value="#373a3c" />
+            <Setter Property="Margin"               Value="0" />
+            <Setter Property="Padding"              Value="0" />
+            <Setter Property="VerticalAlignment"    Value="Center" />
+            <Setter Property="Width"                Value="120" />
+        </Style>
+        <Style x:Key="GridTextBox" TargetType="{x:Type TextBox}">
+            <Setter Property="FontFamily"           Value="Segoe UI" />
+            <Setter Property="FontSize"             Value="16" />
+            <Setter Property="FontWeight"           Value="Light" />
+            <Setter Property="Foreground"           Value="#373a3c" />
+            <Setter Property="Margin"               Value="0" />
+            <Setter Property="VerticalAlignment"    Value="Center" />
+            <Setter Property="Width"                Value="151" />
+        </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+    <Grid>
+        <!--<TextBlock FontSize="20" FontFamily="Segoe UI" Text="{Binding Path=PageTitle}" />-->
+
+        <StackPanel Width="829" Height="140" Orientation="Horizontal" Grid.Column="0" Grid.Row="1" Margin="10,0,10,10" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Border BorderThickness="1" BorderBrush="LightGray">
+                <StackPanel Orientation="Vertical" Width="275">
+                    <StackPanel  Orientation="Vertical" VerticalAlignment="Top" Margin="5">
+                        <!--AddressLine1-->
+                        <TextBlock x:Name="AddressLine1" 
+                               Text="{Binding Path=SubjectAddress.AddressLine1, Mode=TwoWay, FallbackValue='Address Line 1'}"
+                               Style="{StaticResource AddressLine1TextBlock}" />
+                        <!--AddressLine2-->
+                        <TextBlock x:Name="AddressLine2"
+                               Style="{StaticResource AddressLine2TextBlock}">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}, {1} {2}" FallbackValue="Address Line 2">
+                                    <Binding Path="SubjectAddress.City" />
+                                    <Binding Path="SubjectAddress.State" />
+                                    <Binding Path="SubjectAddress.Zip" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <Border BorderThickness="0,1,1,1" BorderBrush="LightGray">
+                <StackPanel Orientation="Vertical" Width="275">
+                    <StackPanel  Orientation="Vertical" VerticalAlignment="Top" Margin="5">
+                        <!--AddressLine1-->
+                        <TextBlock x:Name="Comp1AddressLine1" 
+                               Text="{Binding Path=Comp1Address.AddressLine1, Mode=TwoWay, FallbackValue='Address Line 1'}"
+                               Style="{StaticResource AddressLine1TextBlock}" />
+                        <!--AddressLine2-->
+                        <TextBlock x:Name="Comp1AddressLine2"
+                               Style="{StaticResource AddressLine2TextBlock}">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}, {1} {2}" FallbackValue="Address Line 2">
+                                    <Binding Path="Comp1Address.City" />
+                                    <Binding Path="Comp1Address.State" />
+                                    <Binding Path="Comp1Address.Zip" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="275" Margin="0,20,0,0">
+                        <TextBlock Text="proximity to subject" Style="{StaticResource GridLabel}" />
+                        <TextBox Text="{Binding Path=Comp1DistanceFromSubject, Mode=TwoWay}" Style="{StaticResource GridTextBox}" />
+                        <!-- Spinner -->
+                        <resources:Spinner Width="15" Height="15" Foreground="#337ab7" Margin="-25,0,0,0" 
+                                       Visibility="{Binding Path=ShowSpinner, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <Border BorderThickness="0,1,1,1" BorderBrush="LightGray">
+                <StackPanel Orientation="Vertical" Width="275">
+                    <StackPanel  Orientation="Vertical" VerticalAlignment="Top" Margin="5">
+                        <!--AddressLine1-->
+                        <TextBlock x:Name="Comp2AddressLine1" 
+                               Text="{Binding Path=Comp2Address.AddressLine1, Mode=TwoWay, FallbackValue='Address Line 1'}"
+                               Style="{StaticResource AddressLine1TextBlock}" />
+                        <!--AddressLine2-->
+                        <TextBlock x:Name="Comp2AddressLine2"
+                               Style="{StaticResource AddressLine2TextBlock}" >
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}, {1} {2}" FallbackValue="Address Line 2">
+                                    <Binding Path="Comp2Address.City" />
+                                    <Binding Path="Comp2Address.State" />
+                                    <Binding Path="Comp2Address.Zip" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="275" Margin="0,20,0,0">
+                        <TextBlock Text="proximity to subject" Style="{StaticResource GridLabel}" />
+                        <TextBox Text="{Binding Path=Comp2DistanceFromSubject, Mode=TwoWay}" Style="{StaticResource GridTextBox}" />
+                        <!-- Spinner -->
+                        <resources:Spinner Width="15" Height="15" Foreground="#337ab7" Margin="-25,0,0,0" 
+                                       Visibility="{Binding Path=ShowSpinner, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

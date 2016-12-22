@@ -1,0 +1,250 @@
+﻿<UserControl x:Class="Ryan.Maps.Win.Views.BingAddressGeoCodingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Ryan.Maps.Win.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="SelectAddressButton" TargetType="{x:Type Button}">
+            <!--<Setter Property="Background" Value="Transparent" />-->
+            <Setter Property="Background" Value="#107d7d7d" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="0,0,0,5" />
+            <Setter Property="MinWidth" Value="200" />
+            <Setter Property="Padding" Value="5,2,5,7" />
+        </Style>
+
+        <Style x:Key="ButtonHeader" TargetType="{x:Type TextBlock}">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="9" />
+            <Setter Property="FontStyle" Value="Italic" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+        <Style x:Key="ButtonAddressLine1" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Foreground" Value="Black" />
+        </Style>
+        <Style x:Key="ButtonAddressLine2" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="Foreground" Value="DarkGray" />
+        </Style>
+
+        <Style x:Key="PropertyAddressContainer" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Margin" Value="30,0,0,0" />
+        </Style>
+        <Style x:Key="PropertyAddressLabel" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Foreground" Value="Gray" />
+            <Setter Property="Width" Value="120" />
+        </Style>
+        <Style x:Key="PropertyAddressValue" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Foreground" Value="Black" />
+        </Style>
+
+        <DataTemplate x:Key="AddressButtonTemplate">
+            <Button x:Name="GeoCodedAddress" 
+                    Click="GeoCodedAddress_Click"
+                    Style="{StaticResource SelectAddressButton}">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Style="{StaticResource ButtonHeader}" Text="Click here to use this address" />
+                    <TextBlock Style="{StaticResource ButtonAddressLine1}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0}{1}">
+                                <Binding Path="AddressLine1" FallbackValue="123 W Anywhere Ave" />
+                                <Binding Path="AddressLine2" StringFormat="{}, {0}" FallbackValue="" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource ButtonAddressLine2}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0}, {1} {2}">
+                                <Binding Path="City" FallbackValue="Anytown" />
+                                <Binding Path="State" FallbackValue="UT" />
+                                <Binding Path="Zip" FallbackValue="84041" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StackPanel>
+            </Button>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="45" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1" Margin="10, 0, 10, 10">
+            <StackPanel Orientation="Vertical" Margin="0">
+                <StackPanel Orientation="Vertical" Margin="19,41,21,19">
+                    <TextBlock Text="Address" FontFamily="Segoe UI" FontSize="14" FontWeight="Normal" Foreground="Gray" Grid.Row="0" Margin="5,0,0,0" />
+                    <StackPanel Grid.Row="1" Margin="0" Orientation="Horizontal">
+                        <TextBox x:Name="addressInput" FontFamily="Segoe UI" FontSize="24" Foreground="Black" HorizontalAlignment="Left" Margin="0" Padding="4" Width="600" />
+                        <Button x:Name="Search" Content="Search" FontFamily="Segoe UI" FontSize="16" FontWeight="Normal" Margin="10,0,0,0" Padding="15,0" Click="Search_Click" />
+                        <Button x:Name="TestPopup" Content="Show Popup" Click="TestPopup_Click" Margin="5,0" Padding="10,5"  />
+                    </StackPanel>
+
+                </StackPanel>
+
+                <StackPanel x:Name="PropertyAddressDetailContainer" Orientation="Vertical">
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="Full Address" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.FullAddress}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="Address Line 1" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.AddressLine1}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="AddressLine 2" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.AddressLine2}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}" Visibility="Collapsed">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="House Number" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.HouseNumber}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}" Visibility="Collapsed">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="Street PreDirection" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.StreetPreDirection}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}" Visibility="Collapsed">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="Street Name" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.StreetName}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}" Visibility="Collapsed">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="Street Post Direction" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.StreetPostDirection}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}" Visibility="Collapsed">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="Street Suffix" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.StreetSuffix}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="Unit Number" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.UnitNumber}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="City" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.City}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="State" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.State}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="Zip" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.Zip}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="County" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.County}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="Latitude" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.Latitude}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource PropertyAddressContainer}">
+                        <TextBlock Style="{StaticResource PropertyAddressLabel}" Text="Longitude" />
+                        <TextBlock Style="{StaticResource PropertyAddressValue}" Text="{Binding PropertyAddress.Longitude}" />
+                    </StackPanel>
+                </StackPanel>
+
+                <Border BorderBrush="Gray"  BorderThickness="1" Margin="40,-3,40,20" Width="Auto" Visibility="Collapsed">
+                    <StackPanel Orientation="Vertical" Width="Auto">
+                        <Polygon Fill="Gray" 
+                                 HorizontalAlignment="Left"
+                                 Margin="40,-21,0,0" 
+                                 Points="10,8 20,20 0,20" 
+                                 Stroke="Gray" 
+                                 StrokeDashArray="1 0" 
+                                 StrokeThickness="2"  />
+                        <StackPanel Orientation="Vertical" Margin="10" Width="Auto">
+                            <TextBlock FontFamily="Segoe UI" FontSize="18" FontWeight="Normal" Text="{Binding DecisionText, FallbackValue='[response message]'}" />
+                            <Separator Foreground="Black" Margin="0" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,10,10,0" Orientation="Vertical">
+                                    <TextBlock FontFamily="Segoe UI" FontSize="16" FontWeight="Normal" Text="{Binding GeoCodeResponse.Address.FullAddress, FallbackValue='[Address]'}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="10,10,0,0" Orientation="Vertical">
+                                    <TextBlock FontFamily="Segoe UI" FontSize="16" FontWeight="Normal" Text="{Binding GeoCodeResponse.GeoCodedAddresses[0].FullAddress, FallbackValue='[Address]'}" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Popup x:Name="AddressDecisionPopup"
+                           AllowsTransparency="True"
+                           IsOpen="False"
+                           PopupAnimation="Slide"
+                           StaysOpen="True">
+                    <Border x:Name="AddressPopupContainer" 
+                            Background="White" 
+                            BorderBrush="Black" 
+                            BorderThickness="1" 
+                            CornerRadius="1" 
+                            Margin="3" 
+                            Padding="10, 5"
+                            Width="500"
+                            MinHeight="50" 
+                            MinWidth="200">
+                        <StackPanel Margin="0">
+                            <TextBlock x:Name="PopupHeader" 
+                                   FontFamily="Segoe UI" 
+                                   FontSize="14" 
+                                   FontWeight="Normal" 
+                                   HorizontalAlignment="Left"
+                                   MaxWidth="300"
+                                   Padding="2,0,2,2" 
+                                   TextWrapping="Wrap"
+                                   Text="{Binding DecisionText, FallbackValue='[response message]'}" />
+                            <Separator Foreground="DarkGray" Margin="0" />
+                            <Grid x:Name="AddressPopupGrid">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,10,10,0" Orientation="Vertical">
+                                    <Button x:Name="OriginalAddress" Click="OriginalAddress_Click" Style="{StaticResource SelectAddressButton}">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Style="{StaticResource ButtonHeader}" Text="Click here to keep the original address" />
+                                            <TextBlock Style="{StaticResource ButtonAddressLine1}" Text="{Binding PropertyAddressLine1, FallbackValue='123 Anywhere Ave'}" />
+                                            <TextBlock Style="{StaticResource ButtonAddressLine2}" Text="{Binding PropertyAddressLine2, FallbackValue='Anytown, UT 84041'}" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="10,10,0,0" Orientation="Vertical">
+                                    <ItemsControl ItemsSource="{Binding GeoCodeResponse.GeoCodedAddresses}"
+                                              ItemTemplate="{StaticResource AddressButtonTemplate}" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                        <Border.Effect>
+                            <DropShadowEffect ShadowDepth="1" Opacity="0.6" BlurRadius="3" Color="Black" />
+                        </Border.Effect>
+                    </Border>
+                </Popup>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

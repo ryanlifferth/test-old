@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Ryan.Maps.Win
+namespace Ryan.Maps.Win.Resources
 {
     /// <summary>
     /// Interaction logic for Spinner.xaml

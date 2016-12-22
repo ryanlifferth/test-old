@@ -1,165 +1,181 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Index</h2>
 
+<input type="text" id="propertyAddress" placeholder="Address" />
+<input type="button" id="searchProperty" value="Get Streetside View" />
+<input type="button" id="testError" value="Test Error" />
+<input type="button" value="Get Center" id="bingMapCenter" />
+<br />
+<div id="bingMapCanvas" class="map-canvas bing-map-canvas"></div>
 
-<div id="bingMapCanvas" class="map-canvas bing-map-canvas" />
+<div class="error-loading" id="loadError">
+    <span class="fa fa-exclamation-triangle fa-4x"></span>
+    <span class="error-text">
+        Error loading Streetside View
+    </span>
+</div>
 
+<div class="error-no-address" id="noAddress">
+    <span class="error-text">
+        No Address
+    </span>
+    <span class="fa fa-thumbs-o-down fa-4x"></span>
+</div>
 
 @section htmlhead {
-
-    <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
-
-    <script type="text/javascript">
-        var map;
-        function GetMap() {
-
-            var mapOptions =
-                {
-                    credentials: "AjSx6izDBhCr3ti2xlB9q5BykI34fwnTUAYMPXOAScmyfHGjO7dlMLvs7PSit0vE",
-                    mapTypeId: "r",
-                    enableClickableLogo: false,
-                    enableSearchLogo: false,
-                    center: new Microsoft.Maps.Location(47.490860, -121.835747),
-                    zoom: 9
-                };
-            map = new Microsoft.Maps.Map(document.getElementById("bingMapCanvas"), mapOptions);
-
-
-            var geocodeRequest = "http://dev.virtualearth.net/REST/v1/Locations?countryRegion=US&adminDistrict=TX&adminDivision2=Denton&jsonp=GeocodeCallback&key=AjSx6izDBhCr3ti2xlB9q5BykI34fwnTUAYMPXOAScmyfHGjO7dlMLvs7PSit0vE";
-            //var geocodeRequest = "http://platform.bing.com/geo/spatial/v1/public/Geodata?SpatialFilter=GetBoundary('Denton%20County',1,'AdminDivision2',0,0,'en','US')&$format=json&jsonp=GeocodeCallback&key=AjSx6izDBhCr3ti2xlB9q5BykI34fwnTUAYMPXOAScmyfHGjO7dlMLvs7PSit0vE";
-
-            var script = document.createElement("script");
-            script.setAttribute("type", "text/javascript");
-            script.setAttribute("src", geocodeRequest);
-            document.body.appendChild(script);
+    <style>
+        .error-loading {
+            display: none;
+            position: absolute;
+            text-align: center;
+            top: 50%;
+            width: 100%;
         }
 
-        function GeocodeCallback(result) {
-            //alert("Found Location");
-            //boundaryCallback(result);
-            //alert("Found location: " + result.resourceSets[0].resources[0].name);
-
-            if (result &&
-                   result.resourceSets &&
-                   result.resourceSets.length > 0 &&
-                   result.resourceSets[0].resources &&
-                   result.resourceSets[0].resources.length > 0) {
-                // Set the map view using the returned bounding box
-                var bbox = result.resourceSets[0].resources[0].bbox;
-                var viewBoundaries = Microsoft.Maps.LocationRect.fromLocations(new Microsoft.Maps.Location(bbox[0], bbox[1]), new Microsoft.Maps.Location(bbox[2], bbox[3]));
-                map.setView({ bounds: viewBoundaries });
-
-                // Add a pushpin at the found location
-                var location = new Microsoft.Maps.Location(result.resourceSets[0].resources[0].point.coordinates[0], result.resourceSets[0].resources[0].point.coordinates[1]);
-                var pushpin = new Microsoft.Maps.Pushpin(location);
-                map.entities.push(pushpin);
+            .error-loading .fa-exclamation-triangle {
+                color: #ffd54d;
+                text-shadow: 1px 1px 1px rgba(128, 128, 128, 1);
+                -webkit-text-stroke: 2px #9e0b0f;
             }
-        }
 
-        function boundaryCallback(result) {
-            map.entities.clear();
-
-            var entity = result.d.results[0];
-            var entityMetadata = entity.EntityMetadata;
-            var entityName = entity.Name.EntityName;
-            var primitives = entity.Primitives;
-
-            var polygoncolor = null;
-            var strokecolor = null;
-            var boundaryVertices = null;
-            var numOfVertices = 0;
-
-            polygoncolor = new Microsoft.Maps.Color(100, 128, 128, 128);
-            strokecolor = new Microsoft.Maps.Color(255, 128, 128, 128);
-
-            var polygonArray = new Array();
-            for (var i = 0; i < primitives.length; i++) {
-                var ringStr = primitives[i].Shape;
-                var ringArray = ringStr.split(",");
-
-                for (var j = 1; j < ringArray.length; j++) {
-                    var array = ParseEncodedValue(ringArray[j]);
-
-                    if (array.length > numOfVertices) {
-                        numOfVertices = array.length;
-                        boundaryVertices = array;
-                    }
-                    polygonArray.push(array);
-                }
-
-                var polygon = new Microsoft.Maps.Polygon(polygonArray,
-                  { fillColor: polygoncolor, strokeColor: strokecolor });
-                map.entities.push(polygon)
-
+            .error-loading .error-text {
+                color: #9e0b0f;
+                font-size: 40px;
+                font-weight: 400;
+                text-shadow: 1px 1px 1px rgba(128,128,128,0.8);
+                text-transform: uppercase;
+                vertical-align: top;
             }
+
+        .error-no-address {
+            color: #9e0b0f;
+            display: block;
+            position: absolute;
+            text-align: center;
+            text-shadow: 1px 1px 1px rgba(128,128,128,0.8);
+            top: 50%;
+            width: 100%;
         }
 
-        function ParseEncodedValue(value) {
-            var list = new Array();
-            var index = 0;
-            var xsum = 0;
-            var ysum = 0;
-            var max = 4294967296;
-            var safeCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
-
-
-            while (index < value.length) {
-                var n = 0;
-                var k = 0;
-
-                while (1) {
-                    if (index >= value.length) {
-                        return null;
-                    }
-                    var b = safeCharacters.indexOf(value.charAt(index++));
-                    if (b == -1) {
-                        return null;
-                    }
-                    var tmp = ((b & 31) * (Math.pow(2, k)));
-
-                    var ht = tmp / max;
-                    var lt = tmp % max;
-
-                    var hn = n / max;
-                    var ln = n % max;
-
-                    var nl = (lt | ln) >>> 0;
-                    n = (ht | hn) * max + nl;
-                    k += 5;
-                    if (b < 32) break;
-                }
-
-                var diagonal = parseInt((Math.sqrt(8 * n + 5) - 1) / 2);
-                n -= diagonal * (diagonal + 1) / 2;
-                var ny = parseInt(n);
-                var nx = diagonal - ny;
-                nx = (nx >> 1) ^ -(nx & 1);
-                ny = (ny >> 1) ^ -(ny & 1);
-                xsum += nx;
-                ysum += ny;
-                var lat = ysum * 0.00001;
-                var lon = xsum * 0.00001
-                list.push(new Microsoft.Maps.Location(lat, lon));
+            .error-no-address .error-text {
+                font-size: 40px;
+                font-weight: 400;
+                text-transform: uppercase;
+                vertical-align: top;
             }
-            return list;
-        }
-
-    </script>
+    </style>
 }
 
 @section PageScripts {
-    <script type="text/javascript">
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release'></script>
+    <script type='text/javascript'>
+        function streetsideMapBing() {
+            var self = this;
 
-        $(document).ready(function () {
-            // Load the map when the DOM is ready
-            GetMap();
-        });
+            self.map = {};  // Bing Map object
 
-        
+            self.loadMapScenario = function (lat, lon) {
+                self.map = new Microsoft.Maps.Map(document.getElementById('bingMapCanvas'), {
+                    credentials: 'Auqz2ch8xDX5NnG_53PKz4OaWZMw_YKV-iGdFEzw0N4dX86GREoQaa0lPVjt9GBk',
+                    //credentials: '4hAt5dJXkTHw8pKicEHW~3G1ueYq_0QyFBS0YFBF9NA~AshZkh90FnrHFnkaB4qCRApzAtvZsSa9u49dyCojtw-nQnVx7RlaE2l98oM8RQt4',
+                    //mapTypeId: Microsoft.Maps.MapTypeId.road,
+                    mapTypeId: Microsoft.Maps.MapTypeId.streetside,
+                    ////center: new Microsoft.Maps.Location(47.619757, -122.348854),
+                    ////center: new Microsoft.Maps.Location(41.0755333, -111.9543342),
+                    //center: new Microsoft.Maps.Location(40.4016203, -111.9331935),
+                    center: new Microsoft.Maps.Location(lat, lon),
+                    zoom: 19,
+                    streetsideOptions: {
+                        overviewMapMode: Microsoft.Maps.OverviewMapMode.hidden,
+                        onErrorLoading: self.noStreetsideFound,
+                        //locationToLookAt: new Microsoft.Maps.Location(40.4016203, -111.9331935)
+                        locationToLookAt: new Microsoft.Maps.Location(lat, lon)
+                    },
+                });
+                /*var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), {
+                    icon: 'https://www.bingmapsportal.com/Content/images/poi_custom.png',
+                    anchor: new Microsoft.Maps.Point(12, 39)
+                });*/
+                //var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), { color: '#2b5c87' });
+                //var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(41.0755333, -111.9543342),
+                //                                         { color: '#2b5c87', text: 'DM', title: 'DataMaster', subTitle: 'For Appraisers' });
+                //map.entities.push(pushpin);
 
+                //map.setView({ mapTypeId: Microsoft.Maps.MapTypeId.streetside });
+                //alert('hi');
+            }
+
+            self.noStreetsideFound = function () {
+                alert('no streetside found');
+                self.map.setView({
+                    mapTypeId: Microsoft.Maps.MapTypeId.road,
+                    zoom: 16
+                });
+            }
+
+            return self;
+        }
+
+        //var streetside = new streetsideMapBing();
+        //var loadTheMap = streetside.loadMapScenario();
+
+        window.onload = function () {
+            var streetside = new streetsideMapBing();
+            streetside.loadMapScenario("40.4016203", "-111.9331935");
+
+            function getCenter() {
+                var center = streetside.map.getCenter();
+                alert(center);
+            }
+
+            function geoCodeAndMapProperty(address) {
+                document.getElementById('bingMapCanvas').style.display = 'block';
+                Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+                    var searchManager = new Microsoft.Maps.Search.SearchManager(streetside.map);
+                    var requestOptions = {
+                        where: document.getElementById('propertyAddress').value,
+                        callback: function (answer, userData) {
+                            //var newLoc = answer.results[0].location;
+                            streetside.map.dispose();
+                            streetside.loadMapScenario(answer.results[0].location.latitude, answer.results[0].location.longitude);
+                        }
+                    };
+                    searchManager.geocode(requestOptions);
+                });
+            }
+
+            function showErrorElement() {
+                document.getElementById('bingMapCanvas').style.display = 'none';
+                document.getElementById('loadError').style.display = 'block';
+            }
+
+            var el = document.getElementById('bingMapCenter');
+            el.addEventListener("click", getCenter, false);
+
+            var propertySearchButton = document.getElementById('searchProperty');
+            propertySearchButton.addEventListener("click", geoCodeAndMapProperty, false);
+
+            var testErrorButton = document.getElementById('testError');
+            testErrorButton.addEventListener("click", showErrorElement, false);
+        }
+
+        //(function () {
+        //    var streetside = new streetsideMapBing();
+        //    streetside.loadMapScenario();
+        //})();
+    </script>
+    @*<script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadTheMap' async defer></script>*@
+
+
+    <script type='text/javascript'>
+        var x = document.documentMode;
+        document.write("<br />documentMode: " + x);
+        var nav = navigator;
+        document.write('<br />userAgent: ' + nav.userAgent);
     </script>
 }

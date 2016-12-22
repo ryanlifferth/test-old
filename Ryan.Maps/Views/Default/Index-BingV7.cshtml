@@ -1,0 +1,167 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+
+<div id="bingMapCanvas" class="map-canvas bing-map-canvas" />
+
+
+@section htmlhead {
+
+    <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+
+    <script type="text/javascript">
+        var map;
+        function GetMap() {
+
+            var mapOptions =
+                {
+                    credentials: "AjSx6izDBhCr3ti2xlB9q5BykI34fwnTUAYMPXOAScmyfHGjO7dlMLvs7PSit0vE",
+                    mapTypeId: "r",
+                    enableClickableLogo: false,
+                    enableSearchLogo: false,
+                    //center: new Microsoft.Maps.Location(47.490860, -121.835747),
+                    center: new Microsoft.Maps.Location(41.0755333,-111.9543342),
+                    zoom: 14
+                };
+            map = new Microsoft.Maps.Map(document.getElementById("bingMapCanvas"), mapOptions);
+
+
+            var geocodeRequest = "http://dev.virtualearth.net/REST/v1/Locations?countryRegion=US&adminDistrict=TX&adminDivision2=Denton&jsonp=GeocodeCallback&key=AjSx6izDBhCr3ti2xlB9q5BykI34fwnTUAYMPXOAScmyfHGjO7dlMLvs7PSit0vE";
+            //var geocodeRequest = "http://dev.virtualearth.net/REST/v1/Locations?countryRegion=US&adminDistrict=TX&adminDivision2=Denton&jsonp=GeocodeCallback&key=AjSx6izDBhCr3ti2xlB9q5BykI34fwnTUAYMPXOAScmyfHGjO7dlMLvs7PSit0vE";
+            //var geocodeRequest = "http://platform.bing.com/geo/spatial/v1/public/Geodata?SpatialFilter=GetBoundary('Denton%20County',1,'AdminDivision2',0,0,'en','US')&$format=json&jsonp=GeocodeCallback&key=AjSx6izDBhCr3ti2xlB9q5BykI34fwnTUAYMPXOAScmyfHGjO7dlMLvs7PSit0vE";
+
+            var script = document.createElement("script");
+            script.setAttribute("type", "text/javascript");
+            script.setAttribute("src", geocodeRequest);
+            document.body.appendChild(script);
+        }
+
+        function GeocodeCallback(result) {
+            //alert("Found Location");
+            //boundaryCallback(result);
+            //alert("Found location: " + result.resourceSets[0].resources[0].name);
+
+            if (result &&
+                   result.resourceSets &&
+                   result.resourceSets.length > 0 &&
+                   result.resourceSets[0].resources &&
+                   result.resourceSets[0].resources.length > 0) {
+                // Set the map view using the returned bounding box
+                var bbox = result.resourceSets[0].resources[0].bbox;
+                var viewBoundaries = Microsoft.Maps.LocationRect.fromLocations(new Microsoft.Maps.Location(bbox[0], bbox[1]), new Microsoft.Maps.Location(bbox[2], bbox[3]));
+                map.setView({ bounds: viewBoundaries });
+
+                // Add a pushpin at the found location
+                var location = new Microsoft.Maps.Location(result.resourceSets[0].resources[0].point.coordinates[0], result.resourceSets[0].resources[0].point.coordinates[1]);
+                var pushpin = new Microsoft.Maps.Pushpin(location);
+                map.entities.push(pushpin);
+            }
+        }
+
+        function boundaryCallback(result) {
+            map.entities.clear();
+
+            var entity = result.d.results[0];
+            var entityMetadata = entity.EntityMetadata;
+            var entityName = entity.Name.EntityName;
+            var primitives = entity.Primitives;
+
+            var polygoncolor = null;
+            var strokecolor = null;
+            var boundaryVertices = null;
+            var numOfVertices = 0;
+
+            polygoncolor = new Microsoft.Maps.Color(100, 128, 128, 128);
+            strokecolor = new Microsoft.Maps.Color(255, 128, 128, 128);
+
+            var polygonArray = new Array();
+            for (var i = 0; i < primitives.length; i++) {
+                var ringStr = primitives[i].Shape;
+                var ringArray = ringStr.split(",");
+
+                for (var j = 1; j < ringArray.length; j++) {
+                    var array = ParseEncodedValue(ringArray[j]);
+
+                    if (array.length > numOfVertices) {
+                        numOfVertices = array.length;
+                        boundaryVertices = array;
+                    }
+                    polygonArray.push(array);
+                }
+
+                var polygon = new Microsoft.Maps.Polygon(polygonArray,
+                  { fillColor: polygoncolor, strokeColor: strokecolor });
+                map.entities.push(polygon)
+
+            }
+        }
+
+        function ParseEncodedValue(value) {
+            var list = new Array();
+            var index = 0;
+            var xsum = 0;
+            var ysum = 0;
+            var max = 4294967296;
+            var safeCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
+
+
+            while (index < value.length) {
+                var n = 0;
+                var k = 0;
+
+                while (1) {
+                    if (index >= value.length) {
+                        return null;
+                    }
+                    var b = safeCharacters.indexOf(value.charAt(index++));
+                    if (b == -1) {
+                        return null;
+                    }
+                    var tmp = ((b & 31) * (Math.pow(2, k)));
+
+                    var ht = tmp / max;
+                    var lt = tmp % max;
+
+                    var hn = n / max;
+                    var ln = n % max;
+
+                    var nl = (lt | ln) >>> 0;
+                    n = (ht | hn) * max + nl;
+                    k += 5;
+                    if (b < 32) break;
+                }
+
+                var diagonal = parseInt((Math.sqrt(8 * n + 5) - 1) / 2);
+                n -= diagonal * (diagonal + 1) / 2;
+                var ny = parseInt(n);
+                var nx = diagonal - ny;
+                nx = (nx >> 1) ^ -(nx & 1);
+                ny = (ny >> 1) ^ -(ny & 1);
+                xsum += nx;
+                ysum += ny;
+                var lat = ysum * 0.00001;
+                var lon = xsum * 0.00001
+                list.push(new Microsoft.Maps.Location(lat, lon));
+            }
+            return list;
+        }
+
+    </script>
+}
+
+@section PageScripts {
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            // Load the map when the DOM is ready
+            GetMap();
+        });
+
+        
+
+    </script>
+}

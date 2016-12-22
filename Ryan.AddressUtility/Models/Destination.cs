@@ -9,9 +9,15 @@ namespace Ryan.AddressUtility.Models
     public class Destination
     {
 
-        public string Address { get; set; }
+        public Address Address { get; set; }
+
+        public Address GeocodedAddress { get; set; }
 
         public string DistanceFromOrigin { get; set; }
+
+        public string Apn { get; set; }
+
+        public string MlsNumber { get; set; }
 
     }
 }

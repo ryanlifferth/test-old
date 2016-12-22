@@ -78,7 +78,9 @@
                 '929 Arbor Way, Layton, Utah 84041',
                 '765 E Gordon Ave, Layton, Utah 84041',
                 '2939 N 725 W, Layton, Utah 84041',
-                '498 W 2475 N, Layton, Utah 84041'
+                '498 W 2475 N, Layton, Utah 84041',
+                '2200 E Sunset Dr, Layton, UT 84040',
+                '1170 E Gentile St, Layton, UT 84040'
                 //,'549 W Muskmelon Way, Saratoga Springs, Utah 84045'
             ];
 
@@ -89,9 +91,16 @@
                     var compLocation = data.results[0].geometry.location
                     var compLatLng = new google.maps.LatLng(compLocation.lat, compLocation.lng);
                     var distanceFromSubject = google.maps.geometry.spherical.computeDistanceBetween(subjectLatLng, compLatLng);
+                    //var headingFromSubject = google.maps.geometry.spherical.computeHeading(subjectLatLng, compLatLng);
+                    var headingFromSubject = subjectLatLng.getHeading(compLatLng);
+                    var directionOrdinal = GetDirectionOrdinalFromHeading(headingFromSubject);
                     distanceFromSubject = (distanceFromSubject * 0.000621371192).round(1); // convert to miles
                     //distanceFromSubject = distanceFromSubject.round(1);
-                    var distanceText = (distanceFromSubject === undefined || distanceFromSubject === null) ? "" : distanceFromSubject == 1.0 ? distanceFromSubject + " mile" : distanceFromSubject + " miles";
+                    var distanceText = (distanceFromSubject === undefined || distanceFromSubject === null) ?
+                                            "" :
+                                            distanceFromSubject == 1.0 ?
+                                                distanceFromSubject + " mile " + directionOrdinal :
+                                                distanceFromSubject + " miles " + directionOrdinal;
                     
 
                     var infowindow = new google.maps.InfoWindow({
@@ -127,6 +136,13 @@
 
         String.prototype.ryan = function (stuff) {
             return this + ' hi Ryan and ' + stuff;
+        }
+
+        var GetDirectionOrdinalFromHeading = function (degrees) {
+            var caridnals = [ "N", "NE", "E", "SE", "S", "SW", "W", "NW", "N" ];
+            var index = parseInt(Math.round((parseFloat(degrees) % 360) / 45));
+            return caridnals[index];
+            //return caridnals[(int)Math.Round(((double)degrees % 360) / 45)];
         }
 
 
@@ -176,9 +192,30 @@
                     break;
                 }
             }
-
-
         }
+
+        // Taken from http://stackoverflow.com/questions/2908892/get-degrees-0-360-from-one-latlng-to-another-in-javascript
+        Number.prototype.toRad = function () {
+            return this * Math.PI / 180;
+        }
+
+        Number.prototype.toDeg = function () {
+            return this * 180 / Math.PI;
+        }
+
+        google.maps.LatLng.prototype.getHeading = function (point) {
+            var lat1 = this.lat().toRad(), lat2 = point.lat().toRad();
+            var dLon = (point.lng() - this.lng()).toRad();
+
+            var y = Math.sin(dLon) * Math.cos(lat2);
+            var x = Math.cos(lat1) * Math.sin(lat2) -
+                    Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+
+            var brng = Math.atan2(y, x);
+
+            return ((brng.toDeg() + 360) % 360);
+        }
+        
 
 </script>
 }

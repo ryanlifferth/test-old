@@ -11,31 +11,45 @@ using Newtonsoft.Json.Linq;
 
 namespace Ryan.AddressUtility.Repositories
 {
-    public class GoogleDistanceCalculationRepository : IDistanceCalculation
+    public class GoogleDrivingDistanceCalculationRepository : IDrivingDistanceCalculation
     {
 
         #region Interface Implementations (IDistanceCalculation)
 
-        public DistanceResponse CalculateDistances(string originAddress, List<string> destinationAddresses)
+        public DistanceResponse CalculateDistances(string originAddress, List<Destination> destinationAddresses)
         {
-            var googleResponseJson = GetDistanceFromSubjectGoogle(originAddress, FormatAddressesForGoogleDistance(destinationAddresses));
+            if (string.IsNullOrEmpty(originAddress) || !destinationAddresses.Any())
+            {
+                return new DistanceResponse { StatusCode = 1, StatusMessage = "Origin Address and/or Destination Address(es) are missing." };
+            }
+
+            List<string> destinationAddressStringList = destinationAddresses.Select(destination => destination.Address.FullAddress).ToList();
+
+            var googleResponseJson = GetDistanceFromSubjectGoogle(originAddress, FormatAddressesForGoogleDistance(destinationAddressStringList));
 
             dynamic elements = (JObject.Parse(googleResponseJson) as dynamic).rows[0].elements;
 
             var destinations = new List<Destination>();
+
+            // Note - ELEMENTS response from google is ordered according to the order passed in.  So as we loop through each item, it 
+            //        is guaranteed (by Google) that they will be in the same order
             foreach (var element in elements)
             {
-                var address = (JObject.Parse(googleResponseJson) as dynamic).destination_addresses;
-                destinations.Add(new Destination
-                {
-                    Address = address[elements.IndexOf(element)],
-                    DistanceFromOrigin = element.distance.text.Value
-                });
+                string distanceText = element.distance.text.Value == "1.0 mi" ? "1.0 mile" : element.distance.text.Value.Replace("mi", "miles");
+                var addressGeocoded = (JObject.Parse(googleResponseJson) as dynamic).destination_addresses;
+
+                Destination updateDestination = destinationAddresses[elements.IndexOf(element)];
+                updateDestination.GeocodedAddress = new Address { FullAddress = addressGeocoded[elements.IndexOf(element)] };
+                updateDestination.DistanceFromOrigin = distanceText;
+                destinations.Add(updateDestination);
             }
 
             return new DistanceResponse
             {
-                OriginAddress = (JObject.Parse(googleResponseJson) as dynamic).origin_addresses[0],
+                StatusCode = 0,
+                StatusMessage = "Success",
+                OriginAddress = new Address { FullAddress = originAddress.Replace("+", " ") },
+                GeocodedOriginAddress = new Address { FullAddress = (JObject.Parse(googleResponseJson) as dynamic).origin_addresses[0] },
                 Destinations = destinations
             };
         }
@@ -102,4 +116,5 @@ namespace Ryan.AddressUtility.Repositories
         #endregion
 
     }
+
 }
