@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ryan.AddressUtility.Interfaces
 {
-    public interface IGeoCodeAddress
+    public interface IGeocodeAddress
     {
 
         /// <summary>
@@ -15,7 +15,7 @@ namespace Ryan.AddressUtility.Interfaces
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        Address GeoCodeAddress(Address address);
+        Address GeocodeAddress(Address address);
 
         /// <summary>
         ///     Standardizes and address to USPS and lat/lon, but returns decision information
@@ -23,14 +23,14 @@ namespace Ryan.AddressUtility.Interfaces
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        GeoCodeResponse GeoCodeAddressWithDecisionInfo(Address address);
+        GeoCodeResponse GeocodeAddressWithDecisionInfo(Address address);
 
         /// <summary>
         ///     Standardizes a list of addresses to USPS address format with address parts
         /// </summary>
         /// <param name="addresses"></param>
         /// <returns></returns>
-        List<Address> GeoCodeAddresses(List<Address> addresses);
+        List<Address> GeocodeAddresses(List<Address> addresses);
 
 
     }

@@ -18,8 +18,17 @@
         <DataTemplate DataType="{x:Type viewmodels:BingStreetsideViewModel}">
             <views:BingStreetsideView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewmodels:BingAddressGeoCodingViewModel}">
+        <DataTemplate DataType="{x:Type viewmodels:BingAddressGeocodingViewModel}">
             <views:BingAddressGeoCodingView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:PropertySearchViewModel}">
+            <views:PropertySearchView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:DeedsViewModel}">
+            <views:DeedsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:HyperlinkViewModel}">
+            <views:HyperlinkView />
         </DataTemplate>
         <Style x:Key="NavButtons" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -37,14 +46,14 @@
             </Style.Triggers>
         </Style>
         <Style x:Key="NavButtonsSelected" TargetType="Button" BasedOn="{StaticResource NavButtons}">
-            <Setter Property="Background" Value="LightSeaGreen" />
+            <Setter Property="Background" Value="#017dad" />
             <Setter Property="Foreground" Value="White" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type Button}">
-                                <Border Background="LightSeaGreen"
+                                <Border Background="#016d98"
                                         Cursor="Arrow"
                                         Padding="20,10">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -93,7 +102,10 @@
                 <Button x:Name="proximityButton" Content="Proximity To Subject" Command="{Binding Path=LoadProximityCommand}" Style="{StaticResource NavButtons}" />
                 <Button x:Name="bingMapButton" Content="Bing Maps" Command="{Binding Path=LoadBingMapCommand}" Style="{StaticResource NavButtons}" />
                 <Button x:Name="bingStreetside" Content="Bing Streetside" Command="{Binding Path=LoadBingStreetsideCommand}" Style="{StaticResource NavButtons}" />
-                <Button x:Name="bingAddress" Content="Bing Address" Command="{Binding Path=LoadBingAddressCommand}" Style="{StaticResource NavButtonsSelected}" />
+                <Button x:Name="bingAddress" Content="Bing Address" Command="{Binding Path=LoadBingAddressCommand}" Style="{StaticResource NavButtons}" />
+                <Button x:Name="propertySearch" Content="Property Search" Command="{Binding Path=LoadPropertySearchCommand}" Style="{StaticResource NavButtons}" />
+                <Button x:Name="deeds" Content="Deeds" Command="{Binding Path=LoadDeedsCommand}" Style="{StaticResource NavButtonsSelected}" />
+                <Button x:Name="hyperlinks" Content="Hyperlinks" Command="{Binding Path=LoadHyperlinkCommand}" Style="{StaticResource NavButtons}" />
             </StackPanel>
 
             <ContentControl Content="{Binding Path=CurrentViewModel}" Grid.Row="1" VerticalContentAlignment="Top"></ContentControl>

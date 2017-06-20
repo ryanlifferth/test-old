@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ryan.Maps.Win.ViewModels
 {
-    public class BingAddressGeoCodingViewModel : ViewModelBase
+    public class BingAddressGeocodingViewModel : ViewModelBase
     {
 
         #region Fields

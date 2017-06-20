@@ -17,7 +17,7 @@ namespace Ryan.AddressUtility.Repositories
     ///     of this transaction.  So for our purposes - we are technically violating their terms of use.
     ///     See https://developers.google.com/maps/documentation/geocoding/ for more information
     /// </summary>
-    public class GoogleGeoCodeAddressRepository : IGeoCodeAddress
+    public class GoogleGeocodeAddressRepository : IGeocodeAddress
     {
 
         #region Fields
@@ -27,7 +27,7 @@ namespace Ryan.AddressUtility.Repositories
         #endregion
 
         #region IAddressVerification Implementation
-        public Address GeoCodeAddress(Address address)
+        public Address GeocodeAddress(Address address)
         {
             // Validate that the minimum input params have been set (street + city + state OR street + zip)
             if (ValidateMinimumAddressParts(address) == false)
@@ -45,6 +45,7 @@ namespace Ryan.AddressUtility.Repositories
             geoCodedAddress.StreetName = GetValueFromAddressComponent(addressComponents, "route");
             geoCodedAddress.City = GetValueFromAddressComponent(addressComponents, "locality");
             geoCodedAddress.State = GetValueFromAddressComponent(addressComponents, "administrative_area_level_1");
+            geoCodedAddress.County = GetValueFromAddressComponent(addressComponents, "administrative_area_level_2");
             var zipSuffix = GetValueFromAddressComponent(addressComponents, "postal_code_suffix");
             geoCodedAddress.Zip = string.IsNullOrEmpty(zipSuffix) ? GetValueFromAddressComponent(addressComponents, "postal_code") : GetValueFromAddressComponent(addressComponents, "postal_code") + "-" + zipSuffix;
 
@@ -61,17 +62,17 @@ namespace Ryan.AddressUtility.Repositories
             return geoCodedAddress;
         }
         
-        public GeoCodeResponse GeoCodeAddressWithDecisionInfo(Address address)
+        public GeoCodeResponse GeocodeAddressWithDecisionInfo(Address address)
         {
             throw new NotImplementedException();
         }
         
-        public List<Address> GeoCodeAddresses(List<Address> addresses)
+        public List<Address> GeocodeAddresses(List<Address> addresses)
         {
             var geoCodedAddresses = new List<Address>();
             foreach (var address in addresses)
             {
-                geoCodedAddresses.Add(GeoCodeAddress(address));
+                geoCodedAddresses.Add(GeocodeAddress(address));
             }
             return geoCodedAddresses;
         }

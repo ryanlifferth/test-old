@@ -2,6 +2,7 @@
 using Microsoft.Maps.MapControl.WPF.Design;
 using Ryan.AddressUtility.Models;
 using Ryan.Maps.Win.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Device.Location;
 using System.Threading.Tasks;
@@ -9,7 +10,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace Ryan.Maps.Win.Views
 {
@@ -22,12 +25,17 @@ namespace Ryan.Maps.Win.Views
         #region Fields
         private LocationConverter _locationConverter = new LocationConverter();
         private BingMapViewModel _bingMapViewModel;
+
+        private List<Pushpin> _modifiedPushpins = new List<Pushpin>();
+        Location _originalLocation;
+
         #endregion
 
         public BingMapView()
         {
             InitializeComponent();
             bingMap.Loaded += BingMap_Loaded;
+            bingMap.ViewChangeEnd += BingMap_ViewChangeEnd;
 
             _bingMapViewModel = new BingMapViewModel
             {
@@ -82,6 +90,9 @@ namespace Ryan.Maps.Win.Views
         {
             // Set Default location of map
             SetMapDefaults();
+
+            //_originalLocation = RyanTestPin.Location;
+            //return;
             AddEiffelTowerPin();
 
             var distance = new AddressUtility.Utilities.StraightLineDistance();
@@ -93,7 +104,7 @@ namespace Ryan.Maps.Win.Views
                 new Destination { Address = _bingMapViewModel.Comp3.Address }
             };
 
-            var geoCodeRepo = new AddressUtility.Repositories.BingGeoCodeAddressRepository();
+            var geoCodeRepo = new AddressUtility.Repositories.BingGeocodeAddressRepository();
             var distances = await Task.Run(() => distance.GetProximitiesByDestination(_bingMapViewModel.SubjectAddress, comps, geoCodeRepo));
 
             // Update distances 
@@ -142,6 +153,8 @@ namespace Ryan.Maps.Win.Views
             bingMap.Mode = new Microsoft.Maps.MapControl.WPF.RoadMode();
             //bingMap.Mode = new Microsoft.Maps.MapControl.WPF.AerialMode(true);
 
+            //bingMap.SetView(new Location(48.8530, 2.3498), 10.0);
+            //return;
 
             var pin = new Pushpin
             {
@@ -165,7 +178,6 @@ namespace Ryan.Maps.Win.Views
             //});
 
             this.bingMap.Children.Add(pin);
-
         }
 
         private void AddPropertyPushpin(Location location, string propertyName, string templateType = "Comp")
@@ -176,19 +188,39 @@ namespace Ryan.Maps.Win.Views
                 ContentTemplate = (DataTemplate)this.FindResource("PropertyPushpin" + templateType + "DataTemplate" + pushpinTemplateSize),
                 Location = location,
                 Style = (Style)this.FindResource("AddressPushpin"),
-                PositionOrigin = PositionOrigin.BottomLeft,
+                PositionOrigin = PositionOrigin.TopLeft,
                 Template = (ControlTemplate)this.FindResource(templateType + "PushpinTemplate"),
-                Tag = templateType
+                Tag = templateType,
+                AllowDrop = true
             };
+            pin.MouseDown += MoveMouseDown_Handler;
+            pin.Loaded += (sender, e) => Pin_Loaded(sender, e, location);
             pin.SetBinding(Pushpin.ContentProperty, new Binding
             {
                 //Path = new PropertyPath("SubjectAddress"),  // This is the name of the property to bind to
                 Path = new PropertyPath(propertyName),      // This is the name of the property to bind to
-                Source = this._bingMapViewModel             // This is the source of data item to bind to
+                Source = this._bingMapViewModel            // This is the source of data item to bind to
             });
-
+            
             this.bingMap.Children.Add(pin);
         }
+
+        /// <summary>
+        ///     Set the actual location of the property in the PathPointer tag
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <param name="location"></param>
+        private void Pin_Loaded(object sender, RoutedEventArgs e, Location location)
+        {
+            var pin = sender as Pushpin;
+            var pointer = pin.Template.FindName("PathPointer", pin) as Path;
+            if (pointer != null)
+            {
+                pointer.Tag = location;
+            }
+        }
+
 
 
         /// <summary>
@@ -232,7 +264,6 @@ namespace Ryan.Maps.Win.Views
 
             // Set the map view
             bingMap.SetView(center, zoom);
-
         }
 
         /// <summary>
@@ -248,6 +279,16 @@ namespace Ryan.Maps.Win.Views
             bingMap.SetView(newZoomLevel, 0); // This maintains Bing animation
         }
 
+        private void BingMap_ViewChangeEnd(object sender, MapEventArgs e)
+        {
+            // Resize pointers on pushpins that have been moved
+            foreach (var pin in _modifiedPushpins)
+            {
+                DrawPointerForNewLocation(bingMap, pin);
+            }
+            Console.WriteLine("View changed");
+        }
+        
         /// <summary>
         ///     Changes the map type from Road to Aerial and back
         /// </summary>
@@ -343,16 +384,163 @@ namespace Ryan.Maps.Win.Views
             _bingMapViewModel.ShowDetailedMapPushpin = button.IsChecked ?? false;
         }
 
+        Vector _mouseToMarker;
+        Pushpin _pushpin;
+        bool _dragPin;
+
         private void ExpandPushpin_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            //((Pushpin)((ContentPresenter)((TextBlock)sender).TemplatedParent).TemplatedParent).ContentTemplate = (DataTemplate)this.FindResource("PropertyPushpinSubjectDataTemplate");
-
             var textBlock = sender as TextBlock;
             var pushpinContentPresenter = textBlock?.TemplatedParent as ContentPresenter;
             var pushpin = pushpinContentPresenter?.TemplatedParent as Pushpin;
-            var pushpinType = string.IsNullOrEmpty(textBlock.Tag.ToString()) ? "Comp" : textBlock.Tag.ToString();
-            pushpin.ContentTemplate = (DataTemplate)this.FindResource("PropertyPushpin"+ pushpinType + "DataTemplate");
+            //var pushpinType = string.IsNullOrEmpty(textBlock.Tag.ToString()) ? "Comp" : textBlock.Tag.ToString();
+            //pushpin.ContentTemplate = (DataTemplate)this.FindResource("PropertyPushpin" + pushpinType + "DataTemplate");
+
+            e.Handled = true;
+            _pushpin = pushpin;
+            _dragPin = true;
 
         }
+
+        private void MoveMouseDown_Handler(object sender, MouseButtonEventArgs e)
+        {
+            var pushpin = sender.GetType() == typeof(Pushpin) ? sender as Pushpin : (sender as Grid)?.TemplatedParent as Pushpin;
+
+            e.Handled = true;
+            _pushpin = pushpin;
+            _dragPin = true;
+            //_mouseToMarker = Point.Subtract(ParentContainer.LocationToViewportPoint(pushpin.Location), e.GetPosition(ParentContainer));
+            if (_modifiedPushpins == null) _modifiedPushpins = new List<Pushpin>();
+            if (_modifiedPushpins.Exists(x => x == _pushpin) == false) _modifiedPushpins.Add(_pushpin);
+
+            //Console.WriteLine($"Starting Location: {_pushpin.Location.Latitude}, { _pushpin.Location.Longitude}");
+            //var viewportPoint = bingMap.LocationToViewportPoint(_pushpin.Location);
+            //Console.WriteLine($"End Viewport Point: {viewportPoint.X}, { viewportPoint.Y}");
+        }
+
+        private void MoveMouseUp_Handler(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Released)
+            {
+                if (_dragPin && _pushpin != null)
+                {
+                    //Console.WriteLine($"End Location: {_pushpin.Location.Latitude}, { _pushpin.Location.Longitude}");
+                    //var viewportPoint = bingMap.LocationToViewportPoint(_pushpin.Location);
+                    //Console.WriteLine($"End Viewport Point: {viewportPoint.X}, { viewportPoint.Y}");
+                }
+            }
+
+            _dragPin = false;
+            _pushpin = null;
+        }
+
+        private void MoveMouse_Handler(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                if (_dragPin && _pushpin != null)
+                {
+                    _pushpin.Location = bingMap.ViewportPointToLocation(Point.Add(e.GetPosition(bingMap), _mouseToMarker));
+                    
+                    //var difference = Point.Subtract(bingMap.LocationToViewportPoint(_originalLocation), bingMap.LocationToViewportPoint(_pushpin.Location));
+                    //var pathPointer = (Path)_pushpin.Template.FindName("PathPointer", _pushpin);
+                    //pathPointer.Data = Geometry.Parse($"M3,15 L{difference.X},{difference.Y} L12,3");
+                    DrawPointerForNewLocation(bingMap, _pushpin);
+
+                    // IDEA:  Instead of moving the location - just mess with the margin or triagle (pointer) size
+                    //_pushpin.Margin = new Thickness(20, 0, 0, 0);
+
+                    e.Handled = true;
+                    //Console.WriteLine($"{_pushpin}, { _pushpin.PositionOrigin.Y}");
+                }
+            }
+        }
+
+        private void DrawPointerForNewLocation(Map map, Pushpin pushpin)
+        {
+            if (map == null || pushpin == null) return;
+            
+            // Get the pointer from the pushpin template
+            var pathPointer = pushpin.Template.FindName("PathPointer", pushpin) as Path;
+
+            var actualLocation = pathPointer.Tag as Location;
+
+            // Get the distance between the original location and the new location in Points
+            var pinDistance = Point.Subtract(map.LocationToViewportPoint(actualLocation), map.LocationToViewportPoint(pushpin.Location));
+
+
+            if (pinDistance != null && pathPointer != null)
+            {
+                BuildInfoboxPointer(pushpin, pinDistance, pathPointer);
+            }
+        }
+
+        /// <summary>
+        ///     Moves/builds the pointer to the appropriate corner of the 
+        ///     infobox (i.e, top-left, bottom-left, top-right, or bottom-right) 
+        ///     depending on location
+        /// </summary>
+        /// <param name="pushpin"></param>
+        /// <param name="pinDistance"></param>
+        /// <param name="pathPointer"></param>
+        private static void BuildInfoboxPointer(Pushpin pushpin, Vector pinDistance, Path pathPointer)
+        {
+            // Draw a triangle using path.  Starting point is upper right-hand corner of the pushpin infobox which is 0,0
+            // - UPPER-LEFT corner pointer, points are:  1,10 - original pin location/point - 6,1
+
+            // - LOWER-LEFT corner pointer, points are:  1,{infoboxHeight - 9} - original pin location/point - 6,{infoboxHeight - 2}
+            //   - For example an infobox that is 47px high, points are 1,38 - original pin location/point - 6,45
+
+            // - UPPER-RIGHT corner pointer, points are: {infoboxWidth - 6},1 - original pin location/point - {infoboxWidth - 2},10
+            //   - For example an infobox that is 107px wide, points are 101,1 - original pin location/point - 105,10
+
+            // - LOWER-RIGHT corner pointer, points are: {infoboxWidth - 2},{infoboxHeight - 9} - original pin location/point - {infoboxWidth - 6},{infoboxHieght - 2}
+            //   - For example an infobox that is 107px wide x 47px high, points are 105,41 - original pin location/point - 101,45
+
+            // Get an instance of the infobox (which is actually a rectangle around some text)
+            var infobox = pushpin.Template.FindName("Infobox", pushpin) as Rectangle;
+            // Get the height and width of the infobox
+            double infoboxHeight = infobox != null || infobox.ActualHeight != double.NaN ? infobox.ActualHeight : 0;
+            double infoboxWidth = infobox != null || infobox.ActualWidth != double.NaN ? infobox.ActualWidth : 0;
+            // Set the default values for the path (default values are for upper-right corner of the infobox)
+            double x1 = 1,
+                   y1 = 10,
+                   x2 = pinDistance.X,  // -4
+                   y2 = pinDistance.Y,  // -2
+                   x3 = 6,
+                   y3 = 1;
+
+            // Set the values for lower-left
+            if (pinDistance.Y > infoboxHeight / 2 && pinDistance.X < infoboxWidth)
+            {
+                //pathPointer.Data = Geometry.Parse($"M4,{infoboxHeight - 14} L{pinDistance.X},{pinDistance.Y} L30,{infoboxHeight - 1}");
+                x1 = 1;
+                y1 = infoboxHeight - 9;
+                x3 = 6;
+                y3 = infoboxHeight - 2;
+            }
+
+            // Set the values for upper-right
+            if (pinDistance.Y < infoboxHeight && pinDistance.X > infoboxWidth / 2)
+            {
+                x1 = infoboxWidth - 6;
+                y1 = 1;
+                x3 = infoboxWidth - 2;
+                y3 = 10;
+            }
+
+            // Set the values for lower-right
+            if (pinDistance.Y > infoboxHeight / 2 && pinDistance.X > infoboxWidth / 2)
+            {
+                x1 = infoboxWidth - 2;
+                y1 = infoboxHeight - 9;
+                x3 = infoboxWidth - 6;
+                y3 = infoboxHeight - 2;
+            }
+
+            // Last, build and set the actual path (pointer)
+            pathPointer.Data = Geometry.Parse($"M{x1},{y1} L{x2},{y2} L{x3},{y3}");
+        }
+
     }
 }

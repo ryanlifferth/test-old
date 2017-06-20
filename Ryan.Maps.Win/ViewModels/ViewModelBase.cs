@@ -38,6 +38,13 @@ namespace Ryan.Maps.Win.ViewModels
                 handler(this, e);
             }
         }
+
+        internal void CallPropertyChangedOnAll()
+        {
+            this.PropertyChanged(this, new PropertyChangedEventArgs(string.Empty));
+        }
+
+
     }
 
 }

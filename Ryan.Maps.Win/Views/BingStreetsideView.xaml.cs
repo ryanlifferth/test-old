@@ -65,10 +65,10 @@ namespace Ryan.Maps.Win.Views
                 Address.Text = "549 Muskmelon Way, Saratoga Springs, UT 84045";
             }
 
-            var geoCodeRepo = new AddressUtility.Repositories.BingGeoCodeAddressRepository();
+            var geoCodeRepo = new AddressUtility.Repositories.BingGeocodeAddressRepository();
             //var address = geoCodeRepo.GeoCodeAddress(new AddressUtility.Models.Address { AddressLine1 = "549 Muskmelon Way", City = "Saratoga Springs", State = "Utah", Zip = "84045" });
-            //var address = geoCodeRepo.GeoCodeAddress(new AddressUtility.Models.Address { FullAddress = "549 Muskmelon Way, Saratoga Springs, UT 84045" });
-            var propertyAddress = geoCodeRepo.GeoCodeAddress(new AddressUtility.Models.Address { FullAddress = Address.Text });
+            //var address = geoCodeRepo.GeocodeAddress(new AddressUtility.Models.Address { FullAddress = "549 Muskmelon Way, Saratoga Springs, UT 84045" });
+            var propertyAddress = geoCodeRepo.GeocodeAddress(new AddressUtility.Models.Address { FullAddress = Address.Text });
 
             if (string.IsNullOrEmpty(propertyAddress?.Longitude) == false && string.IsNullOrEmpty(propertyAddress?.Latitude) == false)
             {

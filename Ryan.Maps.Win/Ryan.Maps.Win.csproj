@@ -72,16 +72,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Converters\AddressConverter.cs" />
+    <Compile Include="Converters\CityStateZipConverter.cs" />
+    <Compile Include="Converters\NullToVisibility.cs" />
+    <Compile Include="Converters\ZeroToVisibility.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Comp.cs" />
+    <Compile Include="Models\County.cs" />
+    <Compile Include="Models\FederalState.cs" />
     <Compile Include="Resources\Spinner.xaml.cs">
       <DependentUpon>Spinner.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\BingAddressGeoCodingViewModel.cs" />
+    <Compile Include="ViewModels\BingAddressGeocodingViewModel.cs" />
     <Compile Include="ViewModels\BingMapViewModel.cs" />
     <Compile Include="ViewModels\BingStreetsideViewModel.cs" />
+    <Compile Include="ViewModels\DeedsViewModel.cs" />
     <Compile Include="ViewModels\DelegateCommand.cs" />
+    <Compile Include="ViewModels\HyperlinkViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\PropertySearchViewModel.cs" />
     <Compile Include="ViewModels\ProximityViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\BingAddressGeoCodingView.xaml.cs">
@@ -92,6 +102,15 @@
     </Compile>
     <Compile Include="Views\BingStreetsideView.xaml.cs">
       <DependentUpon>BingStreetsideView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DeedsView.xaml.cs">
+      <DependentUpon>DeedsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HyperlinkView.xaml.cs">
+      <DependentUpon>HyperlinkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PropertySearchView.xaml.cs">
+      <DependentUpon>PropertySearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProximityView.xaml.cs">
       <DependentUpon>ProximityView.xaml</DependentUpon>
@@ -112,6 +131,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\Styles\ControlStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\BingAddressGeoCodingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -121,6 +144,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BingStreetsideView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DeedsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HyperlinkView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PropertySearchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -146,6 +181,10 @@
     <Content Include="Resources\Html\Streetside.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Images\SearchIcon.png" />
+    <Resource Include="Resources\Images\SearchIconWhite.png" />
+    <Resource Include="Resources\Images\FileOpenIcon.png" />
+    <Resource Include="Resources\Images\FileOpenIconWhite.png" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

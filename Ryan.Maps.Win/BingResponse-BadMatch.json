@@ -1,0 +1,109 @@
+{
+    "authenticationResultCode": "ValidCredentials",
+    "brandLogoUri": "http://dev.virtualearth.net/Branding/logo_powered_by.png",
+    "copyright": "Copyright © 2016 Microsoft and its suppliers. All rights reserved. This API cannot be accessed and the content and any results may not be used, reproduced or transmitted in any manner without express written permission from Microsoft Corporation.",
+    "resourceSets": [
+        {
+            "estimatedTotal": 2,
+            "resources": [
+                {
+                    "__type": "Location:http://schemas.microsoft.com/search/local/ws/rest/v1",
+                    "bbox": [
+                        40.3996063681227,
+                        -111.94108151151,
+                        40.407331803264,
+                        -111.927555573451
+                    ],
+                    "name": "N Muskmelon Way, Saratoga Springs, UT 84045",
+                    "point": {
+                        "type": "Point",
+                        "coordinates": [
+                            40.4034690856934,
+                            -111.93431854248
+                        ]
+                    },
+                    "address": {
+                        "addressLine": "N Muskmelon Way",
+                        "adminDistrict": "UT",
+                        "adminDistrict2": "Utah Co.",
+                        "countryRegion": "United States",
+                        "formattedAddress": "N Muskmelon Way, Saratoga Springs, UT 84045",
+                        "locality": "Saratoga Springs",
+                        "postalCode": "84045"
+                    },
+                    "confidence": "Medium",
+                    "entityType": "RoadBlock",
+                    "geocodePoints": [
+                        {
+                            "type": "Point",
+                            "coordinates": [
+                                40.4034690856934,
+                                -111.93431854248
+                            ],
+                            "calculationMethod": "Interpolation",
+                            "usageTypes": [
+                                "Display",
+                                "Route"
+                            ]
+                        }
+                    ],
+                    "matchCodes": [
+                        "Ambiguous",
+                        "Good",
+                        "UpHierarchy"
+                    ]
+                },
+                {
+                    "__type": "Location:http://schemas.microsoft.com/search/local/ws/rest/v1",
+                    "bbox": [
+                        40.3984161825758,
+                        -111.940730439805,
+                        40.4061416177172,
+                        -111.927204740859
+                    ],
+                    "name": "W Muskmelon Way, Saratoga Springs, UT 84045",
+                    "point": {
+                        "type": "Point",
+                        "coordinates": [
+                            40.4022789001465,
+                            -111.933967590332
+                        ]
+                    },
+                    "address": {
+                        "addressLine": "W Muskmelon Way",
+                        "adminDistrict": "UT",
+                        "adminDistrict2": "Utah Co.",
+                        "countryRegion": "United States",
+                        "formattedAddress": "W Muskmelon Way, Saratoga Springs, UT 84045",
+                        "locality": "Saratoga Springs",
+                        "postalCode": "84045"
+                    },
+                    "confidence": "Medium",
+                    "entityType": "RoadBlock",
+                    "geocodePoints": [
+                        {
+                            "type": "Point",
+                            "coordinates": [
+                                40.4022789001465,
+                                -111.933967590332
+                            ],
+                            "calculationMethod": "Interpolation",
+                            "usageTypes": [
+                                "Display",
+                                "Route"
+                            ]
+                        }
+                    ],
+                    "matchCodes": [
+                        "Ambiguous",
+                        "Good",
+                        "UpHierarchy"
+                    ]
+                }
+            ]
+        }
+    ],
+    "statusCode": 200,
+    "statusDescription": "OK",
+    "traceId": "31035eed44274314a1f8f186bb6d5641|CO30276240|7.7.0.0|CO3SCH010264907, CO3SCH010313812, CO3SCH010265210"
+}

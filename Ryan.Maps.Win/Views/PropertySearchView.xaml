@@ -1,0 +1,852 @@
+﻿<UserControl x:Class="Ryan.Maps.Win.Views.PropertySearchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
+             xmlns:local="clr-namespace:Ryan.Maps.Win.Views"
+             xmlns:c="clr-namespace:Ryan.Maps.Win.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="800">
+    <UserControl.Resources>
+
+        <Style x:Key="SearchResultsUseParcelButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#00bb3f" />
+            <Setter Property="BorderBrush" Value="#238c47" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Content" Value="Use this parcel" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="12.5" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Height" Value="30px" />
+            <Setter Property="Margin" Value="0,10,0, 0" />
+            <Setter Property="Padding" Value="15,2" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" 
+                                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            Background="{TemplateBinding Background}"
+                                                            Padding="{TemplateBinding Padding}">
+                            <ContentPresenter x:Name="contentPresenter" 
+                                                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            </ContentPresenter>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!--Mouse Over-->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#238c47"/>
+                            </Trigger>
+                            <!--Mouse Down-->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#1f7a3f"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SearchResultsUseParcelButtonVisibilityStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource SearchResultsUseParcelButton}">
+            <Setter Property="Button.IsEnabled" Value="True" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=SearchResults2, Path=SelectedItem}" Value="{x:Null}">
+                    <Setter Property="Button.IsEnabled" Value="False" />
+                </DataTrigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#f0eeee" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SearchResultsHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="#017dad" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Foreground" Value="#017dad" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="5" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#f1f7fc" />
+                    <Setter Property="Foreground" Value="#003663" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SearchResultsRowStyle" TargetType="DataGridRow">
+            <Setter Property="BorderBrush" Value="LightGray" />
+            <Setter Property="BorderThickness" Value="0,1,0,0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#e2f1fd" />
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SearchResultsCellStyle" TargetType="{x:Type DataGridCell}">
+            <Setter Property="FontSize" Value="12.5" />
+            <Setter Property="Padding" Value="4,4,15,4" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Border Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                                    Padding="{TemplateBinding Padding}" 
+                                                    SnapsToDevicePixels="True">
+                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True" >
+                    <Setter Property="BorderBrush" Value="#017dad" />
+                    <Setter Property="Background" Value="#017dad" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="AddressHeader" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Background" Value="#017dad" />
+            <Setter Property="BorderBrush" Value="LightGray" />
+            <Setter Property="BorderThickness" Value="0,0,1,0" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="5,6,10,4" />
+        </Style>
+
+        <Style x:Key="BorderlessTabControl" TargetType="TabControl">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid KeyboardNavigation.TabNavigation="Local">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <TabPanel x:Name="HeaderPanel"
+                                  HorizontalAlignment="Stretch"
+                                  Grid.Row="0"
+                                  Panel.ZIndex="1"
+                                  Margin="0,0,4,-1"
+                                  IsItemsHost="True"
+                                  KeyboardNavigation.TabIndex="1"
+                                  Background="Transparent" />
+
+                            <Border x:Name="Border"
+                            Grid.Row="1"
+                            BorderThickness="1"
+                            KeyboardNavigation.TabNavigation="Local"
+                            KeyboardNavigation.DirectionalNavigation="Contained"
+                            KeyboardNavigation.TabIndex="2">
+
+                                <Border.Background>
+                                    <SolidColorBrush Color="White"/>
+                                </Border.Background>
+
+                                <Border.BorderBrush>
+                                    <SolidColorBrush Color="White"/>
+                                </Border.BorderBrush>
+
+                                <ContentPresenter x:Name="PART_SelectedContentHost"
+                                          Margin="4"
+                                          ContentSource="SelectedContent" />
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DataMasterTab" TargetType="TabItem">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Name="Panel" BorderThickness="1" BorderBrush="#017dad">
+                            <Grid>
+                                <ContentPresenter x:Name="ContentSite"
+							                    VerticalAlignment="Center"
+							                    HorizontalAlignment="Center"
+							                    ContentSource="Header"
+                                                Margin="10">
+                                </ContentPresenter>
+                                <fa:ImageAwesome x:Name="DownArrow"
+                                             Icon="SortDesc"
+                                             Height="16"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Bottom"
+                                             Margin="0,0,0,-10"
+                                             Foreground="#017dad"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Panel" Property="Background" Value="#017dad" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Panel" Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="#cccccc" />
+                                <Setter TargetName="Panel" Property="BorderBrush" Value="#cccccc" />
+                                <Setter TargetName="Panel" Property="BorderThickness" Value="1"/>
+                                <Setter TargetName="DownArrow" Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DataMasterGrayTab" TargetType="TabItem">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Name="Panel"
+                            Margin="-2,10,7,0"
+                            BorderThickness="0">
+                            <Grid>
+                                <ContentPresenter x:Name="ContentSite"
+							                    VerticalAlignment="Center"
+							                    HorizontalAlignment="Center"
+							                    ContentSource="Header"
+                                                Margin="10">
+                                </ContentPresenter>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Panel" Property="Background" Value="White" />
+                                <Setter Property="Foreground" Value="Black" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Panel" Property="Background" Value="#939393" />
+                                <Setter Property="Foreground" Value="Black" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style  x:Key="TextBoxLabel" TargetType="{x:Type Label}">
+            <Setter Property="Foreground"
+                    Value="#545454" />
+            <Setter Property="FontFamily"
+                    Value="Segoe UI" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+
+        <Style x:Key="MyInputBox" TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="4,8" />
+            <Setter Property="Width" Value="500" />
+        </Style>
+
+        <Style x:Key="LinkButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="Foreground" Value="Navy" />
+            <Setter Property="Margin" Value="0,0,4,2" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="VerticalContentAlignment" Value="Bottom" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Button.IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Foreground" Value="Red" />
+                </Trigger>
+                <Trigger Property="Button.IsFocused" Value="true">
+                    <Setter Property="Foreground" Value="Red" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--ComboBox-->
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Border
+                  x:Name="Border" 
+                  Grid.ColumnSpan="2"
+                  CornerRadius="0"
+                  Background="White"
+                  BorderBrush="#888888"
+                  BorderThickness="1"/>
+                <Border 
+                  Grid.Column="0"
+                  CornerRadius="0" 
+                  Margin="1" 
+                  Background="White" 
+                  BorderBrush="LightGray"
+                  BorderThickness="0,0,0,0" />
+                <Path 
+                  x:Name="Arrow"
+                  Grid.Column="1"     
+                  Fill="#545454"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
+                />
+            </Grid>
+            <!--<ControlTemplate.Triggers>
+            <Trigger Property="ToggleButton.IsMouseOver" Value="true">
+                <Setter TargetName="Border" Property="Background" Value="#808080" />
+            </Trigger>
+            <Trigger Property="ToggleButton.IsChecked" Value="true">
+                <Setter TargetName="Border" Property="Background" Value="#E0E0E0" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Border" Property="Background" Value="#EEEEEE" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
+                <Setter Property="Foreground" Value="#888888"/>
+                <Setter TargetName="Arrow" Property="Fill" Value="#888888" />
+            </Trigger>
+        </ControlTemplate.Triggers>-->
+        </ControlTemplate>
+        <ControlTemplate x:Key="ComboBoxToggleButtonNoBorder" TargetType="{x:Type ToggleButton}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Border
+                  x:Name="Border" 
+                  Grid.ColumnSpan="2"
+                  CornerRadius="0"
+                  Background="White"
+                  BorderBrush="#888888"
+                  BorderThickness="0"/>
+                <Border 
+                  Grid.Column="0"
+                  CornerRadius="0" 
+                  Margin="1" 
+                  Background="White" 
+                  BorderBrush="LightGray"
+                  BorderThickness="0,0,0,0" />
+                <Path 
+                  x:Name="Arrow"
+                  Grid.Column="1"     
+                  Fill="#545454"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
+                />
+            </Grid>
+            <!--<ControlTemplate.Triggers>
+            <Trigger Property="ToggleButton.IsMouseOver" Value="true">
+                <Setter TargetName="Border" Property="Background" Value="#808080" />
+            </Trigger>
+            <Trigger Property="ToggleButton.IsChecked" Value="true">
+                <Setter TargetName="Border" Property="Background" Value="#E0E0E0" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Border" Property="Background" Value="#EEEEEE" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
+                <Setter Property="Foreground" Value="#888888"/>
+                <Setter TargetName="Arrow" Property="Fill" Value="#888888" />
+            </Trigger>
+        </ControlTemplate.Triggers>-->
+        </ControlTemplate>
+        <!--ComboBox-->
+        <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
+            <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
+        </ControlTemplate>
+
+        <Style  x:Key="StyledComboBoxNoBorder" TargetType="{x:Type ComboBox}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Grid>
+                            <ToggleButton 
+                            Name="ToggleButton" 
+                            Template="{StaticResource ComboBoxToggleButtonNoBorder}"
+                            Grid.Column="2" 
+                            Focusable="false"
+                            IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                            ClickMode="Press">
+                            </ToggleButton>
+                            <ContentPresenter Name="ContentSite" IsHitTestVisible="False"  Content="{TemplateBinding SelectionBoxItem}"
+                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                            Margin="10,3,23,3"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left" />
+                            <TextBox x:Name="PART_EditableTextBox"
+                            Style="{x:Null}" 
+                            Template="{StaticResource ComboBoxTextBox}" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Center" 
+                            Margin="10,3,23,3"
+                            Focusable="True" 
+                            Background="#FF3F3F3F"
+                            Foreground="Green"
+                            Visibility="Hidden"
+                            IsReadOnly="{TemplateBinding IsReadOnly}"/>
+                            <Popup 
+                            Name="Popup"
+                            Placement="Bottom"
+                            IsOpen="{TemplateBinding IsDropDownOpen}"
+                            AllowsTransparency="True" 
+                            Focusable="False"
+                            PopupAnimation="Slide">
+
+                                <Grid Name="DropDown"
+                              SnapsToDevicePixels="True"                
+                              MinWidth="{TemplateBinding ActualWidth}"
+                              MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border 
+                                x:Name="DropDownBorder"
+                                Background="White"
+
+                                BorderThickness="1"
+                                BorderBrush="#888888"/>
+                                    <ScrollViewer Margin="1,6,1,6" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#888888"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </Trigger>
+                            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                                <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="0"/>
+                                <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsEditable"  Value="true">
+                                <Setter Property="IsTabStop" Value="false"/>
+                                <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PlaceHolder" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MyInputBox}">
+            <!--http://stackoverflow.com/questions/11873378/adding-placeholder-text-to-textbox-->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Grid>
+                            <TextBox Text="{Binding Path=Text,
+                                                RelativeSource={RelativeSource TemplatedParent}, 
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged}"
+                                 x:Name="textSource" 
+                                 Background="Transparent" 
+                                 BorderThickness="{TemplateBinding BorderThickness}"
+                                     Padding="{TemplateBinding Padding}"
+                                 Panel.ZIndex="2" />
+                            <TextBox Text="{TemplateBinding Tag}" 
+                                     Background="{TemplateBinding Background}" 
+                                     BorderThickness="{TemplateBinding BorderThickness}" 
+                                     Padding="{TemplateBinding Padding}"
+                                     Panel.ZIndex="1">
+                                <TextBox.Style>
+                                    <Style TargetType="{x:Type TextBox}">
+                                        <Setter Property="Foreground" Value="Transparent"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=Text, Source={x:Reference textSource}}" Value="">
+                                                <Setter Property="Foreground" Value="LightGray"/>
+                                                <Setter Property="FontWeight" Value="Light" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="45" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1" Margin="10, 0, 10, 10" Padding="15,10">
+
+            <WrapPanel>
+
+                <!-- MLS/APN/Address Search-->
+                <TabControl x:Uid="TabControl"
+                    SelectedIndex="{Binding TabIndex, FallbackValue=0}">
+                    <TabControl.Resources>
+                        <Style TargetType="TabControl" 
+                           BasedOn="{StaticResource BorderlessTabControl}" />
+                        <Style TargetType="TabItem"
+                           BasedOn="{StaticResource DataMasterTab}" />
+                    </TabControl.Resources>
+                    <!-- Address Search-->
+                    <TabItem Header="Address" Width="110">
+                        <StackPanel Margin="10">
+                            <Grid HorizontalAlignment="Left" MinWidth="500">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Column="0"
+                                   Grid.Row="0"
+                                   Content="Address"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBoxLabel}" />
+                                <Button x:Name="ShowPartialAddressSearch"
+                                    Click="ShowPartialAddressSearch_Click"
+                                    Content="partial search" 
+                                    Grid.Column="1"
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Right"
+                                    Style="{StaticResource LinkButton}"
+                                    Tag="NormalAddressSearch" />
+
+                                <StackPanel Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Grid.Row="1"
+                                        Orientation="Vertical">
+                                    <TextBox x:Name="AddressSearchInput" 
+                                     Style="{StaticResource PlaceHolder}"
+                                     Tag="Full Address (e.g., 123 Main St, Springfield, UT 84041)"
+                                     Text="{Binding Path=Address}"
+                                     Width="600" />
+
+
+                                    <Border x:Name="PartialAddressSearchInput" 
+                                    BorderBrush="DarkGray"
+                                    BorderThickness="1"
+                                    HorizontalAlignment="Left"
+                                    Visibility="Visible">
+                                        <StackPanel Orientation="Horizontal" Margin="0">
+                                            <TextBox x:Name="StreetName" 
+                                             BorderThickness="0"
+                                             HorizontalAlignment="Left"
+                                             Tag="Partial Address"
+                                             Width="200"
+                                             Style="{StaticResource PlaceHolder}"/>
+                                            <Rectangle VerticalAlignment="Stretch" Width="1" Margin="0,4" Stroke="LightGray" />
+                                            <TextBox x:Name="City" 
+                                             BorderThickness="0"
+                                             HorizontalAlignment="Left"
+                                             Tag="City"
+                                             Width="160"
+                                             Style="{StaticResource PlaceHolder}"/>
+                                            <Rectangle VerticalAlignment="Stretch" Width="1" Margin="0,4" Stroke="LightGray" />
+                                            <ComboBox x:Name="AddressSearchState"
+                                                      DisplayMemberPath="StateName"
+                                                      FontWeight="Normal"
+                                                      FontSize="16"
+                                                      IsSynchronizedWithCurrentItem="True"
+                                                      SelectedIndex="2"
+                                                      ItemsSource="{Binding Path=FederalStateList}"
+                                                      SelectedValue="{Binding SelectedFederalState, Mode=TwoWay}"
+                                                      Style="{StaticResource StyledComboBoxNoBorder}" 
+                                                      Width="80" />
+                                            <Rectangle VerticalAlignment="Stretch" Width="1" Margin="0,4" Stroke="LightGray" />
+                                            <ComboBox x:Name="AddressSearchCounty"
+                                                      DisplayMemberPath="Name"
+                                                      FontWeight="Normal"
+                                                      FontSize="16"
+                                                      ItemsSource="{Binding ElementName=AddressSearchState, Path=SelectedItem.Counties}"
+                                                      SelectedItem="{Binding Path=County}"
+                                                      Style="{StaticResource StyledComboBoxNoBorder}" 
+                                                      Width="80" />
+                                            <Rectangle VerticalAlignment="Stretch" Width="1" Margin="0,4" Stroke="LightGray" />
+                                            <TextBox x:Name="Zip" 
+                                             BorderThickness="0"
+                                             HorizontalAlignment="Left"
+                                             Tag="Zip"
+                                             Width="80"
+                                             Style="{StaticResource PlaceHolder}"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                </StackPanel>
+
+                            </Grid>
+
+                        </StackPanel>
+                    </TabItem>
+                    <!-- APN Search-->
+                    <TabItem Header="APN Number" Margin="-1,0,0,0">
+                        <StackPanel Margin="10">
+                            <Label Style="{StaticResource TextBoxLabel}"
+                           Content="APN"/>
+                            <TextBox HorizontalAlignment="Left"
+                                 Style="{StaticResource MyInputBox}"
+                                 Text="{Binding Path=Apn}"  />
+                            <StackPanel Margin="0,10,0,0"
+                                Orientation="Horizontal">
+                                <StackPanel>
+                                    <Label Style="{StaticResource TextBoxLabel}"
+                                   Content="State"/>
+                                    <ComboBox x:Name="States"
+                                      HorizontalAlignment="Left" 
+                                      ItemsSource="{Binding Path=FederalStateList}"
+                                      DisplayMemberPath="StateName"
+                                      SelectedValue="{Binding SelectedFederalState, Mode=TwoWay}"
+                                      MinWidth="80"/>
+                                </StackPanel>
+                                <StackPanel Margin="10,0,0,0">
+                                    <Label Style="{StaticResource TextBoxLabel}"
+                                           Content="County"/>
+                                    <ComboBox x:Name="Counties"
+                                              HorizontalAlignment="Left" 
+                                              ItemsSource="{Binding ElementName=States, Path=SelectedItem.Counties}"
+                                              DisplayMemberPath="Name"
+                                              MinWidth="120"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                    <!-- MLS Search-->
+                    <TabItem Header="MLS Number" Margin="-1,0,0,0">
+                        <StackPanel Margin="10" >
+                            <Label Style="{StaticResource TextBoxLabel}"
+                           Content="MLS #"/>
+                            <TextBox HorizontalAlignment="Left" 
+                                 Style="{StaticResource MyInputBox}"
+                                 Text="{Binding Path=Mls}"/>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+
+                <StackPanel Orientation="Vertical">
+
+                    <TextBlock x:Name="SearchResultsHeader"
+                               FontFamily="Segoe UI"
+                               FontSize="22"
+                               Foreground="DarkSlateGray"
+                               Margin="20,10,0,0"
+                               Text="{Binding StandardizedParcelList.Count, StringFormat='{}{0} Properties Found', FallbackValue='-- Properties Found'}" />
+                    <Label x:Name="DataGridCaption"
+                           Content="Select a property and click the 'Use this parcel' button to continue"
+                           FontFamily="Segoe UI"
+                           FontSize="11"
+                           FontWeight="Light"
+                           Foreground="DarkGray"
+                           Margin="15,-5,0,0" />
+
+                    <DataGrid x:Name="SearchResults2"
+                              AlternationCount="99999"
+                              AutoGenerateColumns="False"
+                              Background="Transparent"
+                              BorderThickness="0,0,0,1"
+                              CellStyle="{StaticResource SearchResultsCellStyle}"
+                              ColumnHeaderStyle="{StaticResource SearchResultsHeaderStyle}"
+                              GridLinesVisibility="None"
+                              HeadersVisibility="Column"
+                              IsReadOnly="True"
+                              ItemsSource="{Binding StandardizedParcelList}"
+                              Margin="15,0,0,0"
+                              RowStyle="{StaticResource SearchResultsRowStyle}"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              MaxHeight="400"
+                              SelectedItem="{Binding Path=SelectedParcel}"
+                              SelectionUnit="FullRow" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="Auto" Header="Tax ID" Binding="{Binding Apn}" />
+                            <DataGridTextColumn Width="Auto" Header="MLS #" Binding="{Binding MlsNumber}" />
+                            <DataGridTextColumn Width="Auto" Header="Address" SortMemberPath="AddressLine1">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding Converter="{c:AddressConverter}">
+                                        <Binding Path="AddressLine1" />
+                                        <Binding Path="AddressLine2" TargetNullValue="" FallbackValue="" />
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="Auto" Header="City" Binding="{Binding City}" />
+                            <DataGridTextColumn Width="Auto" Header="County" Binding="{Binding County}" />
+                            <DataGridTextColumn Width="Auto" Header="State" Binding="{Binding State}" />
+                            <DataGridTextColumn Width="Auto" Header="Zip" Binding="{Binding Zip}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        
+                        <!--<Label Content="{Binding ElementName=SearchResults2, Path=SelectedItem.AddressLine1}" Width="300" />-->
+                        <!--<Label Content="{Binding SelectedParcel.AddressLine1}" Width="300" />-->
+                        <StackPanel Orientation="Vertical" Grid.Column="0">
+                            <Label x:Name="FullAddressLine1"
+                               FontSize="16"
+                               FontWeight="Normal"
+                               Foreground="DarkSlateGray"
+                               Margin="25,10,0,0"
+                               Padding="0">
+                                <Label.Content>
+                                    <MultiBinding Converter="{c:AddressConverter}">
+                                        <Binding Path="SelectedParcel.AddressLine1" TargetNullValue="" FallbackValue="" />
+                                        <Binding Path="SelectedParcel.AddressLine2" TargetNullValue="" FallbackValue="" />
+                                    </MultiBinding>
+                                </Label.Content>
+                            </Label>
+                            <Label x:Name="FullAddressLine2"
+                               FontSize="13"
+                               FontWeight="Light"
+                               Foreground="DarkSlateGray"
+                               Margin="25,0,0,0"
+                               Padding="0">
+                                <Label.Content>
+                                    <MultiBinding Converter="{c:CityStateZipConverter}">
+                                        <Binding Path="SelectedParcel.City" TargetNullValue="" FallbackValue="" />
+                                        <Binding Path="SelectedParcel.State" TargetNullValue="" FallbackValue="" />
+                                        <Binding Path="SelectedParcel.Zip" TargetNullValue="" FallbackValue="" />
+                                    </MultiBinding>
+                                </Label.Content>
+                            </Label>
+                        </StackPanel>
+
+                        <StackPanel x:Name="SelectedButtonContainer"
+                                    Grid.Column="1" 
+                                    HorizontalAlignment="Right" 
+                                    Orientation="Horizontal" 
+                                    VerticalAlignment="Top">
+                            <Button x:Name="UseParcel" Style="{StaticResource SearchResultsUseParcelButtonVisibilityStyle}" />
+                        </StackPanel>
+
+                    </Grid>
+
+
+                </StackPanel>
+
+                <!--<StackPanel Orientation="Vertical">
+
+                    <DataGrid x:Name="SearchResults"
+                              AlternatingRowBackground="#dedede"
+                              AutoGenerateColumns="False"
+                              BorderBrush="#017dad"
+                              BorderThickness="1"
+                              IsReadOnly="True"
+                              ColumnHeaderStyle="{StaticResource AddressHeader}"
+                              GridLinesVisibility="None"
+                              HeadersVisibility="Column"
+                              ItemsSource="{Binding StandardizedParcelList}"
+                              Margin="15,10,0,0">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="BorderBrush" Value="Red" />
+                                <Setter Property="BorderThickness" Value="0,1,0,0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=PreviousData}}" Value="{x:Null}">
+                                        <Setter Property="BorderThickness" Value="0" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="FontSize" Value="14" />
+                                <Setter Property="Padding" Value="4,3,3,3" />
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="Auto" Header="Tax ID" Binding="{Binding Apn}" />
+                            <DataGridTextColumn Width="Auto" Header="MLS #" Binding="{Binding MlsNumber}" />
+                            <DataGridTextColumn Width="Auto" Header="Address" >
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding Converter="{c:AddressConverter}">
+                                        <Binding Path="AddressLine1" />
+                                        <Binding Path="AddressLine2" TargetNullValue="" FallbackValue="" />
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="Auto" Header="City" Binding="{Binding City}" />
+                            <DataGridTextColumn Width="Auto" Header="County" Binding="{Binding County}" />
+                            <DataGridTextColumn Width="Auto" Header="State" Binding="{Binding State}" />
+                            <DataGridTextColumn Width="Auto" Header="Zip" Binding="{Binding Zip}">
+                                <DataGridTextColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource AddressHeader}">
+                                        <Setter Property="BorderBrush" Value="#017dad" />
+                                    </Style>
+                                </DataGridTextColumn.HeaderStyle>
+                            </DataGridTextColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </StackPanel>-->
+
+            </WrapPanel>
+
+        </Border>
+    </Grid>
+</UserControl>

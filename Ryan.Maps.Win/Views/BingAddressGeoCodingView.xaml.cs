@@ -14,7 +14,7 @@ namespace Ryan.Maps.Win.Views
     {
         #region Fields
 
-        private BingAddressGeoCodingViewModel _addressViewModel;
+        private BingAddressGeocodingViewModel _addressViewModel;
 
         #endregion
 
@@ -57,17 +57,19 @@ namespace Ryan.Maps.Win.Views
             if (!string.IsNullOrEmpty(addressInput.Text))
             {
                 ParseOriginalPropertyAddressForDisplay();
-                var geoCodeRepo = new AddressUtility.Repositories.BingGeoCodeAddressRepository();
-                var geoCodeResponse = geoCodeRepo.GeoCodeAddressWithDecisionInfo(new Address { FullAddress = addressInput.Text });
-                _addressViewModel.GeoCodeResponse = geoCodeResponse;
-                
+                var geocodeRepo = new AddressUtility.Repositories.BingGeocodeAddressRepository();
+                var geocodeResponse = geocodeRepo.GeocodeAddressWithDecisionInfo(new Address { FullAddress = addressInput.Text });
+                _addressViewModel.GeoCodeResponse = geocodeResponse;
+
+                var ryanRepo = new AddressUtility.Repositories.GoogleGeocodeAddressRepository();
+                var response = ryanRepo.GeocodeAddress(new Address { FullAddress = addressInput.Text });
 
                 // Check to see what the responses are
-                if (geoCodeResponse.MatchConfidence == AddressUtility.Models.MatchDecision.GoodMatch &&
-                    geoCodeResponse.GeoCodedAddresses.Count == 1)
+                if (geocodeResponse.MatchConfidence == AddressUtility.Models.MatchDecision.GoodMatch &&
+                    geocodeResponse.GeoCodedAddresses.Count == 1)
                 {
                     // Good match
-                    if (geoCodeResponse.Address.FullAddress.Length != geoCodeResponse.GeoCodedAddresses.FirstOrDefault().FullAddress.Length)
+                    if (geocodeResponse.Address.FullAddress.Length != geocodeResponse.GeoCodedAddresses.FirstOrDefault().FullAddress.Length)
                     {
                         // Formatting difference, ask the user which one they want
                         _addressViewModel.DecisionText = "There is a slight difference between the address you entered and the USPS formatted address found.  Which would you like to use?";
@@ -81,7 +83,7 @@ namespace Ryan.Maps.Win.Views
                 }
                 else
                 {
-                    if (geoCodeResponse.GeoCodedAddresses.Count > 1)
+                    if (geocodeResponse.GeoCodedAddresses.Count > 1)
                     {
                         _addressViewModel.DecisionText = "We did not find an exact match.  Are any of these properties correct?";
                     }
@@ -97,7 +99,7 @@ namespace Ryan.Maps.Win.Views
 
         private void BingAddressGeoCodingView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            _addressViewModel = (BingAddressGeoCodingViewModel)this.DataContext;
+            _addressViewModel = (BingAddressGeocodingViewModel)this.DataContext;
         }
 
         private void TestPopup_Click(object sender, RoutedEventArgs e)

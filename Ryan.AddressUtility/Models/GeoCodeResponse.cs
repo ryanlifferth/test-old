@@ -25,12 +25,12 @@ namespace Ryan.AddressUtility.Models
         public String EntityType { get; set; }
     }
 
-    public enum MatchConfidence
-    {
-        High, 
-        Medium,
-        Low
-    }
+    //public enum MatchConfidence
+    //{
+    //    High, 
+    //    Medium,
+    //    Low
+    //}
 
     public enum MatchDecision
     {

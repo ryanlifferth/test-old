@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan", "Ryan\Ryan.csproj", "{44BE207E-B868-43D3-8452-2F42C19750A0}"
 EndProject
@@ -40,6 +40,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.Maps.Win", "Ryan.Maps.Win\Ryan.Maps.Win.csproj", "{68225082-8E1E-497B-B20F-4A0E747CE180}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.AddressUtility.MSLocation", "Ryan.AddressUtility.MSLocation\Ryan.AddressUtility.MSLocation.csproj", "{4667452E-9FC9-49E7-9AA1-BB02173B3032}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.DelegatesAndEvents", "Ryan.DelegatesAndEvents\Ryan.DelegatesAndEvents.csproj", "{4D840C35-2D47-4DC5-A414-DE205E5C977E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ryan.Encryption", "Ryan.Encryption\Ryan.Encryption.csproj", "{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -357,6 +361,38 @@ Global
 		{4667452E-9FC9-49E7-9AA1-BB02173B3032}.Release|x64.Build.0 = Release|Any CPU
 		{4667452E-9FC9-49E7-9AA1-BB02173B3032}.Release|x86.ActiveCfg = Release|Any CPU
 		{4667452E-9FC9-49E7-9AA1-BB02173B3032}.Release|x86.Build.0 = Release|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Debug|ARM.Build.0 = Debug|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Debug|x64.Build.0 = Debug|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Debug|x86.Build.0 = Debug|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Release|ARM.Build.0 = Release|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Release|x64.ActiveCfg = Release|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Release|x64.Build.0 = Release|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Release|x86.ActiveCfg = Release|Any CPU
+		{4D840C35-2D47-4DC5-A414-DE205E5C977E}.Release|x86.Build.0 = Release|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Debug|ARM.Build.0 = Debug|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Debug|x64.Build.0 = Debug|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Debug|x86.Build.0 = Debug|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Release|ARM.ActiveCfg = Release|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Release|ARM.Build.0 = Release|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Release|x64.ActiveCfg = Release|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Release|x64.Build.0 = Release|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Release|x86.ActiveCfg = Release|Any CPU
+		{BD1801B2-DEC0-40B3-9506-AAEAA6FCA1E0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

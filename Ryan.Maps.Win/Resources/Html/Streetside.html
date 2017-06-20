@@ -30,7 +30,7 @@
         }
 
         .bing-map-canvas {
-            height: 100%;
+            height: 80%;
             margin: 0;
             width: 100%;
         }
@@ -58,6 +58,9 @@
                 vertical-align: top;
             }
     </style>
+
+    <!--<script type="text/javascript" src="https://getfirebug.com/firebug-lite.js#startOpened,overrideConsole"></script>-->
+
 </head>
 <body>
     <!--<div style="width: 100%; height: 100%;">
@@ -110,7 +113,8 @@
 
                 self.loadMapScenario = function (lat, lon) {
                     self.map = new Microsoft.Maps.Map(document.getElementById('bingMapCanvas'), {
-                        credentials: 'Auqz2ch8xDX5NnG_53PKz4OaWZMw_YKV-iGdFEzw0N4dX86GREoQaa0lPVjt9GBk',
+                        credentials: 'AhxW8Zol-WrOFlJOoTwI5F-sD1MRq1nJ0F-1zkUmXYf_3_UJy5Y56BdcGvsvJ8_-',
+                        //credentials: 'Auqz2ch8xDX5NnG_53PKz4OaWZMw_YKV-iGdFEzw0N4dX86GREoQaa0lPVjt9GBk',
                         //credentials: '4hAt5dJXkTHw8pKicEHW~3G1ueYq_0QyFBS0YFBF9NA~AshZkh90FnrHFnkaB4qCRApzAtvZsSa9u49dyCojtw-nQnVx7RlaE2l98oM8RQt4',
                         //mapTypeId: Microsoft.Maps.MapTypeId.road,
                         mapTypeId: Microsoft.Maps.MapTypeId.streetside,
@@ -118,11 +122,15 @@
                         center: new Microsoft.Maps.Location(lat, lon),
                         zoom: 19,
                         streetsideOptions: {
-                            overviewMapMode: Microsoft.Maps.OverviewMapMode.hidden,
-                            //locationToLookAt: new Microsoft.Maps.Location(40.4016203, -111.9331935),
-                            showCurrentAddress: false,
                             locationToLookAt: new Microsoft.Maps.Location(lat, lon),
-                            onErrorLoading: self.noStreetsideFound
+                            overviewMapMode: Microsoft.Maps.OverviewMapMode.hidden,
+                            onErrorLoading: self.noStreetsideFound,
+                            showCurrentAddress: false,
+                            showProblemReporting: false,
+                            showExitButton: false,
+                            //        disablePanoramaNavigation: true,
+                            //        showHeadingCompass: true,
+                            //        showZoomButtons: true
                         }
                     });
                     /*var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), {

@@ -219,70 +219,54 @@
         </Style>
 
         <ControlTemplate x:Key="SubjectPushpinTemplate" TargetType="m:Pushpin">
-            <Grid x:Name="ContentGrid" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <StackPanel>
-                    <Grid Margin="0" Width="Auto" Height="Auto">
-                        <Rectangle HorizontalAlignment="Left" Margin="-0.208,13.238,0,-0.146" Width="10.555" Fill="#FF9E0B0F" RenderTransformOrigin="0.5,0.5">
-                            <!--This is the pointer-->
-                            <Rectangle.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform AngleX="-23"/>
-                                    <RotateTransform Angle="-12.944"/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </Rectangle.RenderTransform>
-                        </Rectangle>
+            <Grid x:Name="ContentGrid" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center" Width="Auto" Margin="4,2,0,0">
+                <!--This is the pointer-->
+                <Canvas>
+                    <Path x:Name="PathPointer"
+                          Data="M3,15 L-4,-2 L12,3"
+                          Fill="#b73830"
+                          Margin="0"
+                          Stroke="#b73830" 
+                          StrokeThickness="1.5"  />
+                </Canvas>
 
-                        <Rectangle Fill="White" Stroke="#FF9E0B0F" StrokeThickness="1.5" RadiusX="5" RadiusY="5"/>
+                <Rectangle x:Name="Infobox" Fill="White" Margin="0" Stroke="#FFb73830" StrokeThickness="1.5" RadiusX="5" RadiusY="5"/>
 
-                        <ContentPresenter HorizontalAlignment="Left"
-                                          VerticalAlignment="Center"
-                                          Content="{TemplateBinding Content}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          Margin="0" 
-                                          TextBlock.FontFamily="Segoe UI" 
-                                          TextBlock.FontWeight="Bold" 
-                                          TextBlock.Foreground="#FF005167">
-                        </ContentPresenter>
-                    </Grid>
-                </StackPanel>
+                <ContentPresenter HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Margin="0" 
+                                TextBlock.FontFamily="Segoe UI" 
+                                TextBlock.FontWeight="Bold" 
+                                TextBlock.Foreground="#FF005167">
+                </ContentPresenter>
             </Grid>
         </ControlTemplate>
 
         <ControlTemplate x:Key="CompPushpinTemplate" TargetType="m:Pushpin">
-            <Grid x:Name="ContentGrid" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <StackPanel>
-                    <Grid Margin="0" Width="Auto" Height="Auto">
-                        <Rectangle HorizontalAlignment="Left" Margin="-0.208,13.238,0,-0.146" Width="10.555" Fill="#FF005167" RenderTransformOrigin="0.5,0.5">
-                            <!--This is the pointer-->
-                            <Rectangle.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform AngleX="-23"/>
-                                    <RotateTransform Angle="-12.944"/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </Rectangle.RenderTransform>
-                        </Rectangle>
+            <Grid x:Name="ContentGrid" HorizontalAlignment="Center" Margin="4,2,0,0" VerticalAlignment="Center" Height="Auto" Width="Auto">
+                <!--This is the pointer-->
+                <Canvas>
+                    <Path x:Name="PathPointer"
+                          Data="M3,15 L-4,-2 L12,3"
+                          Fill="#FF4285f4"
+                          Margin="0"
+                          Stroke="#FF4285f4" 
+                          StrokeThickness="1.5"  />
+                </Canvas>
 
-                        <Rectangle Fill="White" Stroke="#FF005167" StrokeThickness="1.5" RadiusX="5" RadiusY="5">
-                            <!--<Rectangle.BitmapEffect>
-                                <DropShadowBitmapEffect Softness="0.1" ShadowDepth="1.5" Direction="270" Color="#BBBBBB"/>
-                            </Rectangle.BitmapEffect>-->
-                        </Rectangle>
+                <Rectangle x:Name="Infobox" Fill="White" Margin="0" Stroke="#FF005167" StrokeThickness="1.5" RadiusX="5" RadiusY="5"/>
 
-                        <ContentPresenter HorizontalAlignment="Left"
-                                          VerticalAlignment="Center"
-                                          Content="{TemplateBinding Content}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          Margin="0" 
-                                          TextBlock.FontFamily="Segoe UI" 
-                                          TextBlock.FontWeight="Bold" 
-                                          TextBlock.Foreground="#FF005167">
-                        </ContentPresenter>
-                    </Grid>
-                </StackPanel>
+                <ContentPresenter HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Margin="0" 
+                                TextBlock.FontFamily="Segoe UI" 
+                                TextBlock.FontWeight="Bold" 
+                                TextBlock.Foreground="#FF005167">
+                </ContentPresenter>
             </Grid>
         </ControlTemplate>
 
@@ -297,7 +281,7 @@
         <DataTemplate x:Key="PropertyPushpinSubjectDataTemplate">
             <Grid>
                 <StackPanel Margin="15,0,7,2" MinHeight="45" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding AddressLine1}" FontFamily="Segoe UI" FontSize="13" FontWeight="SemiBold" Margin="0,7,0,0" />
+                    <TextBlock Text="{Binding AddressLine1, FallbackValue=Address Line 1}" FontFamily="Segoe UI" FontSize="13" FontWeight="SemiBold" Margin="0,7,0,0" />
                     <StackPanel Margin="0,-4,0,0">
                         <TextBlock FontFamily="Segoe UI" FontSize="11" FontWeight="Normal" >
                             <TextBlock.Text>
@@ -431,30 +415,80 @@
         </Style>
 
     </UserControl.Resources>
-    <Grid Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height ="45"/>
-            <RowDefinition Height="5" />
-        </Grid.RowDefinitions>
 
-        <Grid Name="MapGrid" Grid.Row="0" Margin="25, 5, 25, 0">
+    <Border BorderBrush="Black" 
+                BorderThickness="1" 
+                HorizontalAlignment="Stretch"
+                Margin="20, 0, 20, 20" 
+                Padding="0">
+        <Grid Background="White">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="145"/>
+                <RowDefinition Height="5" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <m:Map x:Name="bingMap"
-                   CredentialsProvider="Alt3gPG8fTsQ4-zl8x68BRF-nNPx9s4ho-U-oAU-tuo7jnKfkZYt_Cx-La0T533b"
-                   Center="39.3683, -95.2734"
-                   Grid.Row="0" 
-                   Grid.Column="0"
-                   Height="Auto"
-                   Width="Auto"
-                   ZoomLevel="4.0">
 
-                <!--<Canvas x:Name="SubjectPin" 
+            <Grid Name="MapGrid" Grid.Row="0" Margin="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <m:Map x:Name="bingMap"
+                       CredentialsProvider="Alt3gPG8fTsQ4-zl8x68BRF-nNPx9s4ho-U-oAU-tuo7jnKfkZYt_Cx-La0T533b"
+                       Center="39.3683, -95.2734"
+                       Grid.Row="0" 
+                       Grid.Column="0"
+                       Height="Auto"
+                       Width="Auto"
+                       MouseMove="MoveMouse_Handler"
+                       MouseUp="MoveMouseUp_Handler"
+                       ZoomLevel="4.0">
+
+                    <m:Pushpin x:Name="RyanTestPin"
+                               Content="{Binding Path=Comp1.Address}"
+                               ContentTemplate="{StaticResource PropertyPushpinSubjectDataTemplate}"
+                               HorizontalAlignment="Left"
+                               m:MapLayer.Position="48.858093, 2.294694"
+                               m:MapLayer.PositionOrigin="TopLeft"
+                               Location="48.858093, 2.294694"
+                               PositionOrigin="TopLeft"
+                               Margin="0,0,0,0"
+                               MouseDown="MoveMouseDown_Handler"
+                               Style="{StaticResource AddressPushpin}">
+                        <m:Pushpin.Template>
+                            <ControlTemplate x:Name="PinControlTemplate">
+                                <Grid x:Name="ContentGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Height="Auto" Width="Auto">
+                                    <Canvas>
+                                        <!--This is the pointer-->
+                                        <Path x:Name="PathPointer"
+                                          Data="M3,15 L0,0 L12,3"
+                                          Fill="#b73830"
+                                          Margin="0"
+                                          Stroke="#b73830" 
+                                          StrokeThickness="2"  />
+                                    </Canvas>
+
+                                    <Rectangle x:Name="Infobox" Fill="White" Margin="0,0,0,0" Stroke="#FFb73830" StrokeThickness="1.5" RadiusX="5" RadiusY="5" />
+
+                                    <ContentPresenter HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    Content="{Binding Path=Comp1.Address}"
+                                                    ContentTemplate="{StaticResource PropertyPushpinSubjectDataTemplate}"
+                                                    Margin="0,0,0,0" 
+                                                    TextBlock.FontFamily="Segoe UI" 
+                                                    TextBlock.FontWeight="Bold" 
+                                                    TextBlock.Foreground="#FF005167">
+                                    </ContentPresenter>
+                                </Grid>
+                            </ControlTemplate>
+                        </m:Pushpin.Template>
+                    </m:Pushpin>
+
+
+                    <!--<Canvas x:Name="SubjectPin" 
                         Height="80"
                         m:MapLayer.Position="37.6801,-122.3395"
                         m:MapLayer.PositionOrigin="BottomCenter"
@@ -467,74 +501,93 @@
                         </TextBlock>
                     </Canvas>-->
 
-            </m:Map>
+                </m:Map>
 
-            <Canvas Margin="0" Height="Auto" Width="Auto">
-                <Button x:Name="changeMapType" 
+                <Canvas Margin="0" Height="Auto" Width="Auto">
+                    <Button x:Name="changeMapType" 
                         Click="MapType_Click"
                         Style="{StaticResource ChangeMapButtonStyle}"
                         Tag="RoadMode">
-                    <Canvas Height="32" Margin="0" Width="32">
-                        <Image x:Name="mapTypeImage" Style="{StaticResource MapTypeButtonImage}" />
-                        <TextBlock x:Name="mapTypeName" Style="{StaticResource MapTypeCaption}" Text="Aerial" />
-                    </Canvas>
-                </Button>
+                        <Canvas Height="32" Margin="0" Width="32">
+                            <Image x:Name="mapTypeImage" Style="{StaticResource MapTypeButtonImage}" />
+                            <TextBlock x:Name="mapTypeName" Style="{StaticResource MapTypeCaption}" Text="Aerial" />
+                        </Canvas>
+                    </Button>
 
-                <Button x:Name="mapZoomIn"
+                    <Button x:Name="mapZoomIn"
                         Click="MapZoom_Click"
                         Style="{StaticResource ZoomButtonStyle}"
                         Tag="1">
-                    <Image x:Name="zoomIn" Style="{StaticResource ZoomInButtonImage}" />
-                </Button>
-                <Button x:Name="mapZoomOut"
+                        <Image x:Name="zoomIn" Style="{StaticResource ZoomInButtonImage}" />
+                    </Button>
+                    <Button x:Name="mapZoomOut"
                         Canvas.Top="110" 
                         Click="MapZoom_Click"
                         Style="{StaticResource ZoomButtonStyle}"
                         Tag="-1">
-                    <Image x:Name="zoomOut" Style="{StaticResource ZoomOutButtonImage}" />
-                </Button>
-            </Canvas>
+                        <Image x:Name="zoomOut" Style="{StaticResource ZoomOutButtonImage}" />
+                    </Button>
+                </Canvas>
 
-            <StackPanel Orientation="Horizontal" Opacity="0.7" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                <Button x:Name="btnNorthAmerica" Click="ChangeMapView_Click" Tag="39.3683,-95.2734,0.0000 4.0000" Padding="2" Width="100" Margin="5">
-                    <TextBlock>North America</TextBlock>
-                </Button>
-                <Button x:Name="btnNewYork" Click="ChangeMapView_Click" Tag="40.7199,-74.0030,0.0000 12.0000" Padding="2" Width="100" Margin="5">
-                    <TextBlock>New York</TextBlock>
-                </Button>
-                <Button x:Name="btnSanFrancisco" Click="ChangeMapView_Click" Tag="37.6801,-122.3395,0.0000 11.0000" Padding="2" Width="100" Margin="5">
-                    <TextBlock>San Francisco</TextBlock>
-                </Button>
-                <Button x:Name="btnParis" Click="ChangeMapView_Click" Tag="48.8530,2.3498,0.0000 12.0000" Padding="2" Width="100" Margin="5">
-                    <TextBlock>  Paris</TextBlock>
-                </Button>
-                <Button x:Name="btnVancouver" Click="ChangeMapView_Click" Tag="49.2765,-123.1030,0.0000 14.0000" Padding="2" Width="100" Margin="5">
-                    <TextBlock>Vancouver</TextBlock>
-                </Button>
+                <StackPanel Orientation="Horizontal" Opacity="0.7" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                    <Button x:Name="btnNorthAmerica" Click="ChangeMapView_Click" Tag="39.3683,-95.2734,0.0000 4.0000" Padding="2" Width="100" Margin="5">
+                        <TextBlock>North America</TextBlock>
+                    </Button>
+                    <Button x:Name="btnNewYork" Click="ChangeMapView_Click" Tag="40.7199,-74.0030,0.0000 12.0000" Padding="2" Width="100" Margin="5">
+                        <TextBlock>New York</TextBlock>
+                    </Button>
+                    <Button x:Name="btnSanFrancisco" Click="ChangeMapView_Click" Tag="37.6801,-122.3395,0.0000 11.0000" Padding="2" Width="100" Margin="5">
+                        <TextBlock>San Francisco</TextBlock>
+                    </Button>
+                    <Button x:Name="btnParis" Click="ChangeMapView_Click" Tag="48.8530,2.3498,0.0000 12.0000" Padding="2" Width="100" Margin="5">
+                        <TextBlock>  Paris</TextBlock>
+                    </Button>
+                    <Button x:Name="btnVancouver" Click="ChangeMapView_Click" Tag="49.2765,-123.1030,0.0000 14.0000" Padding="2" Width="100" Margin="5">
+                        <TextBlock>Vancouver</TextBlock>
+                    </Button>
 
-            </StackPanel>
+                </StackPanel>
 
-        </Grid>
+            </Grid>
 
-        <Grid Grid.Row="1" Margin="20,10,0,0" VerticalAlignment="Top">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="200"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <!--<TextBlock Grid.Column="0"
+            <Grid Grid.Row="1" Margin="20,10,0,0" VerticalAlignment="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="200"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <!--<TextBlock Grid.Column="0"
                        FontFamily="Segoe UI" 
                        FontSize="24" 
                        FontWeight="Light"
                        Text="Property and Comp Map"/>-->
-            <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,30,0" Orientation="Horizontal">
-                <Button Style="{StaticResource PrintButton}" />
-            </StackPanel>
+                <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,30,0" Orientation="Horizontal">
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,0" Grid.Column="0" HorizontalAlignment="Right">
-                <Popup x:Name="MyPopup" 
+                    <Border BorderBrush="Navy" BorderThickness="1">
+                        <StackPanel x:Name="TriagleTest"
+                                Height="40"
+                                Margin="0"
+                                Width="40">
+                            <!--<TextBlock Text="Test" />-->
+                            <Polygon Points="10,0 20,20, 0,20" Stretch="UniformToFill"  Stroke="Black" Fill="Red" />
+                        </StackPanel>
+                    </Border>
+
+                    <Grid x:Name="TrackSurface">
+                        <Path Fill="AliceBlue" 
+                              Stretch="Fill"
+                              Stroke="Black" StrokeThickness="1" 
+                              Data="M148,28 C221,133 110.50025,119.5 110.50025,119.5 L124.50016,68.5 z">
+                        </Path>
+                    </Grid>
+
+                    <Button Style="{StaticResource PrintButton}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,0" Grid.Column="0" HorizontalAlignment="Right">
+                    <Popup x:Name="MyPopup" 
                        Height="100"
                        IsOpen="False"
                        Placement="Top"
@@ -542,36 +595,37 @@
                        PopupAnimation="Fade"
                        StaysOpen="False"
                        Width="300">
-                    <Popup.Child>
-                        <Border BorderBrush="Red" BorderThickness="2">
-                            <StackPanel Background="Bisque">
-                                <TextBlock>Stuff goes here.</TextBlock>
-                            </StackPanel>
-                        </Border>
-                    </Popup.Child>
-                </Popup>
-                <Button x:Name="popupTest"
+                        <Popup.Child>
+                            <Border BorderBrush="Red" BorderThickness="2">
+                                <StackPanel Background="Bisque">
+                                    <TextBlock>Stuff goes here.</TextBlock>
+                                </StackPanel>
+                            </Border>
+                        </Popup.Child>
+                    </Popup>
+
+                    <Button x:Name="popupTest"
                         Click="popupTest_Click"
                         Content="Test Popup"    
                         Margin="0,0,65,0" />
 
-                <Button x:Name="changePushpins"
+                    <Button x:Name="changePushpins"
                         Click="ChangePushpins_Click"
                         Content="Change Pushpins"
                         Margin="0,0,65,0" />
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Large property caption" />
-                    <ToggleButton x:Name="ToggleDetailedPushpin"
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Large property caption" />
+                        <ToggleButton x:Name="ToggleDetailedPushpin"
                                   Click="ToggleDetaildPushpin_Toggle"
                                   Cursor="Hand"
                                   Height="20" 
                                   IsChecked="{Binding ShowDetailedMapPushpin}" 
                                   Margin="0,0,25,0"
                                   Style="{StaticResource AnimatedSwitch}" />
-                </StackPanel>
+                    </StackPanel>
 
-                <Expander x:Name="expandExample"
+                    <Expander x:Name="expandExample"
                           Background="Aqua"
                           Header="Sample"
                           Height="Auto"
@@ -580,20 +634,148 @@
                           Margin="0"
                           VerticalAlignment="Top"
                           Width="Auto">
-                    <Border BorderThickness="1" BorderBrush="Red" Width="Auto">
-                        <TextBlock Margin="0"
+                        <Border BorderThickness="1" BorderBrush="Red" Width="Auto">
+                            <TextBlock Margin="0"
                                    Height="Auto"
                                    Foreground="Black"
                                    Text="Sample text for the example"
                                    TextWrapping="WrapWithOverflow"
                                    VerticalAlignment="Top"
                                    Width="Auto" />
-                    </Border>
-                </Expander>
+                        </Border>
+                    </Expander>
+
+                </StackPanel>
+
+            </Grid>
+
+            <StackPanel Grid.Row="2" Margin="10" VerticalAlignment="Center">
+
+                <StackPanel x:Name="ParentContainer" Orientation="Horizontal" 
+                       MouseMove="MoveMouse_Handler"
+                       MouseUp="MoveMouseUp_Handler">
+
+                    <m:Pushpin Content="{Binding Path=Comp1.Address}"
+                           ContentTemplate="{StaticResource PropertyPushpinSubjectDataTemplate}"
+                               Height="47"
+                               Width="106"
+                           HorizontalAlignment="Left"
+                           Margin="0,0,0,0"
+                               MouseDown="MoveMouseDown_Handler"
+                           Style="{StaticResource AddressPushpin}">
+                        <m:Pushpin.Template>
+                            <ControlTemplate>
+                                <Grid x:Name="ContentGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Height="Auto" Width="Auto">
+                                    <!--This is the pointer-->
+                                    <Canvas>
+                                        <!--
+                                            Upper-left: Data="M3,15 L-4,-2 L12,3"
+                                            Lower-left: Data="M1,28 L-4,51 L16,45"
+                                            Upper-right: Data="M91,1 L110,-4 L105,20"
+                                            Lower-right: Data="M105,28 L110,51 L91,45"
+                                        />-->
+                                        <Path x:Name="PathPointer"
+                                              Data="M1,20 L-4,-4 L16,1"
+                                              Fill="Yellow"
+                                              Margin="0"
+                                              Stroke="#b73830" 
+                                              StrokeThickness="2"  />
+                                    </Canvas>
+
+                                    <Rectangle Fill="White" Height="47" Width="106" Margin="0,0,0,0" Stroke="#FFb73830" StrokeThickness="1.5" RadiusX="5" RadiusY="5" />
+
+                                    <ContentPresenter HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    Content="{Binding Path=Comp1.Address}"
+                                                    ContentTemplate="{StaticResource PropertyPushpinSubjectDataTemplate}"
+                                                    Margin="0,0,0,0" 
+                                                    TextBlock.FontFamily="Segoe UI" 
+                                                    TextBlock.FontWeight="Bold" 
+                                                    TextBlock.Foreground="#FF005167">
+                                    </ContentPresenter>
+                                </Grid>
+                            </ControlTemplate>
+                        </m:Pushpin.Template>
+                    </m:Pushpin>
+
+                    <m:Pushpin Content="{Binding Path=Comp1.Address}"
+                           ContentTemplate="{StaticResource PropertyPushpinSubjectDataTemplate}"
+                           HorizontalAlignment="Left"
+                           Margin="20,0,0,0"
+                           Style="{StaticResource AddressPushpin}">
+                        <m:Pushpin.Template>
+                            <ControlTemplate>
+                                <Grid x:Name="ContentGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Height="Auto" Width="Auto">
+                                    <!--This is the pointer-->
+                                    <Polygon x:Name="Pointer" 
+                                             Fill="Yellow"
+                                             HorizontalAlignment="Left"
+                                             VerticalAlignment="Bottom"
+                                             Margin="-2,-2,0,0"
+                                             Points="0,0 2,20 20,12" 
+                                             RenderTransformOrigin="0.5,0.5"
+                                             Stroke="#b73830" 
+                                             StrokeThickness="2">
+                                        <Polygon.RenderTransform>
+                                            <TransformGroup>
+                                                <RotateTransform Angle="-90" />
+                                            </TransformGroup>
+                                        </Polygon.RenderTransform>
+
+                                    </Polygon>
+
+                                    <Rectangle Fill="White" Margin="10,0,0,0" Stroke="#FFb73830" StrokeThickness="1.5" RadiusX="5" RadiusY="5" />
+
+                                    <ContentPresenter HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    Content="{Binding Path=Comp1.Address}"
+                                                    ContentTemplate="{StaticResource PropertyPushpinSubjectDataTemplate}"
+                                                    Margin="10,0,0,0" 
+                                                    TextBlock.FontFamily="Segoe UI" 
+                                                    TextBlock.FontWeight="Bold" 
+                                                    TextBlock.Foreground="#FF005167">
+                                    </ContentPresenter>
+                                </Grid>
+                            </ControlTemplate>
+                        </m:Pushpin.Template>
+                    </m:Pushpin>
+
+                    <m:Pushpin Content="{Binding Path=SubjectAddress}"
+                           ContentTemplate="{StaticResource PropertyPushpinSubjectDataTemplate}"
+                           HorizontalAlignment="Left"
+                           Margin="50,0,0,0"
+                           Style="{StaticResource AddressPushpin}"
+                           Template="{StaticResource SubjectPushpinTemplate}" />
+
+                    <!--<m:Pushpin Content="{Binding Path=Comp1.Address}"
+                           ContentTemplate="{StaticResource PropertyPushpinSubjectDataTemplate}"
+                           HorizontalAlignment="Left"
+                           Margin="10,0,0,0"
+                           Style="{StaticResource AddressPushpin}">
+                        <m:Pushpin.Template>
+                            <ControlTemplate>
+                                <Canvas x:Name="SubjectPin" 
+                                        Height="Auto"
+                                        m:MapLayer.Position="37.6801,-122.3395"
+                                        m:MapLayer.PositionOrigin="BottomCenter"
+                                        Opacity="0.7"
+                                        Width="Auto">
+                                    <Path Data="M 0,0 L 50,0 50,50 25,80 0,50 0,0" Fill="Red" Stroke="Wheat" StrokeThickness="2" />
+                                    <TextBlock FontSize="10" Foreground="White" Margin="5" TextAlignment="Center">
+                                        San <LineBreak />
+                                        Fran <LineBreak />
+                                    </TextBlock>
+                                </Canvas>
+                            </ControlTemplate>
+                        </m:Pushpin.Template>
+                    </m:Pushpin>-->
+
+                </StackPanel>
+
+                <TextBlock Text="Test Spot" />
 
             </StackPanel>
 
         </Grid>
-
-    </Grid>
+    </Border>
 </UserControl>

@@ -15,6 +15,9 @@ namespace Ryan.Maps.Win.ViewModels
         public ICommand LoadBingMapCommand { get; private set; }
         public ICommand LoadBingStreetsideCommand { get; private set; }
         public ICommand LoadBingAddressCommand { get; private set; }
+        public ICommand LoadPropertySearchCommand { get; private set; }
+        public ICommand LoadDeedsCommand { get; private set; }
+        public ICommand LoadHyperlinkCommand { get; private set; }
 
         // ViewModel that is currently bound to the ContentControl
         private ViewModelBase _currentViewModel;
@@ -38,15 +41,22 @@ namespace Ryan.Maps.Win.ViewModels
             //this.LoadProximity();
             //this.LoadBingMap();
             //this.LoadBingStreetside();
-            this.LoadBingAddress();
+            //this.LoadBingAddress();
+            //this.LoadPropertySearch();
+            this.LoadDeeds();
 
             // Hook up Commands to associated methods
             this.LoadProximityCommand = new DelegateCommand(o => this.LoadProximity());
             this.LoadBingMapCommand = new DelegateCommand(o => this.LoadBingMap());
             this.LoadBingStreetsideCommand = new DelegateCommand(o => this.LoadBingStreetside());
             this.LoadBingAddressCommand = new DelegateCommand(o => this.LoadBingAddress());
+            this.LoadPropertySearchCommand = new DelegateCommand(o => this.LoadPropertySearch());
+            this.LoadDeedsCommand = new DelegateCommand(o => this.LoadDeeds());
+            this.LoadHyperlinkCommand = new DelegateCommand(o => this.LoadHyperlink());
         }
         #endregion
+
+        #region Methods
 
         private void LoadProximity()
         {
@@ -65,11 +75,25 @@ namespace Ryan.Maps.Win.ViewModels
 
         private void LoadBingAddress()
         {
-            CurrentViewModel = new BingAddressGeoCodingViewModel() { ViewTitle = "Bing Address View" };
+            CurrentViewModel = new BingAddressGeocodingViewModel() { ViewTitle = "Bing Address View" };
         }
 
+        private void LoadPropertySearch()
+        {
+            CurrentViewModel = new PropertySearchViewModel() { ViewTitle = "Property Search View" };
+        }
 
+        private void LoadDeeds()
+        {
+            CurrentViewModel = new DeedsViewModel() { ViewTitle = "Deeds View" };
+        }
 
+        private void LoadHyperlink()
+        {
+            CurrentViewModel = new HyperlinkViewModel() { ViewTitle = "Hyperlinks View" };
+        }
+
+        #endregion
 
     }
 }

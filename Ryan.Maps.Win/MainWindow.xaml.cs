@@ -61,6 +61,9 @@ namespace Ryan.Maps.Win
             this.proximityButton.Style = (Style)FindResource("NavButtons");
             this.bingStreetside.Style = (Style)FindResource("NavButtons");
             this.bingAddress.Style = (Style)FindResource("NavButtons");
+            this.propertySearch.Style = (Style)FindResource("NavButtons");
+            this.deeds.Style = (Style)FindResource("NavButtons");
+            this.hyperlinks.Style = (Style)FindResource("NavButtons");
             
             var vm = sender as MainWindowViewModel;
 
@@ -77,6 +80,15 @@ namespace Ryan.Maps.Win
                     break;
                 case "Bing Address View":
                     this.bingAddress.Style = (Style)FindResource("NavButtonsSelected");
+                    break;
+                case "Property Search View":
+                    this.propertySearch.Style = (Style)FindResource("NavButtonsSelected");
+                    break;
+                case "Deeds View":
+                    this.deeds.Style = (Style)FindResource("NavButtonsSelected");
+                    break;
+                case "Hyperlinks View":
+                    this.hyperlinks.Style = (Style)FindResource("NavButtonsSelected");
                     break;
             }
 

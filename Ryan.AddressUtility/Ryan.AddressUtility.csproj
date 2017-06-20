@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IGeoCodeAddress.cs" />
+    <Compile Include="Interfaces\IGeocodeAddress.cs" />
     <Compile Include="Models\GeoCodeResponse.cs" />
     <Compile Include="Repositories\DistanceCalculation\BingDrivingDistanceCalculationRepository.cs" />
     <Compile Include="Repositories\AddressVerification\GoogleAddressVerificationRepository.cs" />
@@ -62,8 +62,8 @@
     <Compile Include="Models\Destination.cs" />
     <Compile Include="Models\DistanceResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\GeoCodeAddress\BingGeoCodeAddressRepository.cs" />
-    <Compile Include="Repositories\GeoCodeAddress\GoogleGeoCodeAddressRepository.cs" />
+    <Compile Include="Repositories\GeocodeAddress\BingGeocodeAddressRepository.cs" />
+    <Compile Include="Repositories\GeocodeAddress\GoogleGeocodeAddressRepository.cs" />
     <Compile Include="Utilities\AddressFormatting.cs" />
     <Compile Include="Utilities\StraightLineDistance.cs" />
   </ItemGroup>

@@ -18,7 +18,7 @@ namespace Ryan.AddressUtility.Utilities
 
         #region Methods
 
-        public DistanceResponse GetProximitiesByAddress(Address subjectAddress, List<Address> destinationAddresses, IGeoCodeAddress geoCodingRepository)
+        public DistanceResponse GetProximitiesByAddress(Address subjectAddress, List<Address> destinationAddresses, IGeocodeAddress geoCodingRepository)
         {
             if (subjectAddress == null || !destinationAddresses.Any())
             {
@@ -30,7 +30,7 @@ namespace Ryan.AddressUtility.Utilities
                 OriginAddress = subjectAddress,
                 GeocodedOriginAddress = AddressHasGeoCoordinates(subjectAddress) ?
                                             subjectAddress :
-                                            geoCodingRepository.GeoCodeAddress(subjectAddress) // Only geocode if lat/long ARE NOT present
+                                            geoCodingRepository.GeocodeAddress(subjectAddress) // Only geocode if lat/long ARE NOT present
             };
 
             var originGeoCoordinate = new GeoCoordinate(Double.Parse(response.GeocodedOriginAddress.Latitude, CultureInfo.InvariantCulture), Double.Parse(response.GeocodedOriginAddress.Longitude, CultureInfo.InvariantCulture));
@@ -43,7 +43,7 @@ namespace Ryan.AddressUtility.Utilities
                     Address = compAddress,
                     GeocodedAddress = AddressHasGeoCoordinates(compAddress) ?
                                 compAddress :
-                                geoCodingRepository.GeoCodeAddress(compAddress)
+                                geoCodingRepository.GeocodeAddress(compAddress)
                 };
 
                 var compGeoCoordinate = new GeoCoordinate(Double.Parse(destination.GeocodedAddress.Latitude, CultureInfo.InvariantCulture), Double.Parse(destination.GeocodedAddress.Longitude, CultureInfo.InvariantCulture));
@@ -54,7 +54,7 @@ namespace Ryan.AddressUtility.Utilities
             return new DistanceResponse();
         }
 
-        public DistanceResponse GetProximitiesByDestination(Address subjectAddress, List<Destination> destinationProperties, IGeoCodeAddress geoCodingRepository)
+        public DistanceResponse GetProximitiesByDestination(Address subjectAddress, List<Destination> destinationProperties, IGeocodeAddress geoCodingRepository)
         {
             if (subjectAddress == null || destinationProperties == null)
             {
@@ -66,7 +66,7 @@ namespace Ryan.AddressUtility.Utilities
                 OriginAddress = subjectAddress,
                 GeocodedOriginAddress = AddressHasGeoCoordinates(subjectAddress) ?
                                             subjectAddress :
-                                            geoCodingRepository.GeoCodeAddress(subjectAddress) // Only geocode if lat/long ARE NOT present
+                                            geoCodingRepository.GeocodeAddress(subjectAddress) // Only geocode if lat/long ARE NOT present
             };
 
             var originGeoCoordinate = new GeoCoordinate(Double.Parse(response.GeocodedOriginAddress.Latitude, CultureInfo.InvariantCulture), Double.Parse(response.GeocodedOriginAddress.Longitude, CultureInfo.InvariantCulture));
@@ -80,7 +80,7 @@ namespace Ryan.AddressUtility.Utilities
                     Address = comp.Address,
                     GeocodedAddress = AddressHasGeoCoordinates(comp.Address) ?
                                 comp.Address :
-                                geoCodingRepository.GeoCodeAddress(comp.Address),
+                                geoCodingRepository.GeocodeAddress(comp.Address),
                     Apn = comp.Apn,
                     MlsNumber = comp.MlsNumber
                 };

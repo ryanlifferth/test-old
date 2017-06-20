@@ -4,6 +4,7 @@ using Ryan.AddressUtility.Interfaces;
 using Ryan.AddressUtility.Models;
 using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,7 +17,7 @@ namespace Ryan.AddressUtility.Repositories
     ///     see https://msdn.microsoft.com/en-us/library/ff701714.aspx for more information
     ///     TODO:  Get terms of use/service/limits/etc.
     /// </summary>
-    public class BingGeoCodeAddressRepository : IGeoCodeAddress
+    public class BingGeocodeAddressRepository : IGeocodeAddress
     {
 
         #region Fields
@@ -26,7 +27,7 @@ namespace Ryan.AddressUtility.Repositories
         #endregion
 
         #region IAddressVerification Implementation
-        public Address GeoCodeAddress(Address address)
+        public Address GeocodeAddress(Address address)
         {
             ValidateAddress(address);   // Validate that the minimum input params have been set (street + city + state OR street + zip)
 
@@ -47,7 +48,30 @@ namespace Ryan.AddressUtility.Repositories
             return geoCodedAddress;
         }
 
-        public GeoCodeResponse GeoCodeAddressWithDecisionInfo(Address address)
+        public Address GeocodeByPoint(GeoCoordinate geoCoordination)
+        {
+
+            var jsonResponse = GetGeoCodeResponseFromBing(BuildSearchUrl(geoCoordination.Latitude.ToString(), geoCoordination.Longitude.ToString()));
+
+            dynamic resources = (JObject.Parse(jsonResponse) as dynamic).resourceSets[0].resources[0];
+            var geoCodedAddress = new Address
+            {
+                FullAddress = resources.name.Value,
+                Latitude = resources.point.coordinates[0].Value.ToString(),
+                Longitude = resources.point.coordinates[1].Value.ToString(),
+                AddressLine1 = resources.address.addressLine,
+                City = resources.address.locality,
+                State = resources.address.adminDistrict,
+                County = string.IsNullOrEmpty(resources.address.adminDistrict2.ToString()) ? 
+                                              string.Empty : 
+                                              resources.address.adminDistrict2.ToString().Replace(" Co.", ""),
+                Zip = resources.address.postalCode
+            };
+
+            return geoCodedAddress;
+        }
+
+        public GeoCodeResponse GeocodeAddressWithDecisionInfo(Address address)
         {
             ValidateAddress(address);       // Validate that the minimum input params have been set (street + city + state OR street + zip)
 
@@ -69,6 +93,7 @@ namespace Ryan.AddressUtility.Repositories
                         Longitude = resource.point.coordinates[1].Value.ToString(),
                         AddressLine1 = resource.address.addressLine,
                         City = resource.address.locality,
+                        County = resource.address.adminDistrict2,
                         State = resource.address.adminDistrict,
                         Zip = resource.address.postalCode
                     });
@@ -123,12 +148,12 @@ namespace Ryan.AddressUtility.Repositories
             return geoCodeResponse;
         }
 
-        public List<Address> GeoCodeAddresses(List<Address> addresses)
+        public List<Address> GeocodeAddresses(List<Address> addresses)
         {
             var geoCodedAddresses = new List<Address>();
             foreach (var address in addresses)
             {
-                geoCodedAddresses.Add(GeoCodeAddress(address));
+                geoCodedAddresses.Add(GeocodeAddress(address));
             }
             return geoCodedAddresses;
         }
@@ -168,6 +193,18 @@ namespace Ryan.AddressUtility.Repositories
             string apiKey = "Alt3gPG8fTsQ4-zl8x68BRF-nNPx9s4ho-U-oAU-tuo7jnKfkZYt_Cx-La0T533b";
             StringBuilder url = new StringBuilder("http://dev.virtualearth.net/REST/v1/Locations?");
             url.Append(BuildAddressParameter(address));
+            url.Append("&maxResults=3");
+            url.Append("&key=" + apiKey);
+
+            return url.ToString();
+        }
+
+        private string BuildSearchUrl(string lat, string lon)
+        {
+            //http://dev.virtualearth.net/REST/v1/Locations/41.0755475801052,-111.952174819234?maxResults=3&key=Alt3gPG8fTsQ4-zl8x68BRF-nNPx9s4ho-U-oAU-tuo7jnKfkZYt_Cx-La0T533b
+            string apiKey = "Alt3gPG8fTsQ4-zl8x68BRF-nNPx9s4ho-U-oAU-tuo7jnKfkZYt_Cx-La0T533b";
+            StringBuilder url = new StringBuilder("http://dev.virtualearth.net/REST/v1/Locations/");
+            url.Append(lat).Append(",").Append(lon).Append("?");
             url.Append("&maxResults=3");
             url.Append("&key=" + apiKey);
 
