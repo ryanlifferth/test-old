@@ -18,12 +18,15 @@
     <title></title>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <style>
+        @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600);
+        @import url('https://fonts.googleapis.com/css?family=Ubuntu');
+
         html, body {
             height: 100%;
         }
 
         body {
-            background-color: gainsboro;
+            background-color: #efefef;
             font-size: 14px;
             font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
             margin: 0;
@@ -36,24 +39,83 @@
         }
 
         .error-loading {
+            background-color: #107EAE;
+            display: none;
+            height: 100%;
+        }
+
+            .error-loading .dm-logo {
+                height: 200px;
+                left: -35px;
+                position: absolute;
+                top: -40px;
+                transform: rotate(-20deg);
+                -ms-transform: rotate(-20deg);
+                -webkit-transform: rotate(-20deg);
+                -webkit-filter: drop-shadow(0px 0px 20px rgba(0, 231, 255, 0.8));
+            }
+
+            .error-loading .error-content {
+                font-family: 'Open Sans', sans-serif;
+                position: absolute;
+                left: 10%;
+                top: 20%;
+            }
+
+                .error-loading .error-content .oops {
+                    color: #fff;
+                    font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                    font-size: 100px;
+                    font-weight: 400;
+                    margin: 0 0 6px 0;
+                    text-shadow: 3px 3px 2px #0A506E;
+                }
+
+                .error-loading .error-content .oops-subtitle {
+                    color: #FAF00B;
+                    font-family: 'Open Sans', sans-serif;
+                    font-size: 32px;
+                    font-weight: 300;
+                    margin: 0;
+                }
+
+                .error-loading .error-content p {
+                    color: #000;
+                    font-family: 'Open Sans', sans-serif;
+                    font-size: 16px;
+                    font-weight: normal;
+                }
+
+                .error-loading .error-content a.try-again-button {
+                    color: rgba(255,255,255,0.8);
+                    border: 2px solid rgba(255,255,255,0.75);
+                    border-radius: 5px;
+                    display: inline-block;
+                    font-size: 16px;
+                    padding: 6px 25px;
+                    text-decoration: none;
+                    text-transform: uppercase;
+                }
+
+                    .error-loading .error-content a.try-again-button:hover {
+                        background-color: rgba(255,255,255,0.2);
+                        color: rgba(255,255,255,0.8);
+                    }
+
+
+        .error-no-address {
+            color: #9e0b0f;
             display: none;
             position: absolute;
             text-align: center;
-            top: 50%;
+            text-shadow: 1px 1px 1px rgba(128,128,128,0.8);
+            top: 40%;
             width: 100%;
         }
 
-            .error-loading .fa-exclamation-triangle {
-                color: #ffd54d;
-                text-shadow: 1px 1px 1px rgba(128, 128, 128, 1);
-                -webkit-text-stroke: 2px #9e0b0f;
-            }
-
-            .error-loading .error-text {
-                color: #9e0b0f;
-                font-size: 40px;
+            .error-no-address .error-text {
+                font-size: 32px;
                 font-weight: 400;
-                text-shadow: 1px 1px 1px rgba(128,128,128,0.8);
                 text-transform: uppercase;
                 vertical-align: top;
             }
@@ -79,10 +141,14 @@
     <div id="bingMapCanvas" class="map-canvas bing-map-canvas"></div>
 
     <div class="error-loading" id="loadError">
-        <span class="fa fa-exclamation-triangle fa-4x"></span>
-        <span class="error-text">
-            Error loading Streetside View
-        </span>
+        <img src="http://files.datamasterusa.com/img/dm-logo.png" class="dm-logo" />
+
+        <div class="error-content">
+            <h2 class="oops">Oops!</h2>
+            <h5 class="oops-subtitle">No Street View found for this property</h5>
+            <p>We can't find a Street View for this property, it's possible that it hasn't yet been imaged by the map provider (Microsoft Bing Maps).</p>
+            <!--<a href="#" class="try-again-button" id="tryAgainButton">Try again</a>-->
+        </div>
     </div>
 
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release'></script>
@@ -105,13 +171,17 @@
                     noStreetsideFound: streetside.noStreetsideFound
                 };
             };*/
-
+            
             window.streetsideMapBing = function () {
                 var self = this;
 
-                self.map = {};  // Bing Map object
-
+                self.lat = "";
+                self.lon = "";
+                self.map = {};  // Bing Map object              
+                
                 self.loadMapScenario = function (lat, lon) {
+                    self.lat = lat;
+                    self.lon = lon;
                     self.map = new Microsoft.Maps.Map(document.getElementById('bingMapCanvas'), {
                         credentials: 'AhxW8Zol-WrOFlJOoTwI5F-sD1MRq1nJ0F-1zkUmXYf_3_UJy5Y56BdcGvsvJ8_-',
                         //credentials: 'Auqz2ch8xDX5NnG_53PKz4OaWZMw_YKV-iGdFEzw0N4dX86GREoQaa0lPVjt9GBk',
@@ -170,13 +240,29 @@
                     document.getElementById('loadError').style.display = 'block';
                 }
 
+                self.tryAgain = function () {
+                    alert('try again');
+                }
+
                 return self;
             };
 
-            /*window.onload = function () {
-                var streetside = new window.streetsideMapBing();
-                streetside.loadMapScenario();
-            }*/
+            //window.onload = function () {
+            //    //var streetside = new window.streetsideMapBing();
+            //    //streetside.loadMapScenario();
+            //    //28410 NE 19th Ave, Ridgefield, WA  //-- No streetview
+
+            //    //Find the button that you want to watch for clicks 
+            //    var tryAgainButton = document.getElementById('tryAgainButton');
+
+            //    //Attach an onclick handler that executes our function
+            //    tryAgainButton.addEventListener('click', tryAgainClicked, false);
+            //};
+
+            //var tryAgainClicked = function () {
+            //    //location = "http://www.google.com";
+            //    window.external.InvokeMeFromJavascript();
+            //};
 
         })();
     </script>

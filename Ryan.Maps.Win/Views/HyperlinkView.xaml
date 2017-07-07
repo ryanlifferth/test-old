@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Ryan.Maps.Win.Views"
              mc:Ignorable="d" 
              Background="#f2f2f2"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="800" d:DesignWidth="800">
 
     <UserControl.Resources>
 
@@ -41,19 +41,64 @@
                                 <Hyperlink Command="{Binding DataContext.NavigateToUrlCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                            CommandParameter="{Binding Path=Url}"
                                            TextDecorations="None">
-                                    <StackPanel Orientation="Horizontal">
-                                    <Image Source="{Binding Path=FullLogoImagePath}"
-                                           MaxHeight="50"
-                                           MaxWidth="100"
-                                           VerticalAlignment="Bottom"/>
+                                    <StackPanel Orientation="Vertical">
+                                    <Border Background="#017dad" 
+                                            HorizontalAlignment="Center"
+                                            Height="50"
+                                            Width="100" >
+                                        <Image Source="{Binding Path=FullLogoImagePath}"
+                                               Margin="5"
+                                               Stretch="Uniform"
+                                               VerticalAlignment="Center"/>
+                                    </Border>
                                     <TextBlock Cursor="Hand"
                                                FontFamily="Segoe UI"
-                                               FontSize="14"
+                                               FontSize="12"
                                                FontWeight="Normal"
-                                               Margin="5,0,0,0"
+                                               Margin="0,0,0,0"
                                                TextDecorations="Underline"
                                                Text="{Binding Path=MlsDisplayName, StringFormat='Go to {0} website'}" />
-                                        </StackPanel>
+                                    </StackPanel>
+                                </Hyperlink>
+                            </TextBlock>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <!-- https://rachel53461.wordpress.com/2011/09/17/wpf-itemscontrol-example/ -->
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="MlsLinksTemplateVertical" TargetType="{x:Type ItemsControl}">
+            <ItemsControl ItemsSource="{Binding DataSourceLinkInfoCollection}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Margin="0,0,0,10">
+                                <Hyperlink Command="{Binding DataContext.NavigateToUrlCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                           CommandParameter="{Binding Path=Url}"
+                                           TextDecorations="None">
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                                        <Border Background="#017dad" 
+                                                HorizontalAlignment="Left"
+                                                Height="50"
+                                                Width="100" >
+                                            <Image Source="{Binding Path=FullLogoImagePath}"
+                                                   Margin="5"
+                                                   Stretch="Uniform"
+                                                   VerticalAlignment="Center"/>
+                                        </Border>
+                                        <TextBlock Cursor="Hand"
+                                                   FontFamily="Segoe UI"
+                                                   FontSize="12"
+                                                   FontWeight="Normal"
+                                                   HorizontalAlignment="Left"
+                                                   Margin="0"
+                                                   TextDecorations="Underline"
+                                                   Text="{Binding Path=MlsDisplayName, StringFormat='Go to {0} website'}" />
+                                    </StackPanel>
                                 </Hyperlink>
                             </TextBlock>
                     </DataTemplate>
@@ -64,109 +109,162 @@
 
     </UserControl.Resources>
 
-    <Grid>
+
+    <Grid x:Name="ContentGrid">
         <Border Grid.Row="0" 
                 BorderBrush="Black" 
                 BorderThickness="0,1,0,0" 
                 Margin="0" 
-                Padding="15,10">
-            <StackPanel Orientation="Vertical">
+                Padding="0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Orientation="Vertical" Margin="10,0,10,25">
 
-                <StackPanel>
-                    <!--Action Buttons -->
-                    <WrapPanel Margin="0,20,0,0" HorizontalAlignment="Left" Orientation="Vertical">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="600" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
 
-                        <!-- MLS Links -->
-                        <StackPanel Margin="0,0,0,10" HorizontalAlignment="Left" Orientation="Horizontal">
-                            <StackPanel MinHeight="100" Width="100" />
-                            <!--<StackPanel MinHeight="100" Width="100">
-                                    <Image Margin="5,25,5,0"
-                                           Source="/Ryan.Maps.Win;component/Resources/Images/DataSourceFrontEndLogos/Logo_Crmls_Crmls.png" />
-                                </StackPanel>-->
+                        <StackPanel Grid.Column="0" Grid.Row="0">
+                            <!--Action Buttons -->
+                            <StackPanel Margin="0,20,0,0" HorizontalAlignment="Left" Orientation="Vertical" Width="Auto">
 
-                            <StackPanel Margin="0" HorizontalAlignment="Left" Orientation="Vertical">
-                                <TextBlock Style="{StaticResource ImportActionTitle}"
-                                               Text="Get data directly from your MLS data provider" />
-                                <TextBlock Style="{StaticResource ImportActionDescription}" Text="Search for data directly from your MLS data provider by clicking on the link." />
-                                <StackPanel Margin="0,0,10,0" HorizontalAlignment="Left" Orientation="Horizontal">
-                                    <ItemsControl Template="{StaticResource MlsLinksTemplate}" />
+                                <!-- MLS Links -->
+                                <StackPanel Margin="0,0,0,10" HorizontalAlignment="Left" Orientation="Horizontal">
+                                    <!--<StackPanel MinHeight="100" Width="100" />-->
+                                    <!--<StackPanel MinHeight="100" Width="100">
+                                        <Image Margin="5,25,5,0"
+                                               Source="/Ryan.Maps.Win;component/Resources/Images/DataSourceFrontEndLogos/Logo_Crmls_Crmls.png" />
+                                    </StackPanel>-->
+                                    <Button Style="{StaticResource AdminBlueBigButton}">
+                                        <StackPanel Height="100"
+                                                Width="100" VerticalAlignment="Center">
+                                            <Image Margin="0,12,0,5"
+                                               Style="{StaticResource ResourceKey=BigIconButtonImage}"
+                                               Stretch="Uniform"
+                                               Width="90"
+                                               Height="40"
+                                               Source="/Ryan.Maps.Win;component/Resources/Images/Logo_Crmls_Crmls.png"/>
+                                            <TextBlock Style="{StaticResource BigButtonHeader}"
+                                                   Text="Open CRMLS"/>
+                                            <TextBlock Style="{StaticResource BigButtonDescription}" 
+                                                   Text="site in browser"
+                                                   HorizontalAlignment="Center" />
+                                        </StackPanel>
+                                    </Button>
+
+                                    <StackPanel Margin="0" HorizontalAlignment="Left" Orientation="Vertical">
+                                        <TextBlock Style="{StaticResource ImportActionTitle}"
+                                                   Text="Get data directly from your MLS data provider" />
+                                        <TextBlock Style="{StaticResource ImportActionDescription}" Text="Search for data directly from your MLS data provider by clicking on the link." />
+                                        <StackPanel Margin="0,0,10,0" HorizontalAlignment="Left" Orientation="Horizontal">
+                                            <ItemsControl Template="{StaticResource MlsLinksTemplate}" />
+                                        </StackPanel>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
-                        </StackPanel>
 
-                        <!--Open MLS File-->
-                        <StackPanel Margin="0,10,0,0" HorizontalAlignment="Left" Orientation="Horizontal">
-                            <Button Style="{StaticResource AdminBlueBigButton}"
-                                    Command="{Binding OpenFileCommand}">
-                                <StackPanel Width="100" 
-                                            Height="100">
-                                    <Image Margin="0,10,0,5"
-                                           Style="{StaticResource ResourceKey=BigIconButtonImage}" 
-                                           Source="/Ryan.Maps.Win;component/Resources/Images/FileOpenIconWhite.png"/>
-                                    <TextBlock Style="{StaticResource BigButtonHeader}"
-                                               Text="Open"/>
-                                    <TextBlock Style="{StaticResource BigButtonDescription}" 
-                                               Text="MLS Export File"
-                                               HorizontalAlignment="Center" />
+                                <!--Open MLS File-->
+                                <StackPanel Margin="0,10,0,0" HorizontalAlignment="Left" Orientation="Horizontal">
+                                    <Button Style="{StaticResource AdminBlueBigButton}"
+                                        Command="{Binding OpenFileCommand}">
+                                        <StackPanel Width="100" 
+                                                Height="100">
+                                            <Image Margin="0,10,0,5"
+                                               Style="{StaticResource ResourceKey=BigIconButtonImage}" 
+                                               Source="/Ryan.Maps.Win;component/Resources/Images/FileOpenIconWhite.png"/>
+                                            <TextBlock Style="{StaticResource BigButtonHeader}"
+                                                   Text="Open"/>
+                                            <TextBlock Style="{StaticResource BigButtonDescription}" 
+                                                   Text="MLS Export File"
+                                                   HorizontalAlignment="Center" />
+                                        </StackPanel>
+                                    </Button>
+                                    <StackPanel Margin="0" HorizontalAlignment="Left" Orientation="Vertical">
+                                        <TextBlock Style="{StaticResource ImportActionTitle}"
+                                                   Text="Load data from an export file" />
+                                        <TextBlock Style="{StaticResource ImportActionDescription}"
+                                                   Text="Import data from your MLS export file that contains data from your MLS search." />
+                                    </StackPanel>
                                 </StackPanel>
-                            </Button>
-                            <StackPanel Margin="0" HorizontalAlignment="Left" Orientation="Vertical">
-                                <TextBlock Style="{StaticResource ImportActionTitle}"
-                                               Text="Load data from an export file" />
-                                <TextBlock Style="{StaticResource ImportActionDescription}"
-                                               Text="Import data from your MLS export file that contains data from your MLS search." />
-                            </StackPanel>
-                        </StackPanel>
 
-                        <!-- Property Search -->
-                        <StackPanel Margin="0,10,0,0" HorizontalAlignment="Left" Orientation="Horizontal">
-                            <Button Style="{StaticResource AdminBlueBigButton}"
-                                        Command="{Binding SearchManuallyCommand}">
-                                <StackPanel Width="80" 
-                                            Height="100">
-                                    <Image Margin="0,10,0,5"
-                                           Style="{StaticResource BigIconButtonImage}" 
-                                           Source="/Ryan.Maps.Win;component/Resources/Images/SearchIconWhite.png"/>
-                                    <TextBlock Style="{StaticResource BigButtonHeader}"
-                                               Text="Property"/>
-                                    <TextBlock Style="{StaticResource BigButtonDescription}" 
-                                               Text="Search"
-                                               HorizontalAlignment="Center" />
-                                </StackPanel>
-                            </Button>
-                            <StackPanel Margin="0" HorizontalAlignment="Left" Orientation="Vertical">
-                                <TextBlock Style="{StaticResource ImportActionTitle}"
-                                               Text="Manually search for a property" />
-                                <TextBlock Style="{StaticResource ImportActionDescription}"
+                                <!-- Property Search -->
+                                <StackPanel Margin="0,10,0,0" HorizontalAlignment="Left" Orientation="Horizontal" Width="Auto">
+                                    <Button Style="{StaticResource AdminBlueBigButton}"
+                                            Command="{Binding SearchManuallyCommand}">
+                                        <StackPanel Width="80" 
+                                                Height="100">
+                                            <Image Margin="0,10,0,5"
+                                               Style="{StaticResource BigIconButtonImage}" 
+                                               Source="/Ryan.Maps.Win;component/Resources/Images/SearchIconWhite.png"/>
+                                            <TextBlock Style="{StaticResource BigButtonHeader}"
+                                                   Text="Property"/>
+                                            <TextBlock Style="{StaticResource BigButtonDescription}" 
+                                                   Text="Search"
+                                                   HorizontalAlignment="Center" />
+                                        </StackPanel>
+                                    </Button>
+                                    <StackPanel Margin="0" HorizontalAlignment="Left" Orientation="Vertical" Width="600">
+                                        <TextBlock Style="{StaticResource ImportActionTitle}"
+                                                   Text="Manually search for a property" />
+                                        <TextBlock Style="{StaticResource ImportActionDescription}"
                                                Text="Manually search for a property or list of properties by MLS number, APN/Tax ID, or Address." />
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!-- Image Test -->
+                                <StackPanel Margin="0,10,0,0" HorizontalAlignment="Left" Orientation="Horizontal" Width="Auto">
+                                    <Button Style="{StaticResource AdminBlueBigButton}">
+                                        <StackPanel Width="100" 
+                                                Height="100">
+                                            <Image x:Name="TestButton"
+                                               Margin="0,10,0,5"
+                                               Height="40"
+                                               Width="90"
+                                               Stretch="Uniform"
+                                               Style="{StaticResource BigIconButtonImage}" />
+                                            <TextBlock Style="{StaticResource BigButtonHeader}"
+                                                   Text="WFR"/>
+                                            <TextBlock Style="{StaticResource BigButtonDescription}" 
+                                                   Text="Search"
+                                                   HorizontalAlignment="Center" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+
+                            </StackPanel>
+
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical">
+                            <StackPanel Margin="0,20,0,0" HorizontalAlignment="Left" Orientation="Vertical">
+                                <ItemsControl Template="{StaticResource MlsLinksTemplateVertical}" />
                             </StackPanel>
                         </StackPanel>
 
-                    </WrapPanel>
+                    </Grid>
 
-                </StackPanel>
+                    <StackPanel Grid.Column="0" Grid.Row="1">
 
+                        <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Margin="10,5">
+                        <Hyperlink NavigateUri="http://www.google.com"
+                                   Command="{Binding NavigateToUrlCommand}"
+                                   CommandParameter="http://app.wodify.com"
+                                   TextDecorations="None" >
+                            <TextBlock Text="Go to google" />
+                            <!--<Image Source="{Binding Path=Value}"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"/>-->
+                        </Hyperlink>
+                    </TextBlock>
 
-                <StackPanel>
-
-                    <TextBlock HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   Margin="10,5">
-            <Hyperlink NavigateUri="http://www.google.com"
-                       Command="{Binding NavigateToUrlCommand}"
-                       CommandParameter="http://app.wodify.com"
-                       TextDecorations="None" >
-                <TextBlock Text="Go to google" />
-                <!--<Image Source="{Binding Path=Value}"
-                       HorizontalAlignment="Stretch"
-                       VerticalAlignment="Stretch"/>-->
-            </Hyperlink>
-        </TextBlock>
-
-                    <ItemsControl ItemsSource="{Binding DataSourceLinkInfo}" Margin="10">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock HorizontalAlignment="Left"
+                        <ItemsControl ItemsSource="{Binding DataSourceLinkInfoCollection}" Margin="10">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock HorizontalAlignment="Left"
                                VerticalAlignment="Top"
                                Margin="10,5">
                         <Hyperlink Command="{Binding DataContext.NavigateToUrlCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
@@ -178,18 +276,37 @@
                                    VerticalAlignment="Stretch"/>-->
                         </Hyperlink>
                     </TextBlock>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+
+                    </StackPanel>
+
+                    <WrapPanel Orientation="Horizontal" Margin="0,10">
+                        <TextBlock FontFamily="Segoe UI" FontSize="16" Padding="5" TextWrapping="WrapWithOverflow">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eu ornare dui, sed egestas velit. Duis quis libero rhoncus purus fermentum finibus sed eget leo. Mauris ac imperdiet augue. Sed ex dui, auctor ac accumsan sit amet, sagittis nec magna. Vestibulum malesuada nisl sed eleifend rhoncus. Maecenas vitae justo in tortor pretium lobortis non sit amet lectus. Nam vulputate tempor elit nec bibendum. Integer nulla nisl, efficitur eget placerat eu, maximus vestibulum leo. Suspendisse potenti. Nam ac eleifend tellus. Curabitur congue quam non ullamcorper consectetur. Vestibulum vitae sollicitudin leo.</TextBlock>
+                        <TextBlock FontFamily="Segoe UI" FontSize="16" Padding="5" TextWrapping="WrapWithOverflow">Fusce pulvinar nibh eu ligula ornare, et dictum quam lacinia. Pellentesque non semper odio. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vivamus eleifend lacus aliquet, egestas nisi ac, consequat metus. Cras nisl nisl, consectetur sed orci in, pretium suscipit ligula. Etiam ut diam quis nunc blandit sagittis. Praesent justo justo, eleifend vitae nulla id, fermentum volutpat lectus. Phasellus in elit elit. Mauris ultricies ipsum vel nunc volutpat, eu placerat mi feugiat. Aenean nec sem nec massa bibendum dapibus.</TextBlock>
+                        <TextBlock FontFamily="Segoe UI" FontSize="16" Padding="5" TextWrapping="WrapWithOverflow">Nunc eros nunc, commodo nec ligula non, elementum aliquet nunc. Etiam rutrum vel lectus sed fringilla. Mauris ac maximus orci. In id metus et quam consectetur ultricies. Integer malesuada convallis turpis et luctus. Sed eleifend tortor id velit sollicitudin, in lobortis nunc lobortis. Curabitur quam magna, vehicula malesuada commodo sed, varius sed ligula. Nullam gravida ullamcorper risus, at tempus sapien convallis eu. Aliquam commodo tellus in lacus cursus consequat. Aenean non interdum turpis, ac placerat neque. Donec venenatis gravida enim eu vestibulum. Ut elementum nisl id tincidunt rhoncus. Vestibulum mollis risus eu lobortis accumsan. Maecenas ut nisi ipsum.</TextBlock>
+                    </WrapPanel>
+
+                    <StackPanel>
+                        <Button Click="PrintControl" 
+                            Content="Print" 
+                            FontFamily="Segoe UI"
+                            FontSize="16"
+                            HorizontalAlignment="Left"
+                            Width="100" />
+                    </StackPanel>
+
+
+
 
                 </StackPanel>
-
-            </StackPanel>
+            </ScrollViewer>
         </Border>
     </Grid>
 </UserControl>

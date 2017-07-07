@@ -49,10 +49,12 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Device" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -91,6 +93,7 @@
     <Compile Include="ViewModels\DelegateCommand.cs" />
     <Compile Include="ViewModels\HyperlinkViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\PrintableMapViewModel.cs" />
     <Compile Include="ViewModels\PropertySearchViewModel.cs" />
     <Compile Include="ViewModels\ProximityViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
@@ -108,6 +111,9 @@
     </Compile>
     <Compile Include="Views\HyperlinkView.xaml.cs">
       <DependentUpon>HyperlinkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PrintableMapView.xaml.cs">
+      <DependentUpon>PrintableMapView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PropertySearchView.xaml.cs">
       <DependentUpon>PropertySearchView.xaml</DependentUpon>
@@ -155,6 +161,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\PrintableMapView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\PropertySearchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -181,6 +191,10 @@
     <Content Include="Resources\Html\Streetside.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Images\Logo_Crmls_Claw.png" />
+    <Resource Include="Resources\Images\Logo_Crmls_Itech.png" />
+    <Resource Include="Resources\Images\Logo_Crmls_Crmls.png" />
+    <Resource Include="Resources\Images\Logo_PortlandRmls.png" />
     <Resource Include="Resources\Images\SearchIcon.png" />
     <Resource Include="Resources\Images\SearchIconWhite.png" />
     <Resource Include="Resources\Images\FileOpenIcon.png" />

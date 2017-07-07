@@ -64,6 +64,7 @@ namespace Ryan.Maps.Win
             this.propertySearch.Style = (Style)FindResource("NavButtons");
             this.deeds.Style = (Style)FindResource("NavButtons");
             this.hyperlinks.Style = (Style)FindResource("NavButtons");
+            this.printableMap.Style = (Style)FindResource("NavButtons");
             
             var vm = sender as MainWindowViewModel;
 
@@ -89,6 +90,9 @@ namespace Ryan.Maps.Win
                     break;
                 case "Hyperlinks View":
                     this.hyperlinks.Style = (Style)FindResource("NavButtonsSelected");
+                    break;
+                case "Printable Map View":
+                    this.printableMap.Style = (Style)FindResource("NavButtonsSelected");
                     break;
             }
 

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Ryan.Maps.Win.ViewModels
@@ -32,7 +33,7 @@ namespace Ryan.Maps.Win.ViewModels
 
         private ObservableCollection<DataSourceLinkInfo> _dataSourceLinkInfo;
 
-        public ObservableCollection<DataSourceLinkInfo> DataSourceLinkInfo
+        public ObservableCollection<DataSourceLinkInfo> DataSourceLinkInfoCollection
         {
             get { return _dataSourceLinkInfo; }
             set
@@ -61,7 +62,6 @@ namespace Ryan.Maps.Win.ViewModels
             }
         }
 
-
         private void NavigateToUrlCommandExecute(object param)
         {
             var dataSourceUrl = (string)param ?? "http://www.google.com";
@@ -69,33 +69,16 @@ namespace Ryan.Maps.Win.ViewModels
             System.Diagnostics.Process.Start(dataSourceUrl);
         }
 
+
         #endregion
     }
 
     public class DataSourceLinkInfo : ViewModelBase
     {
-        private string _logoFileName;
-
-        public string LogoFileName
-        {
-            get { return _logoFileName; }
-            set
-            {
-                _logoFileName = value;
-                OnPropertyChanged("LogoFileName");
-            }
-        }
-
-        private string _url;
-
-        public string Url
-        {
-            get { return _url; }
-            set {
-                _url = value;
-                OnPropertyChanged("Url");
-            }
-        }
+        public string MlsDisplayName { get; set; }
+        public string Url { get; set; }
+        public string LogoFileName { get; set; }
+        public string FullLogoImagePath { get; set; }
 
 
     }

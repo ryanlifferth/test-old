@@ -29,6 +29,11 @@ namespace Ryan.Maps.Win.Views
         private List<Pushpin> _modifiedPushpins = new List<Pushpin>();
         Location _originalLocation;
 
+        private string _backgroundColorSubject = "#ffffff"; //"#F4CAB5"
+        private string _borderColorSubject = "#B73830";  //"#b73830"
+        private string _backgroundColorComp = "#ffffff"; //"#F4CAB5"
+        private string _borderColorComp = "#005167";  //"#b73830"
+
         #endregion
 
         public BingMapView()
@@ -68,17 +73,17 @@ namespace Ryan.Maps.Win.Views
                         Zip = "84045"
                     }
                 },
-                Comp3 = new Ryan.Maps.Win.Models.Comp
-                {
-                    CompNumber = "3",
-                    Address = new Address
-                    {
-                        AddressLine1 = "5848 Dartmouth Dr",
-                        City = "Mountain Green",
-                        State = "UT",
-                        Zip = "84050"
-                    }
-                },
+                //Comp3 = new Ryan.Maps.Win.Models.Comp
+                //{
+                //    CompNumber = "3",
+                //    Address = new Address
+                //    {
+                //        AddressLine1 = "5848 Dartmouth Dr",
+                //        City = "Mountain Green",
+                //        State = "UT",
+                //        Zip = "84050"
+                //    }
+                //},
                 ShowDetailedMapPushpin = false
             };
 
@@ -101,7 +106,7 @@ namespace Ryan.Maps.Win.Views
             {
                 new Destination { Address = _bingMapViewModel.Comp1.Address },
                 new Destination { Address = _bingMapViewModel.Comp2.Address },
-                new Destination { Address = _bingMapViewModel.Comp3.Address }
+                //new Destination { Address = _bingMapViewModel.Comp3.Address }
             };
 
             var geoCodeRepo = new AddressUtility.Repositories.BingGeocodeAddressRepository();
@@ -112,7 +117,7 @@ namespace Ryan.Maps.Win.Views
             {
                 this._bingMapViewModel.Comp1.DistanceFromSubject = distances.Destinations[0].DistanceFromOrigin.Substring(0, distances.Destinations[0].DistanceFromOrigin.IndexOf("mile")) + "mi.";
                 this._bingMapViewModel.Comp2.DistanceFromSubject = distances.Destinations[1].DistanceFromOrigin.Substring(0, distances.Destinations[1].DistanceFromOrigin.IndexOf("mile")) + "mi.";
-                this._bingMapViewModel.Comp3.DistanceFromSubject = distances.Destinations[2].DistanceFromOrigin.Substring(0, distances.Destinations[2].DistanceFromOrigin.IndexOf("mile")) + "mi.";
+                //this._bingMapViewModel.Comp3.DistanceFromSubject = distances.Destinations[2].DistanceFromOrigin.Substring(0, distances.Destinations[2].DistanceFromOrigin.IndexOf("mile")) + "mi.";
             }
             var locations = new List<Location>();
 
@@ -125,9 +130,9 @@ namespace Ryan.Maps.Win.Views
             AddPropertyPushpin(location, nameof(_bingMapViewModel.Comp2));
             locations.Add(location);
 
-            location = new Location(double.Parse(distances.Destinations[2].GeocodedAddress.Latitude), double.Parse(distances.Destinations[2].GeocodedAddress.Longitude));
-            AddPropertyPushpin(location, nameof(_bingMapViewModel.Comp3));
-            locations.Add(location);
+            //location = new Location(double.Parse(distances.Destinations[2].GeocodedAddress.Latitude), double.Parse(distances.Destinations[2].GeocodedAddress.Longitude));
+            //AddPropertyPushpin(location, nameof(_bingMapViewModel.Comp3));
+            //locations.Add(location);
 
             // Add subject pin
             var subjectLoc = new Location(double.Parse(distances.GeocodedOriginAddress.Latitude), double.Parse(distances.GeocodedOriginAddress.Longitude));
@@ -182,6 +187,9 @@ namespace Ryan.Maps.Win.Views
 
         private void AddPropertyPushpin(Location location, string propertyName, string templateType = "Comp")
         {
+            var backgroundColor = GetBackgroundColor(templateType);
+            var borderColor = GetBorderColor(templateType);
+
             var pushpinTemplateSize = _bingMapViewModel.ShowDetailedMapPushpin ? "" : "Small";
             var pin = new Pushpin
             {
@@ -190,6 +198,8 @@ namespace Ryan.Maps.Win.Views
                 Style = (Style)this.FindResource("AddressPushpin"),
                 PositionOrigin = PositionOrigin.TopLeft,
                 Template = (ControlTemplate)this.FindResource(templateType + "PushpinTemplate"),
+                BorderBrush = (Brush)(new BrushConverter().ConvertFrom(borderColor)),
+                Background = (Brush)(new BrushConverter().ConvertFrom(backgroundColor)),
                 Tag = templateType,
                 AllowDrop = true
             };
@@ -221,7 +231,15 @@ namespace Ryan.Maps.Win.Views
             }
         }
 
+        private string GetBackgroundColor(string templateType)
+        {
+            return templateType.ToLowerInvariant() == "comp" ? _backgroundColorComp : _backgroundColorSubject;
+        }
 
+        private string GetBorderColor(string templateType)
+        {
+            return templateType.ToLowerInvariant() == "comp" ? _borderColorComp : _borderColorSubject;
+        }
 
         /// <summary>
         /// Example/POC for adding custom pin with templates
@@ -309,6 +327,8 @@ namespace Ryan.Maps.Win.Views
                         button.Tag = "AerialMode";
                         mapTypeName.Text = "Road";
                         mapTypeName.Foreground = new SolidColorBrush(Colors.Black);
+
+                        ChangePinsToSatelliteModeFriendlyColor();
                         break;
                     }
                 default:
@@ -319,10 +339,38 @@ namespace Ryan.Maps.Win.Views
                         button.Tag = "RoadMode";
                         mapTypeName.Text = "Aerial";
                         mapTypeName.Foreground = new SolidColorBrush(Colors.White);
+
+                        ChangePinsToDefaultColor();
                         break;
                     }
             }
 
+        }
+
+        private void ChangePinsToSatelliteModeFriendlyColor()
+        {
+            ChangePinColors("#D85852", "#239FFF");
+        }
+
+        private void ChangePinsToDefaultColor()
+        {
+            ChangePinColors(_borderColorSubject, _borderColorComp);
+        }
+
+        private void ChangePinColors(string subjectColor, string compColor)
+        {
+            Brush borderBrush;
+
+            foreach (var child in bingMap.Children)
+            {
+                var childPushpin = (Pushpin)child;
+                var templateType = childPushpin.Tag?.ToString().ToLower() == "comp" ? "Comp" : "Subject";
+
+                borderBrush = templateType == "Subject" ?
+                                                (Brush)(new BrushConverter().ConvertFrom(subjectColor)) :
+                                                (Brush)(new BrushConverter().ConvertFrom(compColor));
+                childPushpin.BorderBrush = borderBrush;
+            }
         }
 
         private void popupTest_Click(object sender, RoutedEventArgs e)

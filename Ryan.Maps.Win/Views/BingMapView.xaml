@@ -224,13 +224,19 @@
                 <Canvas>
                     <Path x:Name="PathPointer"
                           Data="M3,15 L-4,-2 L12,3"
-                          Fill="#b73830"
+                          Fill="{TemplateBinding BorderBrush}"
                           Margin="0"
-                          Stroke="#b73830" 
+                          Stroke="{TemplateBinding BorderBrush}"
                           StrokeThickness="1.5"  />
                 </Canvas>
 
-                <Rectangle x:Name="Infobox" Fill="White" Margin="0" Stroke="#FFb73830" StrokeThickness="1.5" RadiusX="5" RadiusY="5"/>
+                <Rectangle x:Name="Infobox" 
+                           Fill="{TemplateBinding Background}" 
+                           Margin="0" 
+                           Stroke="{TemplateBinding BorderBrush}" 
+                           StrokeThickness="1.5" 
+                           RadiusX="5" 
+                           RadiusY="5"/>
 
                 <ContentPresenter HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
@@ -250,13 +256,19 @@
                 <Canvas>
                     <Path x:Name="PathPointer"
                           Data="M3,15 L-4,-2 L12,3"
-                          Fill="#FF4285f4"
+                          Fill="{TemplateBinding BorderBrush}"
                           Margin="0"
-                          Stroke="#FF4285f4" 
+                          Stroke="{TemplateBinding BorderBrush}" 
                           StrokeThickness="1.5"  />
                 </Canvas>
 
-                <Rectangle x:Name="Infobox" Fill="White" Margin="0" Stroke="#FF005167" StrokeThickness="1.5" RadiusX="5" RadiusY="5"/>
+                <Rectangle x:Name="Infobox" 
+                           Fill="{TemplateBinding Background}" 
+                           Margin="0" 
+                           Stroke="{TemplateBinding BorderBrush}" 
+                           StrokeThickness="1.5" 
+                           RadiusX="5"
+                           RadiusY="5"/>
 
                 <ContentPresenter HorizontalAlignment="Left"
                                 VerticalAlignment="Center"

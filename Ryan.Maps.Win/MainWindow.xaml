@@ -30,6 +30,9 @@
         <DataTemplate DataType="{x:Type viewmodels:HyperlinkViewModel}">
             <views:HyperlinkView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:PrintableMapViewModel}">
+            <views:PrintableMapView />
+        </DataTemplate>
         <Style x:Key="NavButtons" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -104,8 +107,9 @@
                 <Button x:Name="bingStreetside" Content="Bing Streetside" Command="{Binding Path=LoadBingStreetsideCommand}" Style="{StaticResource NavButtons}" />
                 <Button x:Name="bingAddress" Content="Bing Address" Command="{Binding Path=LoadBingAddressCommand}" Style="{StaticResource NavButtons}" />
                 <Button x:Name="propertySearch" Content="Property Search" Command="{Binding Path=LoadPropertySearchCommand}" Style="{StaticResource NavButtons}" />
-                <Button x:Name="deeds" Content="Deeds" Command="{Binding Path=LoadDeedsCommand}" Style="{StaticResource NavButtonsSelected}" />
+                <Button x:Name="deeds" Content="Deeds" Command="{Binding Path=LoadDeedsCommand}" Style="{StaticResource NavButtons}" />
                 <Button x:Name="hyperlinks" Content="Hyperlinks" Command="{Binding Path=LoadHyperlinkCommand}" Style="{StaticResource NavButtons}" />
+                <Button x:Name="printableMap" Content="Printable Map" Command="{Binding Path=LoadPrintableMapCommand}" Style="{StaticResource NavButtonsSelected}" />
             </StackPanel>
 
             <ContentControl Content="{Binding Path=CurrentViewModel}" Grid.Row="1" VerticalContentAlignment="Top"></ContentControl>

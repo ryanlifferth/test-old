@@ -18,6 +18,7 @@ namespace Ryan.Maps.Win.ViewModels
         public ICommand LoadPropertySearchCommand { get; private set; }
         public ICommand LoadDeedsCommand { get; private set; }
         public ICommand LoadHyperlinkCommand { get; private set; }
+        public ICommand LoadPrintableMapCommand { get; private set; }
 
         // ViewModel that is currently bound to the ContentControl
         private ViewModelBase _currentViewModel;
@@ -43,7 +44,9 @@ namespace Ryan.Maps.Win.ViewModels
             //this.LoadBingStreetside();
             //this.LoadBingAddress();
             //this.LoadPropertySearch();
-            this.LoadDeeds();
+            //this.LoadDeeds();
+            //this.LoadHyperlink();
+            this.LoadPrintableMap();
 
             // Hook up Commands to associated methods
             this.LoadProximityCommand = new DelegateCommand(o => this.LoadProximity());
@@ -53,6 +56,7 @@ namespace Ryan.Maps.Win.ViewModels
             this.LoadPropertySearchCommand = new DelegateCommand(o => this.LoadPropertySearch());
             this.LoadDeedsCommand = new DelegateCommand(o => this.LoadDeeds());
             this.LoadHyperlinkCommand = new DelegateCommand(o => this.LoadHyperlink());
+            this.LoadPrintableMapCommand = new DelegateCommand(o => this.LoadPrintableMap());
         }
         #endregion
 
@@ -91,6 +95,11 @@ namespace Ryan.Maps.Win.ViewModels
         private void LoadHyperlink()
         {
             CurrentViewModel = new HyperlinkViewModel() { ViewTitle = "Hyperlinks View" };
+        }
+
+        private void LoadPrintableMap()
+        {
+            CurrentViewModel = new PrintableMapViewModel() { ViewTitle = "Printable Map View" };
         }
 
         #endregion

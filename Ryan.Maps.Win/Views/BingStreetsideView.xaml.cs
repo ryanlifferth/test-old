@@ -19,6 +19,7 @@ namespace Ryan.Maps.Win.Views
     /// <summary>
     /// Interaction logic for BingStreetsideView.xaml
     /// </summary>
+    [System.Runtime.InteropServices.ComVisible(true)]
     public partial class BingStreetsideView : UserControl
     {
         public BingStreetsideView()
@@ -39,9 +40,12 @@ namespace Ryan.Maps.Win.Views
             mapViewport.NavigateToStream(source);
             //mapViewport.Navigate("http://www.google.com");
 
+            //mapViewport.ObjectForScripting = new ObjectForScriptingHelper(this);
         }
 
-        dynamic _streetside;
+
+        //dynamic _streetside;
+        public dynamic _streetside { get; set; }
         bool _firstLoad = true;
         private void MyButton_Click(object sender, RoutedEventArgs e)
         {
@@ -90,6 +94,7 @@ namespace Ryan.Maps.Win.Views
             }
         }
 
+
         private void MapCenter_Click(object sender, RoutedEventArgs e)
         {
             if (_streetside != null)
@@ -104,4 +109,31 @@ namespace Ryan.Maps.Win.Views
             _streetside.noStreetsideFound("");
         }
     }
+
+    //[System.Runtime.InteropServices.ComVisible(true)]
+    //public class ObjectForScriptingHelper
+    //{
+    //    BingStreetsideView _streetsideView;
+
+    //    public ObjectForScriptingHelper(BingStreetsideView streetsideView)
+    //    {
+    //        _streetsideView = streetsideView;
+    //    }
+
+    //    public void InvokeMeFromJavascript()
+    //    {
+    //        //_streetsideView.mapViewport.Refresh();
+    //        if (_streetsideView?._streetside?.lat != null &&
+    //            _streetsideView?._streetside?.lon != null)
+    //        {
+    //            //_streetsideView._streetside.updateView(_streetsideView._streetside.lat, _streetsideView._streetside.lon);
+    //            _streetsideView._streetside = _streetsideView.mapViewport.InvokeScript("streetsideMapBing");
+    //            _streetsideView._streetside.loadMapScenario(40.4017665, -111.9331024);
+
+    //        }
+            
+    //    }
+
+    //}
+
 }
