@@ -50,6 +50,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="ReachFramework" />
+    <Reference Include="Ryan.AddressUtility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Ryan.AddressUtility.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Device" />
@@ -78,17 +82,21 @@
     <Compile Include="Converters\AddressConverter.cs" />
     <Compile Include="Converters\CityStateZipConverter.cs" />
     <Compile Include="Converters\NullToVisibility.cs" />
+    <Compile Include="Converters\StringToUppercase.cs" />
     <Compile Include="Converters\ZeroToVisibility.cs" />
-    <Compile Include="Models\Address.cs" />
+    <Compile Include="Enumeration\PropertyUsageType.cs" />
     <Compile Include="Models\Comp.cs" />
+    <Compile Include="Models\ComparableType.cs" />
     <Compile Include="Models\County.cs" />
     <Compile Include="Models\FederalState.cs" />
+    <Compile Include="Models\PropertyMap.cs" />
     <Compile Include="Resources\Spinner.xaml.cs">
       <DependentUpon>Spinner.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\BingAddressGeocodingViewModel.cs" />
     <Compile Include="ViewModels\BingMapViewModel.cs" />
     <Compile Include="ViewModels\BingStreetsideViewModel.cs" />
+    <Compile Include="ViewModels\CropMapViewModel.cs" />
     <Compile Include="ViewModels\DeedsViewModel.cs" />
     <Compile Include="ViewModels\DelegateCommand.cs" />
     <Compile Include="ViewModels\HyperlinkViewModel.cs" />
@@ -105,6 +113,9 @@
     </Compile>
     <Compile Include="Views\BingStreetsideView.xaml.cs">
       <DependentUpon>BingStreetsideView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CropMapView.xaml.cs">
+      <DependentUpon>CropMapView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DeedsView.xaml.cs">
       <DependentUpon>DeedsView.xaml</DependentUpon>
@@ -141,6 +152,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\Styles\MapStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\BingAddressGeoCodingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -150,6 +165,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BingStreetsideView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CropMapView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -191,6 +210,12 @@
     <Content Include="Resources\Html\Streetside.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Images\MapTypeAerial-Large.jpg" />
+    <Resource Include="Resources\Images\MapTypeRoad-Large.jpg" />
+    <Resource Include="Resources\Images\MapZoomIn.png" />
+    <Resource Include="Resources\Images\MapZoomInOver.png" />
+    <Resource Include="Resources\Images\MapZoomOut.png" />
+    <Resource Include="Resources\Images\MapZoomOutOver.png" />
     <Resource Include="Resources\Images\Logo_Crmls_Claw.png" />
     <Resource Include="Resources\Images\Logo_Crmls_Itech.png" />
     <Resource Include="Resources\Images\Logo_Crmls_Crmls.png" />
@@ -224,12 +249,6 @@
     <Resource Include="Resources\Images\MapTypeAerial.png" />
     <Resource Include="Resources\Images\MapTypeRoad.png" />
     <Resource Include="Resources\Images\spinner.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Ryan.AddressUtility\Ryan.AddressUtility.csproj">
-      <Project>{2ca5211b-bd90-4f45-ac02-9fbd24061e24}</Project>
-      <Name>Ryan.AddressUtility</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\zoomIn.png" />

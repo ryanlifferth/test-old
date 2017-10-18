@@ -30,7 +30,8 @@ namespace Ryan.AddressUtility.Utilities
                 OriginAddress = subjectAddress,
                 GeocodedOriginAddress = AddressHasGeoCoordinates(subjectAddress) ?
                                             subjectAddress :
-                                            geoCodingRepository.GeocodeAddress(subjectAddress) // Only geocode if lat/long ARE NOT present
+                                            geoCodingRepository.GeocodeAddress(subjectAddress), // Only geocode if lat/long ARE NOT present
+                Destinations = new List<Destination>()
             };
 
             var originGeoCoordinate = new GeoCoordinate(Double.Parse(response.GeocodedOriginAddress.Latitude, CultureInfo.InvariantCulture), Double.Parse(response.GeocodedOriginAddress.Longitude, CultureInfo.InvariantCulture));
@@ -49,9 +50,10 @@ namespace Ryan.AddressUtility.Utilities
                 var compGeoCoordinate = new GeoCoordinate(Double.Parse(destination.GeocodedAddress.Latitude, CultureInfo.InvariantCulture), Double.Parse(destination.GeocodedAddress.Longitude, CultureInfo.InvariantCulture));
                 var bearing = GetBearing(originGeoCoordinate, compGeoCoordinate);
                 destination.DistanceFromOrigin = DegreesToCardinal(bearing);
+                response.Destinations.Add(destination);
             }
 
-            return new DistanceResponse();
+            return response;
         }
 
         public DistanceResponse GetProximitiesByDestination(Address subjectAddress, List<Destination> destinationProperties, IGeocodeAddress geoCodingRepository)

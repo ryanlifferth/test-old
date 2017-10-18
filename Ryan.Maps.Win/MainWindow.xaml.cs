@@ -66,6 +66,7 @@ namespace Ryan.Maps.Win
             this.hyperlinks.Style = (Style)FindResource("NavButtons");
             this.printableMap.Style = (Style)FindResource("NavButtons");
             
+
             var vm = sender as MainWindowViewModel;
 
             switch (vm?.CurrentViewModel?.ViewTitle)
@@ -92,6 +93,9 @@ namespace Ryan.Maps.Win
                     this.hyperlinks.Style = (Style)FindResource("NavButtonsSelected");
                     break;
                 case "Printable Map View":
+                    this.printableMap.Style = (Style)FindResource("NavButtonsSelected");
+                    break;
+                case "Crop Image":
                     this.printableMap.Style = (Style)FindResource("NavButtonsSelected");
                     break;
             }

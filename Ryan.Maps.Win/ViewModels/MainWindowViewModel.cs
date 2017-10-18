@@ -20,6 +20,8 @@ namespace Ryan.Maps.Win.ViewModels
         public ICommand LoadHyperlinkCommand { get; private set; }
         public ICommand LoadPrintableMapCommand { get; private set; }
 
+        public ICommand LoadCropImageCommand { get; private set; }
+
         // ViewModel that is currently bound to the ContentControl
         private ViewModelBase _currentViewModel;
         #endregion
@@ -47,6 +49,7 @@ namespace Ryan.Maps.Win.ViewModels
             //this.LoadDeeds();
             //this.LoadHyperlink();
             this.LoadPrintableMap();
+            //this.LoadCropMap();
 
             // Hook up Commands to associated methods
             this.LoadProximityCommand = new DelegateCommand(o => this.LoadProximity());
@@ -57,6 +60,8 @@ namespace Ryan.Maps.Win.ViewModels
             this.LoadDeedsCommand = new DelegateCommand(o => this.LoadDeeds());
             this.LoadHyperlinkCommand = new DelegateCommand(o => this.LoadHyperlink());
             this.LoadPrintableMapCommand = new DelegateCommand(o => this.LoadPrintableMap());
+
+            this.LoadCropImageCommand = new DelegateCommand(o => this.LoadCropMap());
         }
         #endregion
 
@@ -100,6 +105,11 @@ namespace Ryan.Maps.Win.ViewModels
         private void LoadPrintableMap()
         {
             CurrentViewModel = new PrintableMapViewModel() { ViewTitle = "Printable Map View" };
+        }
+
+        private void LoadCropMap()
+        {
+            CurrentViewModel = new CropMapViewModel() { ViewTitle = "Crop Image" };
         }
 
         #endregion

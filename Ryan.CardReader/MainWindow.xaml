@@ -1,0 +1,291 @@
+﻿<Window x:Class="Ryan.CardReader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:v="clr-namespace:Ryan.CardReader.ValidationRules"
+        xmlns:local="clr-namespace:Ryan.CardReader"
+        xmlns:convert="clr-namespace:Ryan.CardReader.Converters"
+        mc:Ignorable="d"
+        Title="DataMaster Registration"
+        Height="750" Width="800">
+    <Window.Resources>
+        <convert:FallbackConverter x:Key="FallbackConverter" />
+        <v:RequiredValidator x:Key="RequiredValidator" />
+
+        <Style x:Key="ComboStyle" TargetType="{x:Type ComboBox}">
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="26" />
+            <Setter Property="Margin" Value="0,0,10,0" />
+            <Setter Property="Padding" Value="6,1" />
+        </Style>
+
+        <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="26" />
+
+            <Setter Property="Margin" Value="0,0,10,0" />
+
+            <!--<Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="BorderBrush" Value="Red" />
+                </Trigger>
+            </Style.Triggers>-->
+        </Style>
+
+        <Style x:Key="LabelStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="3,5,0,0" />
+        </Style>
+
+        <ControlTemplate x:Key="RequiredValidationTemplate">
+            <DockPanel>
+                <!--<TextBlock Foreground="Red" DockPanel.Dock="Top" HorizontalAlignment="Right" Text="{Binding [0].ErrorContent}" />-->
+                <TextBlock Foreground="Red" DockPanel.Dock="Top" HorizontalAlignment="Right" FontSize="10" Text="*Required" />
+                <AdornedElementPlaceholder x:Name="ErrorAdorner" />
+            </DockPanel>
+        </ControlTemplate>
+
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <!--<RowDefinition Height="60" />-->
+            <RowDefinition Height="*" />
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+
+        <!--<TextBlock x:Name="label"
+                   Grid.Row="0"
+                   FontFamily="Segoe UI Light"
+                   FontSize="40"
+                   Text="{Binding Title, FallbackValue='[Title]'}"
+                   HorizontalAlignment="Left" 
+                   Margin="10,10,0,0" 
+                   VerticalAlignment="Bottom">
+        </TextBlock>-->
+
+        <ScrollViewer Grid.Row="0">
+            <StackPanel >
+
+                <StackPanel Margin="20,10,15,10">
+                    <StackPanel Orientation="Vertical">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="AttendeeDropdownLabel" Text="Name" Margin="0" Grid.Column="0" Style="{StaticResource LabelStyle}" />
+                            <Button x:Name="NewUser" 
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Click="NewUser_Click"
+                                Content="User Not in List"
+                                Cursor="Hand"
+                                FontFamily="Segoe UI"
+                                FontSize="12"
+                                Foreground="Blue"
+                                Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                Margin="0,0,15,0"
+                                Padding="0"
+                                VerticalAlignment="Center"
+                                />
+                        </Grid>
+                        <ComboBox x:Name="AttendeeDropdown" 
+                                  DisplayMemberPath="FullName" 
+                                  IsTextSearchEnabled="True"
+                                  IsTextSearchCaseSensitive="False"
+                                  ItemsSource="{Binding Attendees}" 
+                                  TextSearch.TextPath="FullName"
+                                  SelectedItem="{Binding SelectedAttendee}"
+                                  Style="{StaticResource ComboStyle}"
+                                  />
+
+
+                        <Grid x:Name="NewUserNameTextBoxes" Visibility="Collapsed">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Vertical" Grid.Column="0">
+                                <TextBlock Text="First Name" Style="{StaticResource LabelStyle}" />
+                                <TextBox x:Name="FirstName" 
+                                         Style="{StaticResource TextBoxStyle}" 
+                                         Text="{Binding SelectedAttendee.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                         Validation.ErrorTemplate="{StaticResource RequiredValidationTemplate}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Grid.Column="1">
+                                <TextBlock Text="Last Name" Style="{StaticResource LabelStyle}" />
+                                <TextBox x:Name="LastName" 
+                                         Style="{StaticResource TextBoxStyle}" 
+                                         Text="{Binding SelectedAttendee.LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                         Validation.ErrorTemplate="{StaticResource RequiredValidationTemplate}" />
+                            </StackPanel>
+                        </Grid>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Phone" Style="{StaticResource LabelStyle}" />
+                        <TextBox x:Name="phone"
+                                 Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding Path=SelectedAttendee.Phone, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                                 Validation.ErrorTemplate="{StaticResource RequiredValidationTemplate}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="e-mail" Style="{StaticResource LabelStyle}" />
+                        <TextBox x:Name="Email"
+                                 Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding Path=SelectedAttendee.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                 Validation.ErrorTemplate="{StaticResource RequiredValidationTemplate}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Product" Style="{StaticResource LabelStyle}" />
+                        <ComboBox x:Name="ProductDropdown" 
+                                  DisplayMemberPath="ProductName" 
+                                  IsTextSearchEnabled="True"
+                                  IsTextSearchCaseSensitive="False"
+                                  ItemsSource="{Binding ProductList}" 
+                                  TextSearch.TextPath="FullName"
+                                  SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"                                 
+                                  Style="{StaticResource ComboStyle}"
+                                  />
+                    </StackPanel>
+                </StackPanel>
+
+                <Separator BorderBrush="LightSlateGray" 
+                       BorderThickness="1" 
+                       Margin="20,20,25,10"
+                       Opacity="0.3" />
+
+                <StackPanel Margin="20,10">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Credit Card Number" Style="{StaticResource LabelStyle}" />
+                        <TextBox x:Name="CreditCardDisplay"
+                                 KeyUp="CreditCardDisplay_KeyUp"
+                                 Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding Path=CreditCardNumberDisplay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                 Validation.ErrorTemplate="{StaticResource RequiredValidationTemplate}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Month" Style="{StaticResource LabelStyle}" />
+
+                            <!--<TextBox x:Name="ExpirationMonth"
+                                 Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding Path=ExpMonth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                 Width="60"
+                                 />-->
+                            <ComboBox x:Name="Expirationmonth"
+                                      IsTextSearchCaseSensitive="False"
+                                      IsTextSearchEnabled="True"
+                                      ItemsSource="{Binding MonthList}" 
+                                      Padding="6,1"
+                                      SelectedItem="{Binding Path=ExpMonth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"                                 
+                                      Style="{StaticResource ComboStyle}"
+                                      Width="60"
+                                      />
+                        </StackPanel>
+                        <TextBlock Foreground="LightSlateGray"                               
+                               FontFamily="Segoe UI Light"
+                               FontSize="30"
+                               Margin="-4,20,6,0"
+                               Text="/"
+                               />
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Year" Style="{StaticResource LabelStyle}" />
+
+                            <!--<TextBox x:Name="ExpirationYear"
+                                 Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding Path=ExpYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                 Width="100"
+                                 />-->
+                            <ComboBox x:Name="ExpirationYear"
+                                      IsTextSearchCaseSensitive="False"
+                                      IsTextSearchEnabled="True"
+                                      ItemsSource="{Binding YearList}" 
+                                      SelectedItem="{Binding Path=ExpYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"                                 
+                                      Style="{StaticResource ComboStyle}"
+                                      Width="100"
+                                      />
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="30,0,0,0">
+                            <TextBlock Text="Security Code" Style="{StaticResource LabelStyle}" Margin="0,5,0,0" />
+                            <TextBox x:Name="SecurityCode"
+                                 Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding Path=SecurityCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                 Validation.ErrorTemplate="{StaticResource RequiredValidationTemplate}" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Billing Address" Style="{StaticResource LabelStyle}" Margin="3,15,0,0" />
+                        <TextBox x:Name="AddressLine1"
+                             Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding Path=SelectedAttendee.Address.AddressLine1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                 Validation.ErrorTemplate="{StaticResource RequiredValidationTemplate}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="City" Style="{StaticResource LabelStyle}" />
+                            <TextBox x:Name="City"
+                                     Style="{StaticResource TextBoxStyle}"
+                                     Text="{Binding Path=SelectedAttendee.Address.City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                     Validation.ErrorTemplate="{StaticResource RequiredValidationTemplate}" 
+                                     Width="450"
+                                     />
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="State" Style="{StaticResource LabelStyle}" />
+                            <!--<TextBox x:Name="State"
+                                 MaxLength="2"
+                                 Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding Path=SelectedAttendee.Address.State, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                 Validation.ErrorTemplate="{StaticResource RequiredValidationTemplate}" />-->
+                            <ComboBox x:Name="State"
+                                      IsTextSearchEnabled="True"
+                                      IsTextSearchCaseSensitive="False"
+                                      ItemsSource="{Binding StateList}" 
+                                      SelectedItem="{Binding Path=SelectedAttendee.Address.State, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                                 
+                                      Style="{StaticResource ComboStyle}"
+                                      Padding="6,1"
+                                      Width="100"
+                                      />
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Zip" Style="{StaticResource LabelStyle}" />
+                            <TextBox x:Name="Zip"
+                                 MaxLength="10"
+                                 Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding Path=SelectedAttendee.Address.Zip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                 Validation.ErrorTemplate="{StaticResource RequiredValidationTemplate}" 
+                                 Width="150"
+                                 />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+            <Button x:Name="Cancel"
+                    Click="ClearUserData_Click"
+                    Content="Cancel"
+                    FontFamily="Segoe UI"
+                    FontSize="16"
+                    Margin="0,10,10, 10"
+                    Padding="25, 5"
+                    />
+            <Button x:Name="RegisterUser"
+                    Command="{Binding RegisterClicked}"
+                    Content="Register New User"
+                    FontFamily="Segoe UI"
+                    FontSize="20"
+                    Margin="0,10,25,10"
+                    Padding="15,5"
+                    />
+        </StackPanel>
+
+    </Grid>
+</Window>

@@ -4,11 +4,61 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Ryan.Maps.Win.Views"
+             xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" 
              Background="#f2f2f2"
              d:DesignHeight="800" d:DesignWidth="800">
 
+    <UserControl.Resources>
 
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Ryan.Maps.Win;component/Resources/Styles/MapStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="PropertyPushpinSubjectDataTemplateSmall">
+                <Grid>
+                    <TextBlock Text="S" 
+                        Cursor="Hand"
+                        FontFamily="Segoe UI" 
+                        FontSize="24" 
+                        FontWeight="SemiBold" 
+                        Foreground="#FF9E0B0F"
+                        Margin="10,-1,10,1"
+                        MouseDown="ExpandPushpin_Click"
+                        Opacity="0.6"
+                        Tag="Subject"
+                        VerticalAlignment="Center" >
+                    </TextBlock>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="PropertyPushpinCompDataTemplateSmall">
+                <Grid>
+                    <TextBlock Cursor="Hand"
+                           FontFamily="Segoe UI" 
+                           FontSize="20" 
+                           FontWeight="SemiBold" 
+                           Foreground="#FF005167" 
+                           Margin="5,0,5,3"
+                           MouseDown="ExpandPushpin_Click"
+                           Opacity="0.6" 
+                           Tag="Comp"
+                           VerticalAlignment="Center" >
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{1}{0}">
+                                <Binding Path="CompNumber" />
+                                <Binding Path="CompType.PropertyTypeAbbreviation" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Grid>
+            </DataTemplate>
+
+        </ResourceDictionary>
+
+    </UserControl.Resources>
     <Grid x:Name="ContentGrid">
         <Border Grid.Row="0" 
                 BorderBrush="Black" 
@@ -17,9 +67,139 @@
                 Padding="0">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-                <StackPanel Orientation="Vertical" Margin="10,0,10,25">
-                    <TextBlock FontFamily="Segoe UI Light" FontSize="18" Text="[Map stuff goes here]" Padding="25" />
-                </StackPanel>
+                <Grid Background="White">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height ="45"/>
+                        <RowDefinition />
+                        <RowDefinition Height="5" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="20,10,0,0" VerticalAlignment="Bottom">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="350"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="ViewHeader"
+                                       FontFamily="Segoe UI" 
+                                       FontSize="24" 
+                                       FontWeight="Light"
+                                       Grid.Column="0"
+                                       Text="Property and Comp Map"/>
+                            <TextBlock x:Name="MapLoadingStatus"
+                                       FontFamily="Segoe UI"
+                                       FontSize="14"
+                                       FontWeight="Light"
+                                       Foreground="Blue"
+                                       Grid.Column="1"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Bottom"
+                                       Text="" />
+                        </Grid>
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,30,0" Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,10,0">
+                                <TextBlock Text="Show MC"
+                                           FontFamily="Segoe UI"
+                                           FontSize="13"
+                                           FontWeight="Normal"
+                                           Foreground="{StaticResource PrintBlue}"
+                                           Margin="0,1,3,0"/>
+                                <ToggleButton x:Name="ToggleShowMC"
+                                              Click="ToggleShowMC_Toggle"
+                                              Cursor="Hand"
+                                              Height="16" 
+                                              IsChecked="{Binding ShowMarketConditionsOnMap}" 
+                                              Margin="0,0,25,0"
+                                              Style="{StaticResource AnimatedToggleSwitch}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,10,0">
+                                <TextBlock Text="Pushpin Detail"
+                                           FontFamily="Segoe UI"
+                                           FontSize="13"
+                                           FontWeight="Normal"
+                                           Foreground="{StaticResource PrintBlue}"
+                                           Margin="0,1,3,0"/>
+                                <ToggleButton x:Name="ToggleDetailedPushpin"
+                                              Click="ToggleDetaildPushpin_Toggle"
+                                              Cursor="Hand"
+                                              Height="16" 
+                                              IsChecked="{Binding ShowDetailedMapPushpin}" 
+                                              Margin="0,0,25,0"
+                                              Style="{StaticResource AnimatedToggleSwitch}" />
+                            </StackPanel>
+
+                            <Button Style="{StaticResource PrintButton}" Click="PrintButtonNew_Click" Visibility="Hidden" x:Name="PrintButton" />
+                            <Button Style="{StaticResource PrintPreviewButton}" Click="PrintPreview_Click" x:Name="PrintPrevieButton"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Name="MapGrid" Grid.Row="1" Margin="25, 5, 25, 40">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <m:Map x:Name="bingMap"
+                                       CredentialsProvider="Alt3gPG8fTsQ4-zl8x68BRF-nNPx9s4ho-U-oAU-tuo7jnKfkZYt_Cx-La0T533b"
+                                       Center="39.3683, -95.2734"
+                                       Grid.Row="0" Grid.Column="0"
+                                       Height="Auto"
+                                       MouseMove="MoveMouse_Handler"
+                                       MouseUp="MoveMouseUp_Handler"
+                                       Width="Auto"
+                                       ZoomLevel="4.0">
+                        </m:Map>
+                        <Canvas Margin="0" Height="Auto" Width="Auto" x:Name="MapButtons" >
+                            <Button x:Name="changeMapType" 
+                                    Click="MapType_Click"
+                                    Style="{StaticResource ChangeMapButtonStyle}"
+                                    Tag="RoadMode">
+                                <Canvas Height="32" Margin="0" Width="32">
+                                    <Image x:Name="mapTypeImage" Style="{StaticResource MapTypeButtonImage}" />
+                                    <TextBlock x:Name="mapTypeName" Style="{StaticResource MapTypeCaption}" Text="Aerial" />
+                                </Canvas>
+                            </Button>
+                            <Button x:Name="mapZoomIn"
+                        Click="MapZoom_Click"
+                        Style="{StaticResource ZoomButtonStyle}"
+                        Tag="1">
+                                <Image x:Name="zoomIn" Style="{StaticResource ZoomInButtonImage}" />
+                            </Button>
+                            <Button x:Name="mapZoomOut"
+                                Canvas.Top="110" 
+                                Click="MapZoom_Click"
+                                Style="{StaticResource ZoomButtonStyle}"
+                                Tag="-1">
+                                <Image x:Name="zoomOut" Style="{StaticResource ZoomOutButtonImage}" />
+                            </Button>
+                        </Canvas>
+
+                    </Grid>
+                    <Grid Name="MapGrid2" Grid.Row="1" Margin="25, 5, 25, 40">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Canvas Grid.Row="0" x:Name="canvas" Margin="0" Height="Auto" Width="Auto" Visibility="Hidden" Background="Aqua">
+
+                            <Image x:Name="MapImage" Stretch="UniformToFill" StretchDirection="Both" Source="C:\Users\Ron\Documents\DataMaster\testmap.jpeg" Width="{Binding ActualWidth, ElementName=MapGrid2}" Height="{Binding ActualHeight, ElementName=MapGrid2}" VerticalAlignment="Top"  />
+                            <Rectangle Name="rectangle" Stroke="Black">
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="WhiteSmoke" Opacity=".5"/>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </Canvas>
+                    </Grid>
+                </Grid>
 
             </ScrollViewer>
         </Border>

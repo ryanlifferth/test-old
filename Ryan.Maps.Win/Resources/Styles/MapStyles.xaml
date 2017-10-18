@@ -1,0 +1,372 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
+                    xmlns:valueconverters="clr-namespace:Ryan.Maps.Win.Converters"
+                    x:Class="Ryan.Maps.Win.Resources.Styles.MapStyles"
+                    xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF">
+
+    <valueconverters:StringToUppercase x:Key="StringToUppercase" />
+    
+    <!--Printer ButtoN Blue-->
+    <Color x:Key="ColorPrintBlue">#005167</Color>
+    <SolidColorBrush x:Key="PrintBlue" Color="{StaticResource ColorPrintBlue}" />
+    <!--Printer Button Blue Hover -->
+    <Color x:Key="ColorPrintHover">#671b00</Color>
+    <SolidColorBrush x:Key="PrintHover" Color="{StaticResource ColorPrintHover}" />
+    
+    <Style x:Key="ZoomButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Canvas.Right" Value="10"/>
+        <Setter Property="Canvas.Top" Value="60"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ZoomButtonImage" TargetType="Image">
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Width"  Value="40" />
+    </Style>
+
+    <Style x:Key="ZoomInButtonImage" TargetType="Image" BasedOn="{StaticResource ZoomButtonImage}">
+        <Setter Property="Source" Value="/Ryan.Maps.Win;component/Resources/Images/MapZoomIn.png" />
+        <Style.Triggers>
+            <Trigger Property="Image.IsMouseOver" Value="True">
+                <Setter Property="Source" Value="/Ryan.Maps.Win;component/Resources/Images/MapZoomInOver.png" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ZoomOutButtonImage" TargetType="Image" BasedOn="{StaticResource ZoomButtonImage}">
+        <Setter Property="Source" Value="/Ryan.Maps.Win;component/Resources/Images/MapZoomOut.png" />
+        <Style.Triggers>
+            <Trigger Property="Image.IsMouseOver" Value="True">
+                <Setter Property="Source" Value="/Ryan.Maps.Win;component/Resources/Images/MapZoomOutOver.png" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ChangeMapButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Canvas.Right" Value="14"/>
+        <Setter Property="Canvas.Top" Value="20"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Width"  Value="32"/>
+        <Setter Property="ToolTip" Value="Change map type to Aerial/Satellite Mode" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="{TemplateBinding ToolTip}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MapTypeButtonImage" TargetType="Image">
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Width"  Value="32" />
+        <Setter Property="Source" Value="/Ryan.Maps.Win;component/Resources/Images/MapTypeAerial.png" />
+    </Style>
+
+    <Style x:Key="MapTypeButtonImageRoad" TargetType="Image" BasedOn="{StaticResource MapTypeButtonImage}">
+        <Setter Property="Source" Value="/Ryan.Maps.Win;component/Resources/Images/MapTypeRoad.png" />
+    </Style>
+
+    <Style x:Key="MapTypeButtonImageAerial" TargetType="Image" BasedOn="{StaticResource MapTypeButtonImage}">
+        <Setter Property="Source" Value="/Ryan.Maps.Win;component/Resources/Images/MapTypeAerial.png" />
+    </Style>
+
+    <Style x:Key="MapTypeCaption" TargetType="TextBlock">
+        <Setter Property="Canvas.Bottom" Value="0" />
+        <Setter Property="Canvas.Left" Value="1" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontSize" Value="9" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style x:Key="AddressPushpin" TargetType="m:Pushpin">
+        <Setter Property="Height" Value="Auto" />
+        <Setter Property="Width" Value="Auto" />
+    </Style>
+
+    <Style x:Key="MarketConditionsPushpin" TargetType="m:Pushpin">
+        <Setter Property="Height" Value="10" />
+        <Setter Property="Width" Value="10" />
+    </Style>
+
+    <ControlTemplate x:Key="SubjectPushpinTemplate" TargetType="m:Pushpin">
+        <Grid x:Name="ContentGrid" Height="Auto" HorizontalAlignment="Center" Margin="4,2,0,0" VerticalAlignment="Center" Width="Auto">
+            <!--This is the pointer-->
+            <Canvas Panel.ZIndex="100">
+                <Path x:Name="PathPointer"
+                      Data="M3,15 L-4,-2 L12,3"
+                      Fill="{TemplateBinding BorderBrush}"
+                      Margin="0"
+                      Stroke="{TemplateBinding BorderBrush}" 
+                      StrokeThickness="1.5"  />
+            </Canvas>
+
+            <Rectangle x:Name="Infobox" 
+                       Fill="{TemplateBinding Background}" 
+                       Margin="0" 
+                       Panel.ZIndex="100" 
+                       Stroke="{TemplateBinding BorderBrush}" 
+                       StrokeThickness="1.5" 
+                       RadiusX="5" 
+                       RadiusY="5"/>
+
+            <ContentPresenter x:Name="SubjectContentPresenter" 
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              HorizontalAlignment="Left"
+                              Margin="0"
+                              Panel.ZIndex="100"
+                              TextBlock.FontFamily="Segoe UI" 
+                              TextBlock.FontWeight="Bold" 
+                              TextBlock.Foreground="#FF005167" 
+                              VerticalAlignment="Center" />
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="CompPushpinTemplate" TargetType="m:Pushpin">
+        <Grid x:Name="ContentGrid" HorizontalAlignment="Center" Margin="4,2,0,0" VerticalAlignment="Center" Height="Auto" Width="Auto">
+
+            <!--This is the pointer-->
+            <Canvas Panel.ZIndex="90">
+                <Path x:Name="PathPointer"
+                      Data="M3,15 L-4,-2 L12,3"
+                      Fill="{TemplateBinding BorderBrush}"
+                      Margin="0"
+                      Stroke="{TemplateBinding BorderBrush}" 
+                      StrokeThickness="1.5"  />
+            </Canvas>
+
+            <Rectangle x:Name="Infobox" 
+                       Fill="{TemplateBinding Background}" 
+                       Margin="0" 
+                       Panel.ZIndex="90" 
+                       Stroke="{TemplateBinding BorderBrush}" 
+                       StrokeThickness="1.5" 
+                       RadiusX="5" RadiusY="5"/>
+
+            <ContentPresenter x:Name="CompContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              HorizontalAlignment="Left"
+                              Margin="0" 
+                              Panel.ZIndex="90"
+                              TextBlock.FontFamily="Segoe UI" 
+                              TextBlock.FontWeight="Bold" 
+                              TextBlock.Foreground="#FF005167" 
+                              VerticalAlignment="Center" />
+
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="MarketConditionsPushpinTemplate" TargetType="m:Pushpin">
+        <Rectangle Fill="{TemplateBinding Background}" Panel.ZIndex="10" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1.5" RadiusX="5" RadiusY="5">
+            <Rectangle.BitmapEffect>
+                <DropShadowBitmapEffect Softness="0.1" ShadowDepth="1.5" Direction="270" Color="#BBBBBB"/>
+            </Rectangle.BitmapEffect>
+        </Rectangle>
+    </ControlTemplate>
+
+    <DataTemplate x:Key="PropertyPushpinSubjectDataTemplate">
+        <Grid>
+            <StackPanel Margin="15,0,7,2" MinHeight="45" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Address.AddressLine1, FallbackValue='Address Line 1'}" FontFamily="Segoe UI" FontSize="13" FontWeight="SemiBold" Margin="0,7,0,0" />
+                <StackPanel Margin="0,-4,0,0">
+                    <TextBlock FontFamily="Segoe UI" FontSize="11" FontWeight="Normal" >
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0}, {1} {2}" FallbackValue="Address Line 2">
+                                <Binding Path="Address.City" />
+                                <Binding Path="Address.State" />
+                                <Binding Path="Address.Zip" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+            <TextBlock Text="SUBJECT" FontFamily="Segoe UI" FontSize="9" FontWeight="Normal" Foreground="#FF898989" Opacity="0.6" VerticalAlignment="Center" >
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="270" Block.TextAlignment="Center"  />
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    
+
+    <DataTemplate x:Key="PropertyPushpinCompDataTemplate">
+        <Grid>
+            <StackPanel Margin="15,0,7,2">
+                <TextBlock Text="{Binding Address.AddressLine1, FallbackValue='Address Line 1'}" FontFamily="Segoe UI" FontSize="12" FontWeight="SemiBold" />
+                <StackPanel Margin="0,-4,0,0">
+                    <TextBlock FontFamily="Segoe UI" FontSize="10" FontWeight="Normal" >
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0}, {1} {2}" FallbackValue="Address Line 2">
+                                <Binding Path="Address.City" />
+                                <Binding Path="Address.State" />
+                                <Binding Path="Address.Zip" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StackPanel>
+                <!-- Text="{Binding DistanceFromSubject, StringFormat={}{0} from suject, FallbackValue= mi.}"-->
+                <TextBlock FontFamily="Segoe UI" FontSize="10" FontStyle="Italic" FontWeight="Light" Foreground="#FF555555" Margin="0,2,0,0">
+                        <Run Text="{Binding DistanceFromSubject, FallbackValue=-- mi., TargetNullValue=-- mi.}" />
+                        <Run Text=" from subject" />
+                </TextBlock>
+
+            </StackPanel>
+            <TextBlock FontFamily="Segoe UI" FontSize="9" FontWeight="Normal" Foreground="#FF898989" Opacity="0.6" VerticalAlignment="Center" >
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{1} {0}" FallbackValue="COMP">
+                        <Binding Path="CompNumber" />
+                        <Binding Path="CompType.PropertyTypeNameShort" Converter="{StaticResource StringToUppercase}" />
+                    </MultiBinding>
+                </TextBlock.Text>
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="270" Block.TextAlignment="Center"  />
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    
+
+    <Style x:Key="PrintButtonText" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Regular" />
+        <Setter Property="Foreground" Value="{StaticResource PrintBlue}" />
+    </Style>
+
+    <Style x:Key="PrintButtonImage" TargetType="fa:ImageAwesome">
+        <Setter Property="Foreground" Value="{StaticResource PrintBlue}" />
+        <Setter Property="Margin" Value="0,0,5,0" />
+        <Setter Property="Width" Value="18" />
+    </Style>
+
+    <ControlTemplate x:Key="PrintButtonTemplate" TargetType="Button">
+        <StackPanel Orientation="Horizontal" Cursor="Hand">
+            <ContentPresenter/>
+            <fa:ImageAwesome x:Name="Icon" Icon="Print" Style="{StaticResource PrintButtonImage}" />
+            <TextBlock x:Name="InnerText" Style="{StaticResource PrintButtonText}" Text="PRINT" VerticalAlignment="Center" />
+        </StackPanel>
+        <ControlTemplate.Triggers>
+            <Trigger Property="Button.IsMouseOver" Value="True">
+                <Setter TargetName="InnerText" Property="Foreground" Value="{DynamicResource PrintHover}" />
+                <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource PrintHover}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="PrintPreviewButtonTemplate" TargetType="Button">
+        <StackPanel Orientation="Horizontal" Cursor="Hand">
+            <ContentPresenter/>
+            <fa:ImageAwesome x:Name="Icon" Icon="Print" Style="{StaticResource PrintButtonImage}" />
+            <TextBlock x:Name="InnerText" Style="{StaticResource PrintButtonText}" Text="Print Preview" VerticalAlignment="Center" />
+        </StackPanel>
+        <ControlTemplate.Triggers>
+            <Trigger Property="Button.IsMouseOver" Value="True">
+                <Setter TargetName="InnerText" Property="Foreground" Value="{DynamicResource PrintHover}" />
+                <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource PrintHover}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="PrintButton" TargetType="Button">
+        <Setter Property="Template" Value="{StaticResource PrintButtonTemplate}" />
+    </Style>
+
+    <Style x:Key="PrintPreviewButton" TargetType="Button">
+        <Setter Property="Template" Value="{StaticResource PrintPreviewButtonTemplate}" />
+    </Style>
+
+    <!-- Toggle Switch -->
+    <Style x:Key="AnimatedToggleSwitch" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Background" Value="#D7D7D7" />
+        <Setter Property="BorderBrush" Value="#BDBDBD" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Viewbox Stretch="Uniform">
+                        <Canvas Name="Layer_1" Width="20" Height="20" Canvas.Left="10" Canvas.Top="0">
+                            <Ellipse  Canvas.Left="0" Width="20" Height="20" Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="0.5"/>
+                            <Ellipse  Canvas.Left="15" Width="20" Height="20" Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="0.5"/>
+                            <Border Canvas.Left="10" Width="15" Height="20" Name="rect416927" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0.5,0,0.5"/>
+                            <Ellipse x:Name="ellipse"  Canvas.Left="0" Width="20" Height="20" Fill="White" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="0.3">
+                                <Ellipse.RenderTransform>
+                                    <TranslateTransform X="0" Y="0" />
+                                </Ellipse.RenderTransform>
+                                <Ellipse.BitmapEffect>
+                                    <DropShadowBitmapEffect Softness="0.1" ShadowDepth="0.7" Direction="270" Color="#BBBBBB"/>
+                                </Ellipse.BitmapEffect>
+                            </Ellipse>
+                        </Canvas>
+                    </Viewbox>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True" >
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <!--<ColorAnimation Storyboard.TargetProperty="Background.Color" To="#52D468" Duration="0:0:0.2" />
+                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" To="#41C955" Duration="0:0:0.2" />-->
+                                        <ColorAnimation Storyboard.TargetProperty="Background.Color" To="#09627a" Duration="0:0:0.2" />
+                                        <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" To="#005167" Duration="0:0:0.2" />
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Ellipse.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="ellipse">
+                                            <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="15" KeySpline="0, 1, 0.6, 1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="Background.Color" To="#FFD7D7D7" Duration="0:0:0.2" />
+                                        <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" To="#FFBDBDBD" Duration="0:0:0.2" />
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Ellipse.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="ellipse">
+                                            <SplineDoubleKeyFrame KeyTime="0" Value="15"/>
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0" KeySpline="0, 0.5, 0.5, 1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="GridMapButton" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

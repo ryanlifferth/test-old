@@ -33,6 +33,9 @@
         <DataTemplate DataType="{x:Type viewmodels:PrintableMapViewModel}">
             <views:PrintableMapView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:CropMapViewModel}">
+            <views:CropMapView />
+        </DataTemplate>
         <Style x:Key="NavButtons" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -110,6 +113,7 @@
                 <Button x:Name="deeds" Content="Deeds" Command="{Binding Path=LoadDeedsCommand}" Style="{StaticResource NavButtons}" />
                 <Button x:Name="hyperlinks" Content="Hyperlinks" Command="{Binding Path=LoadHyperlinkCommand}" Style="{StaticResource NavButtons}" />
                 <Button x:Name="printableMap" Content="Printable Map" Command="{Binding Path=LoadPrintableMapCommand}" Style="{StaticResource NavButtonsSelected}" />
+                <Button x:Name="CropImage" Content="Crop Image" Command="{Binding Path=LoadCropImageCommand}" Style="{StaticResource NavButtons}" />
             </StackPanel>
 
             <ContentControl Content="{Binding Path=CurrentViewModel}" Grid.Row="1" VerticalContentAlignment="Top"></ContentControl>
